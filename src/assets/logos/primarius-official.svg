@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 92" role="img" aria-label="概伦电子 Primarius">
+  <rect width="320" height="92" fill="#fff"/>
+  <text x="18" y="38" fill="#1b2f47" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="27" font-weight="800">概伦电子</text>
+  <g transform="translate(20 51)">
+    <text x="0" y="23" fill="#1b2f47" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="30" font-weight="900" letter-spacing="1">PRIMARIUS</text>
+    <path d="M134 19 153 0l-7 23-20 7Z" fill="#f49a15"/>
+  </g>
+</svg>
