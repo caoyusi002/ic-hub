@@ -1049,6 +1049,60 @@ button {
   margin-left: auto;
 }
 
+.resource-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 16px;
+  border-top: 1px solid rgba(98, 214, 255, 0.14);
+  padding-top: 16px;
+}
+
+.resource-pagination button {
+  min-width: 36px;
+  height: 34px;
+  border: 1px solid rgba(98, 214, 255, 0.26);
+  border-radius: 6px;
+  color: rgba(234, 247, 255, 0.78);
+  background: rgba(5, 20, 38, 0.76);
+  padding: 0 11px;
+  cursor: pointer;
+}
+
+.resource-pagination button:hover,
+.resource-pagination button:focus-visible,
+.resource-pagination button.active {
+  border-color: rgba(139, 255, 207, 0.66);
+  color: #07140f;
+  background: #8bffcf;
+  outline: none;
+}
+
+.resource-pagination button:disabled {
+  border-color: rgba(98, 214, 255, 0.12);
+  color: rgba(234, 247, 255, 0.32);
+  background: rgba(5, 20, 38, 0.38);
+  cursor: not-allowed;
+}
+
+.page-number-list {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.page-number-list span,
+.page-size-note {
+  color: rgba(234, 247, 255, 0.62);
+  font-size: 0.78rem;
+}
+
+.page-size-note {
+  margin-left: 4px;
+}
+
 .resource-card dl,
 .modal-panel dl {
   display: grid;

@@ -1270,6 +1270,8 @@ const companySourceUrls = {
   '合见工软': 'https://www.univista-isg.com/',
 };
 
+const RESULTS_PAGE_SIZE = 8;
+
 function EdaLibrary({ onBack }) {
   const [query, setQuery] = useState('');
   const [activePrimary, setActivePrimary] = useState('全部');
@@ -1283,6 +1285,7 @@ function EdaLibrary({ onBack }) {
   const [expandedPrimaryCategories, setExpandedPrimaryCategories] = useState(
     () => new Set(edaTaxonomy.map((category) => category.label)),
   );
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedResource, setSelectedResource] = useState(null);
 
   const filterOptions = useMemo(() => {
@@ -1350,6 +1353,41 @@ function EdaLibrary({ onBack }) {
 
   const companyCount = new Set(edaResources.map((resource) => resource.company)).size;
   const secondaryCategoryCount = edaTaxonomy.reduce((count, category) => count + category.items.length, 0);
+  const totalPages = Math.max(1, Math.ceil(filteredResources.length / RESULTS_PAGE_SIZE));
+  const currentSafePage = Math.min(currentPage, totalPages);
+  const paginatedResources = useMemo(() => {
+    const start = (currentSafePage - 1) * RESULTS_PAGE_SIZE;
+    return filteredResources.slice(start, start + RESULTS_PAGE_SIZE);
+  }, [currentSafePage, filteredResources]);
+  const paginationItems = useMemo(() => {
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, index) => index + 1);
+    }
+
+    const pages = new Set([1, totalPages, currentSafePage - 1, currentSafePage, currentSafePage + 1]);
+    if (currentSafePage <= 3) {
+      pages.add(2);
+      pages.add(3);
+      pages.add(4);
+    }
+    if (currentSafePage >= totalPages - 2) {
+      pages.add(totalPages - 3);
+      pages.add(totalPages - 2);
+      pages.add(totalPages - 1);
+    }
+
+    const sortedPages = Array.from(pages)
+      .filter((page) => page >= 1 && page <= totalPages)
+      .sort((left, right) => left - right);
+
+    return sortedPages.flatMap((page, index) => {
+      const previous = sortedPages[index - 1];
+      if (index > 0 && page - previous > 1) {
+        return [`ellipsis-${previous}-${page}`, page];
+      }
+      return [page];
+    });
+  }, [currentSafePage, totalPages]);
   const selectedCategoryLabel =
     activeSecondary !== '全部' ? activeSecondary : activePrimary !== '全部' ? activePrimary : '全部分类';
   const getResourceVisual = (resource) => resource.imageUrl || companyVisuals[resource.company];
@@ -1370,11 +1408,13 @@ function EdaLibrary({ onBack }) {
   const handlePrimarySelect = (primaryCategory) => {
     setActivePrimary(primaryCategory);
     setActiveSecondary('全部');
+    setCurrentPage(1);
   };
 
   const handlePrimaryToggle = (primaryCategory) => {
     setActivePrimary(primaryCategory);
     setActiveSecondary('全部');
+    setCurrentPage(1);
     setExpandedPrimaryCategories((current) => {
       const next = new Set(current);
       if (next.has(primaryCategory)) {
@@ -1389,6 +1429,7 @@ function EdaLibrary({ onBack }) {
   const handleSecondarySelect = (primaryCategory, secondaryCategory) => {
     setActivePrimary(primaryCategory);
     setActiveSecondary(secondaryCategory);
+    setCurrentPage(1);
     setExpandedPrimaryCategories((current) => new Set(current).add(primaryCategory));
   };
 
@@ -1400,6 +1441,7 @@ function EdaLibrary({ onBack }) {
     setRegionFilter('全部');
     setStageFilter('全部');
     setToolTypeFilter('全部');
+    setCurrentPage(1);
     setExpandedPrimaryCategories(new Set(edaTaxonomy.map((category) => category.label)));
   };
 
@@ -1529,7 +1571,10 @@ function EdaLibrary({ onBack }) {
                 <div className="tree-section-body">
                   <button
                     className={companyFilter === '全部' ? 'tree-all active' : 'tree-all'}
-                    onClick={() => setCompanyFilter('全部')}
+                    onClick={() => {
+                      setCompanyFilter('全部');
+                      setCurrentPage(1);
+                    }}
                   >
                     <span>全部公司</span>
                     <strong>{edaResources.length}</strong>
@@ -1538,7 +1583,10 @@ function EdaLibrary({ onBack }) {
                     <button
                       key={company}
                       className={companyFilter === company ? 'tree-primary active' : 'tree-primary'}
-                      onClick={() => setCompanyFilter(company)}
+                      onClick={() => {
+                        setCompanyFilter(company);
+                        setCurrentPage(1);
+                      }}
                     >
                       <span>{company}</span>
                       <strong>{companyCounts[company] || 0}</strong>
@@ -1555,7 +1603,10 @@ function EdaLibrary({ onBack }) {
                 <Search size={18} aria-hidden="true" />
                 <input
                   value={query}
-                  onChange={(event) => setQuery(event.target.value)}
+                  onChange={(event) => {
+                    setQuery(event.target.value);
+                    setCurrentPage(1);
+                  }}
                   placeholder="搜索公司、工具、分类、阶段或标签"
                 />
               </label>
@@ -1563,7 +1614,13 @@ function EdaLibrary({ onBack }) {
               <div className="filter-row">
                 <label className="filter-field">
                   <span>厂商</span>
-                  <select value={companyFilter} onChange={(event) => setCompanyFilter(event.target.value)}>
+                  <select
+                    value={companyFilter}
+                    onChange={(event) => {
+                      setCompanyFilter(event.target.value);
+                      setCurrentPage(1);
+                    }}
+                  >
                     {filterOptions.companies.map((option) => (
                       <option key={option}>{option}</option>
                     ))}
@@ -1571,7 +1628,13 @@ function EdaLibrary({ onBack }) {
                 </label>
                 <label className="filter-field">
                   <span>地区</span>
-                  <select value={regionFilter} onChange={(event) => setRegionFilter(event.target.value)}>
+                  <select
+                    value={regionFilter}
+                    onChange={(event) => {
+                      setRegionFilter(event.target.value);
+                      setCurrentPage(1);
+                    }}
+                  >
                     {filterOptions.regions.map((option) => (
                       <option key={option}>{option}</option>
                     ))}
@@ -1579,7 +1642,13 @@ function EdaLibrary({ onBack }) {
                 </label>
                 <label className="filter-field">
                   <span>应用阶段</span>
-                  <select value={stageFilter} onChange={(event) => setStageFilter(event.target.value)}>
+                  <select
+                    value={stageFilter}
+                    onChange={(event) => {
+                      setStageFilter(event.target.value);
+                      setCurrentPage(1);
+                    }}
+                  >
                     {filterOptions.stages.map((option) => (
                       <option key={option}>{option}</option>
                     ))}
@@ -1587,7 +1656,13 @@ function EdaLibrary({ onBack }) {
                 </label>
                 <label className="filter-field">
                   <span>工具类型</span>
-                  <select value={toolTypeFilter} onChange={(event) => setToolTypeFilter(event.target.value)}>
+                  <select
+                    value={toolTypeFilter}
+                    onChange={(event) => {
+                      setToolTypeFilter(event.target.value);
+                      setCurrentPage(1);
+                    }}
+                  >
                     {filterOptions.toolTypes.map((option) => (
                       <option key={option}>{option}</option>
                     ))}
@@ -1621,7 +1696,7 @@ function EdaLibrary({ onBack }) {
             </div>
 
             <section className="resource-grid" aria-label="EDA 资源列表">
-              {filteredResources.map((resource) => (
+              {paginatedResources.map((resource) => (
                 <button
                   key={`${resource.company}-${resource.tool}-${resource.secondaryCategory}`}
                   className="resource-card"
@@ -1683,6 +1758,42 @@ function EdaLibrary({ onBack }) {
                 </button>
               ))}
             </section>
+
+            {filteredResources.length > 0 && (
+              <nav className="resource-pagination" aria-label="EDA 资源分页">
+                <button
+                  onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                  disabled={currentSafePage === 1}
+                >
+                  上一页
+                </button>
+                <div className="page-number-list">
+                  {paginationItems.map((item) =>
+                    typeof item === 'number' ? (
+                      <button
+                        key={item}
+                        className={item === currentSafePage ? 'active' : ''}
+                        onClick={() => setCurrentPage(item)}
+                        aria-current={item === currentSafePage ? 'page' : undefined}
+                      >
+                        {item}
+                      </button>
+                    ) : (
+                      <span key={item}>...</span>
+                    ),
+                  )}
+                </div>
+                <button
+                  onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+                  disabled={currentSafePage === totalPages}
+                >
+                  下一页
+                </button>
+                <span className="page-size-note">
+                  每页 {RESULTS_PAGE_SIZE} 个 · 第 {currentSafePage}/{totalPages} 页
+                </span>
+              </nav>
+            )}
 
             {filteredResources.length === 0 && (
               <section className="empty-state">
