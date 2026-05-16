@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   ArrowLeft,
@@ -12,7 +12,10 @@ import {
   Factory,
   Grid2X2,
   List,
+  Mail,
+  MapPin,
   Microchip,
+  Phone,
   RotateCcw,
   Search,
   Sparkles,
@@ -1603,6 +1606,272 @@ const companySourceUrls = {
 
 const RESULTS_PAGE_SIZE = 8;
 
+const getResourceSlug = (resource) => encodeURIComponent(`${resource.company}-${resource.tool}`);
+
+const findResourceBySlug = (resources, slug) => resources.find((resource) => getResourceSlug(resource) === slug);
+
+const getCompanySlug = (company) => encodeURIComponent(company);
+
+const getCompanyBySlug = (slug) =>
+  Array.from(new Set(edaResources.map((resource) => resource.company))).find((company) => getCompanySlug(company) === slug);
+
+const getCompanyResources = (company) => edaResources.filter((resource) => resource.company === company);
+
+const getResourceVisual = (resource) => resource.imageUrl || companyVisuals[resource.company];
+
+const getResourceSourceUrl = (resource) => resource.officialUrl || resource.sourceUrl || companySourceUrls[resource.company];
+
+const getResourceChips = (resource) => [resource.secondaryCategory, resource.stage, resource.region];
+
+const getApplicationText = (resource) => resource.tags.slice(0, 3).join('、');
+
+const getCompanyInitials = (company) => company
+  .split(/\s+/)
+  .map((part) => part[0])
+  .join('')
+  .slice(0, 2)
+  .toUpperCase();
+
+const getStageFlow = (resource) => {
+  if (resource.primaryCategory.includes('模拟')) return ['电路设计', '仿真验证', '版图/签核'];
+  if (resource.primaryCategory.includes('数字前端')) return ['RTL 设计', '验证', '综合'];
+  if (resource.primaryCategory.includes('数字后端')) return ['物理实现', '分析', '签核'];
+  if (resource.primaryCategory.includes('工艺开发')) return ['工艺建模', '模型验证', '制造支持'];
+  if (resource.primaryCategory.includes('封装') || resource.primaryCategory.includes('PCB')) return ['封装/PCB 设计', 'SI/PI 分析', '制造输出'];
+  if (resource.primaryCategory.includes('FPGA')) return ['原型设计', '验证', '系统协同'];
+  if (resource.primaryCategory.includes('系统')) return ['系统建模', '多物理仿真', '协同优化'];
+  if (resource.primaryCategory.includes('处理器')) return ['架构选型', '软件生态适配', 'SoC 集成'];
+  if (resource.primaryCategory.includes('接口')) return ['协议选型', '控制器/PHY 集成', '合规验证'];
+  if (resource.primaryCategory.includes('存储')) return ['容量/带宽规划', '控制器/PHY 集成', '可靠性验证'];
+  if (resource.primaryCategory.includes('安全')) return ['威胁建模', '安全子系统集成', '密钥生命周期'];
+  if (resource.primaryCategory.includes('基础')) return ['工艺适配', '库验证', '后端实现'];
+  if (resource.primaryCategory.includes('验证')) return ['测试平台', '协议检查', '覆盖率收敛'];
+  return [resource.primaryCategory, resource.stage, resource.secondaryCategory];
+};
+
+const getResourceDetailSections = (resource) => resource.detailSections || [
+  {
+    title: '产品定位',
+    body: resource.detail || resource.summary,
+  },
+  {
+    title: '核心用途',
+    body: `${resource.summary} 该条目归入「${resource.primaryCategory} / ${resource.secondaryCategory}」，用于快速判断其在 EDA 流程中的位置。`,
+  },
+  {
+    title: '典型应用',
+    body: getApplicationText(resource) || '典型应用待补充，后续可随具体厂商资料继续扩写。',
+  },
+];
+
+const getSourceStatus = (resource) => (getResourceSourceUrl(resource) ? '官网整理' : '待补充');
+
+const productContactItems = [
+  { label: '地址', value: '地址信息待补充', icon: MapPin },
+  { label: '联系方式', value: '联系方式待补充', icon: Phone },
+  { label: '邮箱', value: '邮箱信息待补充', icon: Mail },
+];
+
+const productFollowChannels = [
+  { label: '公众号', icon: 'wechat' },
+  { label: '微博', icon: 'weibo' },
+  { label: 'X', icon: 'x' },
+  { label: 'Facebook', icon: 'facebook' },
+  { label: 'Instagram', icon: 'instagram' },
+];
+
+function BrandIcon({ name }) {
+  if (name === 'wechat') {
+    return (
+      <svg viewBox="0 0 32 32" aria-hidden="true" className="brand-icon">
+        <path d="M13.6 8.5c-5.2 0-9.4 3.4-9.4 7.6 0 2.4 1.4 4.5 3.5 5.9l-.8 3 3.4-1.8c1 .3 2.1.5 3.3.5 5.2 0 9.4-3.4 9.4-7.6s-4.2-7.6-9.4-7.6Z" />
+        <path d="M20 14.2c4.4.5 7.8 3.4 7.8 7 0 2.1-1.2 4-3.1 5.3l.7 2.6-3-1.6c-.9.3-1.9.4-3 .4-3.6 0-6.7-1.9-8-4.6" />
+        <circle cx="10.5" cy="14.9" r="1.1" />
+        <circle cx="16.3" cy="14.9" r="1.1" />
+      </svg>
+    );
+  }
+
+  if (name === 'weibo') {
+    return (
+      <svg viewBox="0 0 32 32" aria-hidden="true" className="brand-icon">
+        <path d="M22.9 6.7c2.5.6 4.4 2.6 4.9 5.1" />
+        <path d="M21.2 10.2c1.3.3 2.4 1.3 2.7 2.7" />
+        <path d="M16 14.1c5.7 0 10.3 3.1 10.3 6.9S21.7 28 16 28 5.7 24.9 5.7 21.1c0-2.2 1.6-4.1 4-5.4.9-.5 1.1-1 .9-1.7-.2-.9.1-1.7.9-2.1.8-.4 1.8 0 2.4.9.4.7.8 1.3 2.1 1.3Z" />
+        <ellipse cx="15.1" cy="21.3" rx="5.2" ry="3.8" />
+        <circle cx="13.3" cy="20.6" r="1.1" />
+        <circle cx="17.1" cy="21.9" r="0.85" />
+      </svg>
+    );
+  }
+
+  if (name === 'x') {
+    return (
+      <svg viewBox="0 0 32 32" aria-hidden="true" className="brand-icon brand-icon-solid">
+        <path d="M7 6h5.1l5.1 6.8L23.2 6H26l-7.6 8.7L27 26h-5.1l-5.6-7.4L9.8 26H7l8.1-9.3L7 6Zm4.1 2.1 11.8 15.8h1L12.1 8.1h-1Z" />
+      </svg>
+    );
+  }
+
+  if (name === 'facebook') {
+    return (
+      <svg viewBox="0 0 32 32" aria-hidden="true" className="brand-icon brand-icon-solid">
+        <path d="M18.6 28V17.4h3.6l.6-4.2h-4.2v-2.7c0-1.2.4-2 2.1-2h2.3V4.7c-.4-.1-1.8-.2-3.4-.2-3.4 0-5.8 2.1-5.8 5.9v2.8H10v4.2h3.8V28h4.8Z" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 32 32" aria-hidden="true" className="brand-icon">
+      <rect x="7" y="7" width="18" height="18" rx="5.4" />
+      <circle cx="16" cy="16" r="4.4" />
+      <circle cx="21.2" cy="10.8" r="1.1" />
+    </svg>
+  );
+}
+
+const productFlowTemplates = {
+  analog: ['规格定义', '原理图设计', '电路仿真', '版图设计', '物理验证', '寄生提取/后仿', '模拟签核'],
+  digitalFront: ['需求/架构', 'RTL 设计', '仿真/形式验证', '逻辑综合', 'DFT/等价检查', '前端收敛', '交付后端'],
+  digitalBack: ['网表/约束输入', '地板规划', '布局布线', '寄生提取', '时序/功耗分析', '物理验证', '签核收敛'],
+  assemblyPcb: ['系统/封装规划', '原理图设计', '版图/封装设计', 'SI/PI/热分析', '规则检查', '制造输出', '协同管理'],
+  fpga: ['需求/架构', 'RTL 设计', '综合映射', '仿真验证', '原型实现', '调试迭代', '系统验证'],
+  system: ['系统建模', '架构探索', '多物理仿真', '软硬件协同', '性能/功耗分析', '系统验证', '优化交付'],
+  foundry: ['工艺开发', '器件建模', '参数提取', '模型验证', '光刻/OPC', '良率分析', '制造协同'],
+  memsOpto: ['器件定义', '结构建模', '多物理仿真', '版图/工艺协同', '验证优化', '制造准备', '测试反馈'],
+  testYield: ['测试规划', 'DFT 插入', '向量生成', '量测/ATE', '诊断分析', '良率优化', '量产反馈'],
+  general: ['需求/架构', '设计输入', '仿真验证', '实现优化', '规则检查', '签核交付', '制造协同'],
+};
+
+const getProductFlowTemplateKey = (resource) => {
+  if (resource.primaryCategory.includes('模拟')) return 'analog';
+  if (resource.primaryCategory.includes('数字前端')) return 'digitalFront';
+  if (resource.primaryCategory.includes('数字后端')) return 'digitalBack';
+  if (resource.primaryCategory.includes('Assembly') || resource.primaryCategory.includes('PCB')) return 'assemblyPcb';
+  if (resource.primaryCategory.includes('FPGA')) return 'fpga';
+  if (resource.primaryCategory.includes('System')) return 'system';
+  if (resource.primaryCategory.includes('Foundry')) return 'foundry';
+  if (resource.primaryCategory.includes('MEMS') || resource.primaryCategory.includes('Opto')) return 'memsOpto';
+  if (resource.primaryCategory.includes('其它') || /测试|良率|ATE|量测/.test(`${resource.secondaryCategory} ${resource.stage}`)) return 'testYield';
+  return 'general';
+};
+
+const getProductFlowStepIndex = (resource, templateKey) => {
+  const text = `${resource.primaryCategory} ${resource.secondaryCategory} ${resource.stage} ${resource.tags.join(' ')}`;
+  const matchers = {
+    analog: [
+      /规格|需求/,
+      /Schematic|原理图|Custom Compiler|Aether|设计平台/,
+      /Simulation|SPICE|HSPICE|NanoSpice|ALPS|Spectre|仿真|RF/,
+      /Layout|版图|PCell|Polas/,
+      /DRC|LVS|物理验证|Pegasus|IC Validator/,
+      /Extraction|寄生|RCExplorer|后仿|StarRC|Quantus/,
+      /签核|Signoff/,
+    ],
+    digitalFront: [
+      /需求|架构/,
+      /RTL|设计输入/,
+      /验证|仿真|Formal|VCS|Xcelium|Verdi|SpyGlass|UVS|UVD|VC Formal|形式/,
+      /逻辑综合|Synthesis|Design Compiler|Genus/,
+      /DFT|Test|ATPG|BIST|等价|Formality|Conformal/,
+      /收敛|功耗|覆盖率/,
+      /后端|交付/,
+    ],
+    digitalBack: [
+      /网表|约束/,
+      /地板规划|Floorplan/,
+      /布局布线|物理实现|Place|Route|Innovus|Fusion Compiler|IC Compiler/,
+      /Extraction|寄生|StarRC|Quantus/,
+      /时序|Timing|PrimeTime|功耗|Power|Voltus|RedHawk/,
+      /DRC|LVS|物理验证|IC Validator|Pegasus/,
+      /签核|Signoff/,
+    ],
+    assemblyPcb: [
+      /系统|封装规划/,
+      /Schematic|原理图|OrCAD|Archer Schematic/,
+      /Allegro|PCB|封装|Layout|Archer PCB/,
+      /SI|PI|热|Sigrity|Clarity|Celsius/,
+      /DRC|规则|检查/,
+      /制造输出|Manufacturing/,
+      /协同|管理|EDM/,
+    ],
+    fpga: [
+      /需求|架构/,
+      /RTL|设计/,
+      /Synplify|综合|映射/,
+      /仿真|验证/,
+      /HAPS|ZeBu|Palladium|Protium|原型|硬件仿真/,
+      /调试|Debug/,
+      /系统验证/,
+    ],
+    system: [
+      /系统建模|建模/,
+      /架构/,
+      /多物理|仿真|Clarity|Celsius|QuantumATK/,
+      /协同/,
+      /性能|功耗/,
+      /验证/,
+      /优化|交付/,
+    ],
+    foundry: [
+      /工艺开发|TCAD|Sentaurus/,
+      /器件建模|BSIM|模型/,
+      /参数提取|提取/,
+      /模型验证|验证|MeQLab/,
+      /OPC|光刻|Proteus|ILT|LRC/,
+      /良率|Yield|NanoYield/,
+      /制造|Foundry|协同/,
+    ],
+    memsOpto: [
+      /定义|需求/,
+      /建模/,
+      /仿真|多物理/,
+      /版图|工艺/,
+      /验证|优化/,
+      /制造/,
+      /测试/,
+    ],
+    testYield: [
+      /测试规划|Test Plan/,
+      /DFT|插入/,
+      /向量|ATPG/,
+      /ATE|量测|LabExpress|ATS|晶圆测试/,
+      /诊断|DIAG|TRASTA/,
+      /良率|Yield/,
+      /量产|反馈/,
+    ],
+    general: [
+      /需求|架构/,
+      /设计|输入/,
+      /仿真|验证/,
+      /实现|优化/,
+      /检查|规则/,
+      /签核|交付/,
+      /制造|协同/,
+    ],
+  };
+  const templateMatchers = matchers[templateKey] || matchers.general;
+  const matchedIndex = templateMatchers.findIndex((matcher) => matcher.test(text));
+  if (matchedIndex >= 0) return matchedIndex;
+  return 0;
+};
+
+const getProductFlow = (resource) => {
+  const templateKey = getProductFlowTemplateKey(resource);
+  return {
+    steps: productFlowTemplates[templateKey],
+    activeIndex: getProductFlowStepIndex(resource, templateKey),
+  };
+};
+
+const companyDescriptions = {
+  Cadence: 'Cadence 是全球头部 EDA 与系统设计软件厂商之一，产品覆盖定制 IC、数字实现、验证、封装/PCB、系统分析等多个设计环节。',
+  Synopsys: 'Synopsys 是全球头部 EDA、IP 与软件安全解决方案厂商之一，EDA 产品覆盖数字前端、验证、后端实现、签核、工艺与制造相关流程。',
+  '华大九天': '华大九天是国内 EDA 代表企业之一，产品覆盖模拟/混合信号设计、数字设计、平板显示、晶圆制造与先进封装等方向。',
+  '概伦电子': '概伦电子聚焦器件建模、模型验证、仿真验证、良率提升和测试等 EDA 方向，产品常用于工艺开发、模拟设计与制造协同场景。',
+  '合见工软': '合见工软聚焦芯片验证与系统级设计工具，产品覆盖仿真验证、硬件辅助验证、原型验证、DFT、PCB/原理图与工程数据管理等方向。',
+};
+
 const libraryConfigs = {
   eda: {
     resourceName: 'EDA',
@@ -1611,12 +1880,13 @@ const libraryConfigs = {
     contrastColor: '#07140f',
     eyebrow: 'EDA RESOURCE LIBRARY',
     title: 'EDA 资源库',
-    description: '面向产业研究的 EDA 资源框架，先沉淀工具类型、流程阶段、地域样本与典型能力，后续可替换为真实产业数据。',
+    description: '',
     taxonomy: edaTaxonomy,
     resources: edaResources,
-    metricResourceLabel: '示例资源',
-    metricCompanyLabel: 'EDA 企业',
+    metricResourceLabel: '工具总数',
+    metricCompanyLabel: '收录企业',
     searchPlaceholder: '搜索公司、工具、分类、阶段或标签',
+    detailBasePath: 'eda',
   },
   ip: {
     resourceName: 'IP',
@@ -1648,6 +1918,7 @@ function ResourceLibrary({ onBack, config }) {
     metricResourceLabel,
     metricCompanyLabel,
     searchPlaceholder,
+    detailBasePath,
   } = config;
   const [query, setQuery] = useState('');
   const [activePrimary, setActivePrimary] = useState('全部');
@@ -1733,14 +2004,38 @@ function ResourceLibrary({ onBack, config }) {
   const secondaryCategoryCount = taxonomy.reduce((count, category) => count + category.items.length, 0);
   const sortedResources = useMemo(() => {
     const next = [...filteredResources];
-    if (sortMode === 'company') {
+    const keyword = query.trim().toLowerCase();
+    const getSearchScore = (resource) => {
+      const company = resource.company.toLowerCase();
+      const tool = resource.tool.toLowerCase();
+      const secondary = resource.secondaryCategory.toLowerCase();
+      const primary = resource.primaryCategory.toLowerCase();
+      const tags = resource.tags.join(' ').toLowerCase();
+
+      if (!keyword) return 0;
+      if (company.startsWith(keyword)) return 100;
+      if (tool.startsWith(keyword)) return 90;
+      if (company.includes(keyword)) return 80;
+      if (tool.includes(keyword)) return 70;
+      if (secondary.includes(keyword)) return 55;
+      if (primary.includes(keyword)) return 45;
+      if (tags.includes(keyword)) return 35;
+      return 10;
+    };
+
+    if (keyword) {
+      next.sort((left, right) => {
+        const scoreDiff = getSearchScore(right) - getSearchScore(left);
+        if (scoreDiff !== 0) return scoreDiff;
+        return `${left.company}${left.tool}`.localeCompare(`${right.company}${right.tool}`, 'zh-Hans-CN');
+      });
+    } else if (sortMode === 'company') {
       next.sort((left, right) => `${left.company}${left.tool}`.localeCompare(`${right.company}${right.tool}`, 'zh-Hans-CN'));
-    }
-    if (sortMode === 'stage') {
+    } else if (sortMode === 'stage') {
       next.sort((left, right) => `${left.stage}${left.company}`.localeCompare(`${right.stage}${right.company}`, 'zh-Hans-CN'));
     }
     return next;
-  }, [filteredResources, sortMode]);
+  }, [filteredResources, query, sortMode]);
   const totalPages = Math.max(1, Math.ceil(sortedResources.length / RESULTS_PAGE_SIZE));
   const currentSafePage = Math.min(currentPage, totalPages);
   const paginatedResources = useMemo(() => {
@@ -1778,32 +2073,8 @@ function ResourceLibrary({ onBack, config }) {
   }, [currentSafePage, totalPages]);
   const selectedCategoryLabel =
     activeSecondary !== '全部' ? activeSecondary : activePrimary !== '全部' ? activePrimary : '全部分类';
-  const getResourceVisual = (resource) => resource.imageUrl || companyVisuals[resource.company];
-  const getResourceSourceUrl = (resource) => resource.sourceUrl || companySourceUrls[resource.company];
-  const getResourceChips = (resource) => [resource.secondaryCategory, resource.stage, resource.region];
-  const getApplicationText = (resource) => resource.tags.slice(0, 3).join('、');
-  const getCompanyInitials = (company) => company
-    .split(/\s+/)
-    .map((part) => part[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase();
-  const getStageFlow = (resource) => {
-    if (resource.primaryCategory.includes('模拟')) return ['电路设计', '仿真验证', '版图/签核'];
-    if (resource.primaryCategory.includes('数字前端')) return ['RTL 设计', '验证', '综合'];
-    if (resource.primaryCategory.includes('数字后端')) return ['物理实现', '分析', '签核'];
-    if (resource.primaryCategory.includes('工艺开发')) return ['工艺建模', '模型验证', '制造支持'];
-    if (resource.primaryCategory.includes('封装') || resource.primaryCategory.includes('PCB')) return ['封装/PCB 设计', 'SI/PI 分析', '制造输出'];
-    if (resource.primaryCategory.includes('FPGA')) return ['原型设计', '验证', '系统协同'];
-    if (resource.primaryCategory.includes('系统')) return ['系统建模', '多物理仿真', '协同优化'];
-    if (resource.primaryCategory.includes('处理器')) return ['架构选型', '软件生态适配', 'SoC 集成'];
-    if (resource.primaryCategory.includes('接口')) return ['协议选型', '控制器/PHY 集成', '合规验证'];
-    if (resource.primaryCategory.includes('存储')) return ['容量/带宽规划', '控制器/PHY 集成', '可靠性验证'];
-    if (resource.primaryCategory.includes('安全')) return ['威胁建模', '安全子系统集成', '密钥生命周期'];
-    if (resource.primaryCategory.includes('基础')) return ['工艺适配', '库验证', '后端实现'];
-    if (resource.primaryCategory.includes('验证')) return ['测试平台', '协议检查', '覆盖率收敛'];
-    return [resource.primaryCategory, resource.stage, resource.secondaryCategory];
-  };
+  const getInternalDetailPath = (resource) =>
+    detailBasePath ? `#/${detailBasePath}/product/${getResourceSlug(resource)}` : null;
 
   const handlePrimarySelect = (primaryCategory) => {
     setActivePrimary(primaryCategory);
@@ -1863,7 +2134,7 @@ function ResourceLibrary({ onBack, config }) {
           </button>
           <p className="eyebrow">{eyebrow}</p>
           <h1>{title}</h1>
-          <p>{description}</p>
+          {description ? <p>{description}</p> : null}
         </header>
 
         <section className="library-metrics" aria-label={`${resourceName} 资源概览`}>
@@ -1881,7 +2152,7 @@ function ResourceLibrary({ onBack, config }) {
           </div>
           <div>
             <span>{secondaryCategoryCount}</span>
-            <p>二级条目</p>
+            <p>二级分类</p>
           </div>
         </section>
 
@@ -1906,19 +2177,14 @@ function ResourceLibrary({ onBack, config }) {
                   )}
                   {resourceName} 分类
                 </span>
-                <strong>{taxonomy.length}</strong>
+                <span className="tree-toggle-meta">
+                  <strong>{taxonomy.length}</strong>
+                  <em>{isCategorySectionOpen ? '收起' : '展开'}</em>
+                </span>
               </button>
 
               {isCategorySectionOpen && (
                 <div className="tree-section-body">
-                  <button
-                    className={activePrimary === '全部' && activeSecondary === '全部' ? 'tree-all active' : 'tree-all'}
-                    onClick={() => handlePrimarySelect('全部')}
-                  >
-                    <span>全部分类</span>
-                    <strong>{resources.length}</strong>
-                  </button>
-
                   {taxonomy.map((category) => {
                     const isExpanded = expandedPrimaryCategories.has(category.label);
 
@@ -1970,21 +2236,14 @@ function ResourceLibrary({ onBack, config }) {
                   )}
                   公司分类
                 </span>
-                <strong>{companyCount}</strong>
+                <span className="tree-toggle-meta">
+                  <strong>{companyCount}</strong>
+                  <em>{isCompanySectionOpen ? '收起' : '展开'}</em>
+                </span>
               </button>
 
               {isCompanySectionOpen && (
                 <div className="tree-section-body">
-                  <button
-                    className={companyFilter === '全部' ? 'tree-all active' : 'tree-all'}
-                    onClick={() => {
-                      setCompanyFilter('全部');
-                      setCurrentPage(1);
-                    }}
-                  >
-                    <span>全部公司</span>
-                    <strong>{resources.length}</strong>
-                  </button>
                   {filterOptions.companies.filter((company) => company !== '全部').map((company) => (
                     <button
                       key={company}
@@ -2042,20 +2301,6 @@ function ResourceLibrary({ onBack, config }) {
                     }}
                   >
                     {filterOptions.regions.map((option) => (
-                      <option key={option}>{option}</option>
-                    ))}
-                  </select>
-                </label>
-                <label className="filter-field">
-                  <span>应用阶段</span>
-                  <select
-                    value={stageFilter}
-                    onChange={(event) => {
-                      setStageFilter(event.target.value);
-                      setCurrentPage(1);
-                    }}
-                  >
-                    {filterOptions.stages.map((option) => (
                       <option key={option}>{option}</option>
                     ))}
                   </select>
@@ -2120,71 +2365,102 @@ function ResourceLibrary({ onBack, config }) {
               className={viewMode === 'list' ? 'resource-grid resource-grid-list' : 'resource-grid'}
               aria-label={`${resourceName} 资源列表`}
             >
-              {paginatedResources.map((resource) => (
-                <button
-                  key={`${resource.company}-${resource.tool}-${resource.secondaryCategory}`}
-                  className="resource-card"
-                  onClick={() => setSelectedResource(resource)}
-                >
-                  <div className="resource-card-head">
-                    <div className="resource-visual">
-                      {getResourceVisual(resource) ? (
-                        <img
-                          src={getResourceVisual(resource)}
-                          alt={`${resource.company} 图标`}
-                          onError={(event) => {
-                            event.currentTarget.style.display = 'none';
-                            event.currentTarget.nextElementSibling.hidden = false;
-                          }}
-                        />
-                      ) : null}
-                      <span className="resource-visual-fallback" hidden={Boolean(getResourceVisual(resource))}>
-                        {getCompanyInitials(resource.company)}
+              {paginatedResources.map((resource) => {
+                const detailPath = getInternalDetailPath(resource);
+                const sourceUrl = getResourceSourceUrl(resource);
+                const MainElement = detailPath ? 'a' : 'button';
+                const mainProps = detailPath
+                  ? {
+                      href: detailPath,
+                      'aria-label': `打开${resource.company} ${resource.tool}内部详情页`,
+                    }
+                  : {
+                      type: 'button',
+                      onClick: () => setSelectedResource(resource),
+                      'aria-label': `查看${resource.company} ${resource.tool}详情`,
+                    };
+
+                return (
+                  <article
+                    key={`${resource.company}-${resource.tool}-${resource.secondaryCategory}`}
+                    className="resource-card"
+                  >
+                    <MainElement className="resource-card-main" {...mainProps}>
+                      <div className="resource-card-head">
+                        <div className="resource-visual">
+                          {getResourceVisual(resource) ? (
+                            <img
+                              src={getResourceVisual(resource)}
+                              alt={`${resource.company} 图标`}
+                              onError={(event) => {
+                                event.currentTarget.style.display = 'none';
+                                event.currentTarget.nextElementSibling.hidden = false;
+                              }}
+                            />
+                          ) : null}
+                          <span className="resource-visual-fallback" hidden={Boolean(getResourceVisual(resource))}>
+                            {getCompanyInitials(resource.company)}
+                          </span>
+                        </div>
+                        <div className="resource-title-block">
+                          <p className="resource-company">{resource.company}</p>
+                          <h2>{resource.tool}</h2>
+                          <div className="resource-chip-row">
+                            {getResourceChips(resource).map((chip) => (
+                              <span key={chip}>{chip}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="resource-browse-profile" aria-label={`${resource.tool}产品信息`}>
+                        <p>
+                          <Sparkles size={14} aria-hidden="true" />
+                          <strong>产品简介：</strong>
+                          {resource.summary}
+                        </p>
+                        <p>
+                          <Workflow size={14} aria-hidden="true" />
+                          <strong>典型应用：</strong>
+                          {getApplicationText(resource)}
+                        </p>
+                        <p>
+                          <Workflow size={14} aria-hidden="true" />
+                          <strong>适用阶段：</strong>
+                          {getStageFlow(resource).join(' → ')}
+                        </p>
+                      </div>
+                    </MainElement>
+                    <div className="resource-card-footer">
+                      {detailPath ? (
+                        <a href={detailPath}>
+                          <BookOpen size={14} aria-hidden="true" />
+                          详情
+                        </a>
+                      ) : (
+                        <button type="button" onClick={() => setSelectedResource(resource)}>
+                          <BookOpen size={14} aria-hidden="true" />
+                          详情
+                        </button>
+                      )}
+                      {sourceUrl ? (
+                        <a href={sourceUrl} target="_blank" rel="noreferrer">
+                          <Download size={14} aria-hidden="true" />
+                          官网
+                        </a>
+                      ) : (
+                        <span>
+                          <Download size={14} aria-hidden="true" />
+                          待补充
+                        </span>
+                      )}
+                      <span>
+                        <Bookmark size={14} aria-hidden="true" />
+                        收藏
                       </span>
                     </div>
-                    <div className="resource-title-block">
-                      <p className="resource-company">{resource.company}</p>
-                      <h2>{resource.tool}</h2>
-                      <div className="resource-chip-row">
-                        {getResourceChips(resource).map((chip) => (
-                          <span key={chip}>{chip}</span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="resource-browse-profile" aria-label={`${resource.tool}产品信息`}>
-                    <p>
-                      <Sparkles size={14} aria-hidden="true" />
-                      <strong>产品简介：</strong>
-                      {resource.summary}
-                    </p>
-                    <p>
-                      <Workflow size={14} aria-hidden="true" />
-                      <strong>典型应用：</strong>
-                      {getApplicationText(resource)}
-                    </p>
-                    <p>
-                      <Workflow size={14} aria-hidden="true" />
-                      <strong>适用阶段：</strong>
-                      {getStageFlow(resource).join(' → ')}
-                    </p>
-                  </div>
-                  <div className="resource-card-footer">
-                    <span>
-                      <BookOpen size={14} aria-hidden="true" />
-                      详情
-                    </span>
-                    <span>
-                      <Download size={14} aria-hidden="true" />
-                      官网
-                    </span>
-                    <span>
-                      <Bookmark size={14} aria-hidden="true" />
-                      收藏
-                    </span>
-                  </div>
-                </button>
-              ))}
+                  </article>
+                );
+              })}
             </section>
 
             {filteredResources.length > 0 && (
@@ -2268,7 +2544,7 @@ function ResourceLibrary({ onBack, config }) {
                 <dd>{selectedResource.region}</dd>
               </div>
               <div>
-                <dt>二级条目</dt>
+                      <dt>二级分类</dt>
                 <dd>{selectedResource.secondaryCategory}</dd>
               </div>
             </dl>
@@ -2289,6 +2565,315 @@ function ResourceLibrary({ onBack, config }) {
   );
 }
 
+function ResourceDetailPage({ config, resource }) {
+  const {
+    resourceName,
+    accentColor,
+    accentRgb,
+    contrastColor,
+    title,
+    detailBasePath,
+  } = config;
+  const sourceUrl = resource ? getResourceSourceUrl(resource) : null;
+  const visual = resource ? getResourceVisual(resource) : null;
+  const detailSections = resource ? getResourceDetailSections(resource) : [];
+  const companyPath = resource ? `#/company/${getCompanySlug(resource.company)}` : null;
+  const productFlow = resource ? getProductFlow(resource) : { steps: [], activeIndex: 0 };
+
+  return (
+    <main
+      className="app-shell library-shell"
+      style={{
+        '--bg-image': `url(${backgroundUrl})`,
+        '--library-accent': accentColor,
+        '--library-accent-rgb': accentRgb,
+        '--library-contrast': contrastColor,
+      }}
+    >
+      <section className="resource-detail-page">
+        <a className="library-back detail-back" href={`#/${detailBasePath}`}>
+          <ArrowLeft size={18} aria-hidden="true" />
+          返回 {title}
+        </a>
+
+        {!resource ? (
+          <section className="empty-state detail-empty">
+            <p className="eyebrow">{resourceName} PRODUCT DETAIL</p>
+            <h1>未找到产品</h1>
+            <p>这个产品条目可能已经被调整。可以返回资源库后重新选择。</p>
+          </section>
+        ) : (
+          <>
+            <header className="product-detail-hero">
+              <a
+                className="product-logo-card company-entry-link"
+                href={companyPath}
+                aria-label={`查看${resource.company}厂商详情`}
+              >
+                {visual ? (
+                  <img src={visual} alt={`${resource.company} 图标`} />
+                ) : (
+                  <span className="resource-visual-fallback">{getCompanyInitials(resource.company)}</span>
+                )}
+              </a>
+              <div className="product-detail-title">
+                <p className="eyebrow">{resourceName} PRODUCT DETAIL</p>
+                <a className="resource-company company-name-link" href={companyPath}>
+                  {resource.company}
+                </a>
+                <h1>{resource.tool}</h1>
+                <div className="resource-chip-row">
+                  {getResourceChips(resource).map((chip) => (
+                    <span key={chip}>{chip}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="detail-actions">
+                {sourceUrl ? (
+                  <a className="source-link" href={sourceUrl} target="_blank" rel="noreferrer">
+                    官网详情
+                  </a>
+                ) : (
+                  <span className="source-link disabled-link">官网待补充</span>
+                )}
+                {resource.materialUrl ? (
+                  <a className="source-link" href={resource.materialUrl} target="_blank" rel="noreferrer">
+                    产品资料
+                  </a>
+                ) : null}
+              </div>
+            </header>
+
+            <section className="detail-layout">
+              <article className="detail-panel detail-main-panel">
+                <section className="product-flow-panel" aria-label={`${resource.tool}产品流程位置`}>
+                  <div className="product-flow-heading">
+                    <p className="eyebrow">FLOW POSITION</p>
+                    <h2>产品流程位置</h2>
+                  </div>
+                  <div className="product-flow-track">
+                    {productFlow.steps.map((step, index) => {
+                      const state = index < productFlow.activeIndex ? 'past' : index === productFlow.activeIndex ? 'active' : 'future';
+
+                      return (
+                        <div key={step} className={`product-flow-step ${state}`}>
+                          <span className="flow-dot" aria-hidden="true" />
+                          <strong>{step}</strong>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </section>
+                <p className="eyebrow">OVERVIEW</p>
+                <h2>产品说明</h2>
+                <p>{resource.summary}</p>
+                <div className="detail-section-grid">
+                  {detailSections.map((section) => (
+                    <section key={section.title} className="detail-section">
+                      <h3>{section.title}</h3>
+                      <p>{section.body}</p>
+                    </section>
+                  ))}
+                </div>
+              </article>
+
+              <aside className="detail-side">
+                <section className="detail-panel">
+                  <p className="eyebrow">CLASSIFICATION</p>
+                  <h2>分类与流程</h2>
+                  <dl className="detail-meta">
+                    <div>
+                      <dt>一级分类</dt>
+                      <dd>{resource.primaryCategory}</dd>
+                    </div>
+                    <div>
+                      <dt>二级分类</dt>
+                      <dd>{resource.secondaryCategory}</dd>
+                    </div>
+                    <div>
+                      <dt>适用阶段</dt>
+                      <dd>{resource.stage}</dd>
+                    </div>
+                    <div>
+                      <dt>来源地区</dt>
+                      <dd>{resource.region}</dd>
+                    </div>
+                  </dl>
+                </section>
+
+                <section className="detail-panel">
+                  <p className="eyebrow">TAGS</p>
+                  <h2>能力标签</h2>
+                  <div className="resource-tags">
+                    {resource.tags.map((tag) => (
+                      <span key={tag}>{tag}</span>
+                    ))}
+                  </div>
+                </section>
+
+                <section className="detail-panel">
+                  <p className="eyebrow">MATERIALS</p>
+                  <h2>下载产品信息</h2>
+                  {resource.materialUrl ? (
+                    <a className="source-link" href={resource.materialUrl} target="_blank" rel="noreferrer">
+                      下载资料
+                    </a>
+                  ) : (
+                    <p className="material-note">产品信息文件整理上传后，可在此下载。</p>
+                  )}
+                </section>
+
+                <section className="detail-panel product-contact-panel">
+                  <p className="eyebrow">CONTACT</p>
+                  <h2>联系方式</h2>
+                  <div className="product-contact-list">
+                    {productContactItems.map((item) => {
+                      const Icon = item.icon;
+
+                      return (
+                        <div className="product-contact-row" key={item.label}>
+                          <Icon size={16} aria-hidden="true" />
+                          <span>{item.label}</span>
+                          <strong>{item.value}</strong>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="follow-us-block">
+                    <p>Follow Us</p>
+                    <div className="follow-channel-list">
+                      {productFollowChannels.map((channel) => (
+                        <button
+                          type="button"
+                          className="follow-channel"
+                          key={channel.label}
+                          title={channel.label}
+                          data-label={channel.label}
+                          aria-label={`${channel.label}入口待补充`}
+                        >
+                          <BrandIcon name={channel.icon} />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </section>
+              </aside>
+            </section>
+          </>
+        )}
+      </section>
+    </main>
+  );
+}
+
+function CompanyDetailPage({ company }) {
+  const resources = company ? getCompanyResources(company) : [];
+  const visual = company ? companyVisuals[company] : null;
+  const sourceUrl = company ? companySourceUrls[company] : null;
+  const categoryCount = new Set(resources.map((resource) => resource.primaryCategory)).size;
+  const stageCount = new Set(resources.map((resource) => resource.stage)).size;
+
+  return (
+    <main
+      className="app-shell library-shell"
+      style={{
+        '--bg-image': `url(${backgroundUrl})`,
+        '--library-accent': libraryConfigs.eda.accentColor,
+        '--library-accent-rgb': libraryConfigs.eda.accentRgb,
+        '--library-contrast': libraryConfigs.eda.contrastColor,
+      }}
+    >
+      <section className="resource-detail-page company-detail-page">
+        <a className="library-back detail-back" href="#/eda">
+          <ArrowLeft size={18} aria-hidden="true" />
+          返回 EDA 资源库
+        </a>
+
+        {!company ? (
+          <section className="empty-state detail-empty">
+            <p className="eyebrow">COMPANY DETAIL</p>
+            <h1>未找到厂商</h1>
+            <p>这个厂商条目可能还没有被收录，可以返回资源库后重新选择。</p>
+          </section>
+        ) : (
+          <>
+            <header className="product-detail-hero company-detail-hero">
+              <div className="product-logo-card company-logo-card">
+                {visual ? (
+                  <img src={visual} alt={`${company} 图标`} />
+                ) : (
+                  <span className="resource-visual-fallback">{getCompanyInitials(company)}</span>
+                )}
+              </div>
+              <div className="product-detail-title">
+                <p className="eyebrow">COMPANY PROFILE</p>
+                <p className="resource-company">EDA 厂商信息</p>
+                <h1>{company}</h1>
+                <p className="company-profile-copy">
+                  {companyDescriptions[company] || '厂商简介待补充，当前页面先聚合已收录产品与分类覆盖。'}
+                </p>
+              </div>
+              <div className="detail-actions">
+                {sourceUrl ? (
+                  <a className="source-link" href={sourceUrl} target="_blank" rel="noreferrer">
+                    厂商官网
+                  </a>
+                ) : (
+                  <span className="source-link disabled-link">官网待补充</span>
+                )}
+              </div>
+            </header>
+
+            <section className="library-metrics company-metrics" aria-label={`${company}厂商概览`}>
+              <div>
+                <span>{resources.length}</span>
+                <p>已收录产品</p>
+              </div>
+              <div>
+                <span>{categoryCount}</span>
+                <p>覆盖一级分类</p>
+              </div>
+              <div>
+                <span>{stageCount}</span>
+                <p>覆盖应用阶段</p>
+              </div>
+              <div>
+                <span>{sourceUrl ? '1' : '0'}</span>
+                <p>官网入口</p>
+              </div>
+            </section>
+
+            <section className="detail-panel company-products-panel">
+              <p className="eyebrow">COLLECTED PRODUCTS</p>
+              <h2>已收录产品</h2>
+              {resources.length > 0 ? (
+                <div className="company-product-list">
+                  {resources.map((resource) => (
+                    <a
+                      key={`${resource.company}-${resource.tool}-${resource.secondaryCategory}`}
+                      className="company-product-row"
+                      href={`#/eda/product/${getResourceSlug(resource)}`}
+                    >
+                      <span>
+                        <strong>{resource.tool}</strong>
+                        <em>{resource.summary}</em>
+                      </span>
+                      <span>{resource.primaryCategory}</span>
+                      <span>{resource.stage}</span>
+                    </a>
+                  ))}
+                </div>
+              ) : (
+                <p className="company-profile-copy">暂无已收录产品。</p>
+              )}
+            </section>
+          </>
+        )}
+      </section>
+    </main>
+  );
+}
+
 function EdaLibrary({ onBack }) {
   return <ResourceLibrary onBack={onBack} config={libraryConfigs.eda} />;
 }
@@ -2300,11 +2885,47 @@ function IpLibrary({ onBack }) {
 function App() {
   const [activeNode, setActiveNode] = useState(null);
   const [selectedNode, setSelectedNode] = useState(null);
+  const [routeHash, setRouteHash] = useState(() => window.location.hash);
+
+  useEffect(() => {
+    const handleHashChange = () => setRouteHash(window.location.hash);
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   const currentResource = useMemo(
     () => nodes.find((node) => node.id === selectedNode),
     [selectedNode],
   );
+
+  const companyRouteMatch = routeHash.match(/^#\/company\/(.+)$/);
+  if (companyRouteMatch) {
+    const [, companySlug] = companyRouteMatch;
+    return <CompanyDetailPage company={getCompanyBySlug(companySlug)} />;
+  }
+
+  const libraryRouteMatch = routeHash.match(/^#\/(eda|ip)(?:\/product\/(.+))?$/);
+  if (libraryRouteMatch) {
+    const [, libraryKey, productSlug] = libraryRouteMatch;
+    const config = libraryConfigs[libraryKey];
+    const handleRouteBack = () => {
+      window.location.hash = '';
+      setSelectedNode(null);
+    };
+
+    if (productSlug) {
+      const resource = config.detailBasePath ? findResourceBySlug(config.resources, productSlug) : null;
+      return <ResourceDetailPage config={config} resource={resource} />;
+    }
+
+    if (libraryKey === 'eda') {
+      return <EdaLibrary onBack={handleRouteBack} />;
+    }
+
+    if (libraryKey === 'ip') {
+      return <IpLibrary onBack={handleRouteBack} />;
+    }
+  }
 
   if (selectedNode === 'eda') {
     return <EdaLibrary onBack={() => setSelectedNode(null)} />;
