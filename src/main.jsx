@@ -1254,6 +1254,330 @@ const edaResources = [
   },
 ];
 
+const ipTaxonomy = [
+  {
+    id: 'processor',
+    label: '处理器|Processor',
+    items: ['CPU', 'DPU', 'GPU', 'NPU', 'VPU', 'DSP', 'TPU', 'eFPGA', 'AI Processor/Accelerator'],
+  },
+  {
+    id: 'foundation',
+    label: '基础|Foundation',
+    items: ['Standard Cell Library', 'Memory Compilers', 'General Purpose IOs'],
+  },
+  {
+    id: 'analog-mixed',
+    label: '模拟和混合信号|Analog & Mixed Signal',
+    items: ['ADC', 'DAC', 'CODEC', 'PLL', 'DLL', 'Crystal driver', 'RC/LC OSC', 'DCDC', 'LDO', 'POR/BOR', 'PVT Monitors', 'Amplifier', 'Sensor'],
+  },
+  {
+    id: 'interface',
+    label: '接口和总线协议|Interface & BUS Protocol(PHY&Controller)',
+    items: ['PCIe', 'SATA', 'AMBA', 'CXL', 'CCIX', 'DDR', 'DP', 'HDMI', 'MIPI', 'XAUI', 'LVDS', 'USB', 'HBM', 'Ethernet', 'Die-to-Die', 'Thread', 'EMMC', 'Mobile Storage', 'Datapath IP(PHY & Controller)'],
+  },
+  {
+    id: 'memory',
+    label: '存储与逻辑库|Memory & Logic Library',
+    items: ['TCAM Compiler', 'eFlash', 'MTP/OTP', 'SRAM', 'RRAM', 'MRAM', 'FRAM', 'ROM', 'Memory Compilers'],
+  },
+  {
+    id: 'security',
+    label: '安全加密|Security',
+    items: ['Cryptography Cores', 'PUF', 'tRNG', 'Light/Voltage/Freq.Detector', 'Temperature Sensor'],
+  },
+  {
+    id: 'rf-wireless',
+    label: '射频和无线通信|RF & Wireless Communication',
+    items: ['3GPP-5G/LTE', 'WiFi', 'Bluetooth', 'Zigbee', 'NB-loT', 'Sub-G', 'RFID', 'NFC', 'UWB', 'CAT-1', 'GPS/北斗'],
+  },
+  {
+    id: 'graphic-multimedia',
+    label: '图形处理和多媒体|Graphic & Multimedia',
+    items: ['ISP', 'MPEG-4', 'VGA', 'Audio Interfaces', '2D/3D', 'H.263/H.264/h.265/H.266'],
+  },
+  {
+    id: 'automotive',
+    label: '汽车电子|Automotive',
+    items: ['CAN', 'CAN-FD', 'FlexRay', 'LIN', 'Safe Ethernet'],
+  },
+];
+
+const ipResources = [
+  {
+    company: 'Arm',
+    tool: 'Cortex-A / Cortex-M 系列',
+    primaryCategory: '处理器|Processor',
+    secondaryCategory: 'CPU',
+    stage: 'SoC 架构与集成',
+    region: '英国/海外',
+    tags: ['CPU', '低功耗', '生态软件'],
+    status: '示例整理',
+    summary: 'Arm CPU IP 覆盖高性能应用处理器与低功耗 MCU 场景，是大量 SoC 的通用计算内核来源。',
+    detail: '适合作为处理器 IP 条目记录指令集生态、软件工具链、互连与安全扩展，以及授权模式对芯片产品规划的影响。',
+    sourceUrl: 'https://www.arm.com/products/silicon-ip-cpu',
+  },
+  {
+    company: 'Arm',
+    tool: 'Mali GPU / Ethos NPU',
+    primaryCategory: '处理器|Processor',
+    secondaryCategory: 'GPU',
+    stage: '图形与 AI 加速',
+    region: '英国/海外',
+    tags: ['GPU', 'NPU', '边缘 AI'],
+    status: '示例整理',
+    summary: 'Arm 面向移动、嵌入式和边缘设备提供图形与神经网络加速 IP。',
+    detail: '可用于记录多媒体 SoC、智能终端和边缘 AI 芯片中的图形渲染、视觉推理和软件栈适配能力。',
+    sourceUrl: 'https://www.arm.com/products/silicon-ip-multimedia',
+  },
+  {
+    company: 'Synopsys',
+    tool: 'ARC Processor IP',
+    primaryCategory: '处理器|Processor',
+    secondaryCategory: 'DSP',
+    stage: '可配置处理器集成',
+    region: '美国/海外',
+    tags: ['Configurable CPU', 'DSP', '嵌入式'],
+    status: '示例整理',
+    summary: 'Synopsys ARC 处理器 IP 面向可配置嵌入式处理和 DSP 场景。',
+    detail: '适合记录可配置指令、处理器子系统、软件工具链，以及在存储、连接和低功耗控制芯片中的应用。',
+    sourceUrl: 'https://www.synopsys.com/designware-ip/processor-solutions.html',
+  },
+  {
+    company: 'SiFive',
+    tool: 'SiFive RISC-V Core IP',
+    primaryCategory: '处理器|Processor',
+    secondaryCategory: 'CPU',
+    stage: '开放指令集处理器',
+    region: '美国/海外',
+    tags: ['RISC-V', 'CPU', '可定制'],
+    status: '示例整理',
+    summary: 'SiFive 提供基于 RISC-V 的处理器 IP，覆盖 MCU、应用处理和高性能计算方向。',
+    detail: '可用于观察 RISC-V IP 的授权、可扩展指令、生态工具链和面向国产替代或专用芯片的定制空间。',
+    sourceUrl: 'https://www.sifive.com/risc-v-core-ip',
+  },
+  {
+    company: 'Cadence',
+    tool: 'Tensilica DSP IP',
+    primaryCategory: '处理器|Processor',
+    secondaryCategory: 'DSP',
+    stage: '信号处理加速',
+    region: '美国/海外',
+    tags: ['DSP', '音频', '视觉'],
+    status: '示例整理',
+    summary: 'Cadence Tensilica 面向音频、视觉、通信和 AI 推理提供可配置 DSP IP。',
+    detail: '适合记录专用信号处理、指令扩展、编译器支持，以及与算法团队协同优化的芯片设计流程。',
+    sourceUrl: 'https://www.cadence.com/en_US/home/tools/ip/tensilica-ip.html',
+  },
+  {
+    company: 'Synopsys',
+    tool: 'DesignWare PCI Express IP',
+    primaryCategory: '接口和总线协议|Interface & BUS Protocol(PHY&Controller)',
+    secondaryCategory: 'PCIe',
+    stage: '高速互连接口',
+    region: '美国/海外',
+    tags: ['PCIe', 'Controller', 'PHY'],
+    status: '示例整理',
+    summary: 'Synopsys DesignWare PCIe IP 覆盖控制器、PHY 与验证资源，是高速互连常用商用 IP。',
+    detail: '适合记录不同 PCIe 代际、控制器/PHY 组合、验证 IP 与合规测试需求。',
+    sourceUrl: 'https://www.synopsys.com/designware-ip/interface-ip/pci-express.html',
+  },
+  {
+    company: 'Cadence',
+    tool: 'Cadence PCIe / USB / Ethernet IP',
+    primaryCategory: '接口和总线协议|Interface & BUS Protocol(PHY&Controller)',
+    secondaryCategory: 'PCIe',
+    stage: '协议接口集成',
+    region: '美国/海外',
+    tags: ['PCIe', 'USB', 'Ethernet'],
+    status: '示例整理',
+    summary: 'Cadence 提供多类接口 IP，覆盖常见高速协议控制器、PHY 和验证模型。',
+    detail: '用于归档接口 IP 的协议版本、控制器能力、PHY 工艺适配和系统验证资源。',
+    sourceUrl: 'https://www.cadence.com/en_US/home/tools/ip.html',
+  },
+  {
+    company: 'Rambus',
+    tool: 'DDR / HBM Memory Interface IP',
+    primaryCategory: '存储与逻辑库|Memory & Logic Library',
+    secondaryCategory: 'Memory Compilers',
+    stage: '高带宽存储接口',
+    region: '美国/海外',
+    tags: ['DDR', 'HBM', 'PHY'],
+    status: '示例整理',
+    summary: 'Rambus 面向高性能 SoC 提供 DDR、GDDR、HBM 等存储接口 IP。',
+    detail: '适合记录存储带宽、PHY 工艺节点、控制器兼容性和数据中心/AI 芯片中的接口需求。',
+    sourceUrl: 'https://www.rambus.com/interface-ip/',
+  },
+  {
+    company: 'Synopsys',
+    tool: 'DesignWare DDR Controller / PHY',
+    primaryCategory: '存储与逻辑库|Memory & Logic Library',
+    secondaryCategory: 'Memory Compilers',
+    stage: '外部存储控制',
+    region: '美国/海外',
+    tags: ['DDR', 'Controller', 'PHY'],
+    status: '示例整理',
+    summary: 'Synopsys DDR IP 提供控制器、PHY 与验证环境，服务高性能 SoC 外部存储接口。',
+    detail: '可用于记录 DDR5/LPDDR/HBM 等存储协议、功耗模式、训练校准和一致性验证需求。',
+    sourceUrl: 'https://www.synopsys.com/designware-ip/interface-ip/ddr.html',
+  },
+  {
+    company: 'eMemory',
+    tool: 'NeoFuse / NeoMTP NVM IP',
+    primaryCategory: '存储与逻辑库|Memory & Logic Library',
+    secondaryCategory: 'eFlash',
+    stage: '嵌入式非易失存储',
+    region: '中国台湾/国产生态',
+    tags: ['NVM', 'eFlash', 'OTP/MTP'],
+    status: '示例整理',
+    summary: 'eMemory 提供嵌入式非易失存储 IP，用于芯片配置、校准、安全和少量数据保存。',
+    detail: '适合记录一次性可编程、多次可编程、可靠性、工艺适配及与安全启动/密钥存储的关系。',
+    sourceUrl: 'https://www.ememory.com.tw/en-US/Products',
+  },
+  {
+    company: 'Rambus',
+    tool: 'Root of Trust / Crypto IP',
+    primaryCategory: '安全加密|Security',
+    secondaryCategory: 'Cryptography Cores',
+    stage: '芯片安全子系统',
+    region: '美国/海外',
+    tags: ['RoT', 'Crypto', 'Secure Boot'],
+    status: '示例整理',
+    summary: 'Rambus 安全 IP 覆盖硬件信任根、密码引擎和密钥保护能力。',
+    detail: '可用于记录安全启动、固件认证、密钥管理、防篡改和面向车规/数据中心的安全合规需求。',
+    sourceUrl: 'https://www.rambus.com/security/',
+  },
+  {
+    company: 'Synopsys',
+    tool: 'Security IP for SoC',
+    primaryCategory: '安全加密|Security',
+    secondaryCategory: 'Cryptography Cores',
+    stage: '数据保护与认证',
+    region: '美国/海外',
+    tags: ['Crypto', 'TRNG', 'Security'],
+    status: '示例整理',
+    summary: 'Synopsys 安全 IP 包含密码、随机数、安全协议和保护模块。',
+    detail: '适合记录算法覆盖、侧信道防护、密钥生命周期和与处理器/存储子系统的集成边界。',
+    sourceUrl: 'https://www.synopsys.com/designware-ip/security-ip.html',
+  },
+  {
+    company: '芯原股份',
+    tool: 'Vivante GPU / NPU IP',
+    primaryCategory: '处理器|Processor',
+    secondaryCategory: 'GPU',
+    stage: '图形与 AI 加速',
+    region: '中国/国产',
+    tags: ['GPU', 'NPU', '视觉处理'],
+    status: '示例整理',
+    summary: '芯原提供图形处理器、神经网络处理器和视频处理相关 IP，服务 SoC 平台化设计。',
+    detail: '适合作为国产 IP 厂商样本，记录 GPU/NPU、VPU、显示处理和芯片定制服务之间的组合能力。',
+    sourceUrl: 'https://www.verisilicon.com/en/IPPortfolio',
+  },
+  {
+    company: '芯原股份',
+    tool: 'Video Processor / Display Processor IP',
+    primaryCategory: '模拟和混合信号|Analog & Mixed Signal',
+    secondaryCategory: 'Sensor',
+    stage: '多媒体子系统',
+    region: '中国/国产',
+    tags: ['Video', 'Display', 'Camera'],
+    status: '示例整理',
+    summary: '芯原多媒体 IP 面向视频编解码、图像信号处理和显示管线。',
+    detail: '当前归入传感与多媒体接口，后续可单独拆为多媒体 IP 分类，便于研究智能终端与边缘视觉芯片。',
+    sourceUrl: 'https://www.verisilicon.com/en/IPPortfolio',
+  },
+  {
+    company: '芯动科技',
+    tool: 'SerDes / DDR / PCIe IP',
+    primaryCategory: '接口和总线协议|Interface & BUS Protocol(PHY&Controller)',
+    secondaryCategory: 'Datapath IP(PHY & Controller)',
+    stage: '高速接口与物理层',
+    region: '中国/国产',
+    tags: ['SerDes', 'DDR', 'PCIe'],
+    status: '示例整理',
+    summary: '芯动科技提供高速混合信号 IP，覆盖 SerDes、DDR、PCIe 等接口方向。',
+    detail: '适合记录国产高速 PHY IP 的工艺节点、量产案例、协议覆盖和高性能芯片集成价值。',
+    sourceUrl: 'https://www.innosilicon.com/',
+  },
+  {
+    company: '芯动科技',
+    tool: 'GPU IP',
+    primaryCategory: '处理器|Processor',
+    secondaryCategory: 'GPU',
+    stage: '图形处理与显示',
+    region: '中国/国产',
+    tags: ['GPU', '国产 IP', '图形处理'],
+    status: '示例整理',
+    summary: '芯动科技布局国产 GPU IP，可服务图形显示、桌面和嵌入式图形处理需求。',
+    detail: '适合跟踪国产 GPU IP 在生态驱动、性能档位、应用场景和 SoC 集成中的成熟度。',
+    sourceUrl: 'https://www.innosilicon.com/',
+  },
+  {
+    company: '灿芯股份',
+    tool: 'SerDes / DDR / Analog IP',
+    primaryCategory: '模拟和混合信号|Analog & Mixed Signal',
+    secondaryCategory: 'PLL',
+    stage: '定制芯片 IP 集成',
+    region: '中国/国产',
+    tags: ['SerDes', 'DDR', 'Analog IP'],
+    status: '示例整理',
+    summary: '灿芯在一站式芯片定制服务中提供接口、模拟和基础 IP 支持。',
+    detail: '可作为 IP 与 ASIC 设计服务结合的样本，记录自有 IP、工艺平台和客户定制交付之间的关系。',
+    sourceUrl: 'https://www.brite-semi.com/',
+  },
+  {
+    company: 'Synopsys',
+    tool: 'DesignWare Foundation IP',
+    primaryCategory: '基础|Foundation',
+    secondaryCategory: 'Standard Cell Library',
+    stage: '工艺平台基础库',
+    region: '美国/海外',
+    tags: ['Foundation IP', 'Std Cell', 'I/O'],
+    status: '示例整理',
+    summary: 'Synopsys Foundation IP 覆盖标准单元库、存储器编译器和通用基础库。',
+    detail: '用于记录不同工艺节点上的基础库、低功耗变体、编译器和 SoC 后端实现所需的工艺绑定资源。',
+    sourceUrl: 'https://www.synopsys.com/designware-ip/foundation-ip.html',
+  },
+  {
+    company: 'Cadence',
+    tool: 'Verification IP Portfolio',
+    primaryCategory: '接口和总线协议|Interface & BUS Protocol(PHY&Controller)',
+    secondaryCategory: 'Datapath IP(PHY & Controller)',
+    stage: '协议验证与合规',
+    region: '美国/海外',
+    tags: ['VIP', 'UVM', 'Protocol'],
+    status: '示例整理',
+    summary: 'Cadence 验证 IP 支持常见协议的测试平台、检查器和覆盖模型。',
+    detail: '适合记录接口 IP 导入后的协议验证、合规套件、覆盖率收敛和仿真/硬件仿真复用能力。',
+    sourceUrl: 'https://www.cadence.com/en_US/home/tools/system-design-and-verification/verification-ip.html',
+  },
+  {
+    company: 'Synopsys',
+    tool: 'Verification IP for Protocols',
+    primaryCategory: '接口和总线协议|Interface & BUS Protocol(PHY&Controller)',
+    secondaryCategory: 'Datapath IP(PHY & Controller)',
+    stage: '协议验证与合规',
+    region: '美国/海外',
+    tags: ['VIP', 'Compliance', 'Protocol'],
+    status: '示例整理',
+    summary: 'Synopsys VIP 覆盖多类接口协议，支持仿真、形式验证和硬件辅助验证流程。',
+    detail: '可用于跟踪协议覆盖、参考测试、UVM 集成和与 DesignWare 接口 IP 的协同验证。',
+    sourceUrl: 'https://www.synopsys.com/verification/verification-ip.html',
+  },
+  {
+    company: '华大九天',
+    tool: 'Qualib 标准单元库/IP 验证',
+    primaryCategory: '基础|Foundation',
+    secondaryCategory: 'Standard Cell Library',
+    stage: 'IP 质量验证',
+    region: '中国/国产',
+    tags: ['Library QA', 'IP Validation', '国产 EDA'],
+    status: '示例整理',
+    summary: '华大九天 Qualib 面向标准单元库与 IP 的质量验证，可作为基础 IP 质量流程样本。',
+    detail: '虽然它本身属于 EDA 工具，但与 IP 入库、库质量评估和 Foundry/设计公司交付流程强相关。',
+    sourceUrl: 'https://www.empyrean.com.cn/product/eda.html',
+  },
+];
+
 const companyVisuals = {
   Cadence: cadenceLogo,
   Synopsys: synopsysLogo,
@@ -1268,11 +1592,63 @@ const companySourceUrls = {
   '华大九天': 'https://www.empyrean.com.cn/product/eda.html',
   '概伦电子': 'https://www.primarius-tech.com/',
   '合见工软': 'https://www.univista-isg.com/',
+  Arm: 'https://www.arm.com/products/silicon-ip',
+  SiFive: 'https://www.sifive.com/risc-v-core-ip',
+  Rambus: 'https://www.rambus.com/interface-ip/',
+  eMemory: 'https://www.ememory.com.tw/en-US/Products',
+  '芯原股份': 'https://www.verisilicon.com/en/IPPortfolio',
+  '芯动科技': 'https://www.innosilicon.com/',
+  '灿芯股份': 'https://www.brite-semi.com/',
 };
 
 const RESULTS_PAGE_SIZE = 8;
 
-function EdaLibrary({ onBack }) {
+const libraryConfigs = {
+  eda: {
+    resourceName: 'EDA',
+    accentColor: '#8bffcf',
+    accentRgb: '139 255 207',
+    contrastColor: '#07140f',
+    eyebrow: 'EDA RESOURCE LIBRARY',
+    title: 'EDA 资源库',
+    description: '面向产业研究的 EDA 资源框架，先沉淀工具类型、流程阶段、地域样本与典型能力，后续可替换为真实产业数据。',
+    taxonomy: edaTaxonomy,
+    resources: edaResources,
+    metricResourceLabel: '示例资源',
+    metricCompanyLabel: 'EDA 企业',
+    searchPlaceholder: '搜索公司、工具、分类、阶段或标签',
+  },
+  ip: {
+    resourceName: 'IP',
+    accentColor: '#a995ff',
+    accentRgb: '169 149 255',
+    contrastColor: '#100b2d',
+    eyebrow: 'IP RESOURCE LIBRARY',
+    title: 'IP 资源库',
+    description: '围绕可复用芯片功能模块沉淀处理器、接口、存储、安全、模拟混合信号与基础库资源，支持从架构选型到集成验证的产业研究。',
+    taxonomy: ipTaxonomy,
+    resources: ipResources,
+    metricResourceLabel: 'IP 样本',
+    metricCompanyLabel: 'IP 企业',
+    searchPlaceholder: '搜索公司、IP、协议、分类、阶段或标签',
+  },
+};
+
+function ResourceLibrary({ onBack, config }) {
+  const {
+    resourceName,
+    accentColor,
+    accentRgb,
+    contrastColor,
+    eyebrow,
+    title,
+    description,
+    taxonomy,
+    resources,
+    metricResourceLabel,
+    metricCompanyLabel,
+    searchPlaceholder,
+  } = config;
   const [query, setQuery] = useState('');
   const [activePrimary, setActivePrimary] = useState('全部');
   const [activeSecondary, setActiveSecondary] = useState('全部');
@@ -1283,13 +1659,15 @@ function EdaLibrary({ onBack }) {
   const [isCategorySectionOpen, setIsCategorySectionOpen] = useState(true);
   const [isCompanySectionOpen, setIsCompanySectionOpen] = useState(true);
   const [expandedPrimaryCategories, setExpandedPrimaryCategories] = useState(
-    () => new Set(edaTaxonomy.map((category) => category.label)),
+    () => new Set(taxonomy.map((category) => category.label)),
   );
+  const [viewMode, setViewMode] = useState('card');
+  const [sortMode, setSortMode] = useState('default');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedResource, setSelectedResource] = useState(null);
 
   const filterOptions = useMemo(() => {
-    const getOptions = (key) => ['全部', ...Array.from(new Set(edaResources.map((resource) => resource[key])))];
+    const getOptions = (key) => ['全部', ...Array.from(new Set(resources.map((resource) => resource[key])))];
 
     return {
       companies: getOptions('company'),
@@ -1297,28 +1675,28 @@ function EdaLibrary({ onBack }) {
       stages: getOptions('stage'),
       toolTypes: getOptions('secondaryCategory'),
     };
-  }, []);
+  }, [resources]);
 
   const categoryCounts = useMemo(() => {
-    return edaResources.reduce((counts, resource) => {
+    return resources.reduce((counts, resource) => {
       counts[resource.primaryCategory] = (counts[resource.primaryCategory] || 0) + 1;
       const secondaryKey = `${resource.primaryCategory}::${resource.secondaryCategory}`;
       counts[secondaryKey] = (counts[secondaryKey] || 0) + 1;
       return counts;
     }, {});
-  }, []);
+  }, [resources]);
 
   const companyCounts = useMemo(() => {
-    return edaResources.reduce((counts, resource) => {
+    return resources.reduce((counts, resource) => {
       counts[resource.company] = (counts[resource.company] || 0) + 1;
       return counts;
     }, {});
-  }, []);
+  }, [resources]);
 
   const filteredResources = useMemo(() => {
     const keyword = query.trim().toLowerCase();
 
-    return edaResources.filter((resource) => {
+    return resources.filter((resource) => {
       const matchesPrimary = activePrimary === '全部' || resource.primaryCategory === activePrimary;
       const matchesSecondary = activeSecondary === '全部' || resource.secondaryCategory === activeSecondary;
       const matchesCompany = companyFilter === '全部' || resource.company === companyFilter;
@@ -1349,16 +1727,26 @@ function EdaLibrary({ onBack }) {
         (!keyword || searchable.includes(keyword))
       );
     });
-  }, [activePrimary, activeSecondary, companyFilter, query, regionFilter, stageFilter, toolTypeFilter]);
+  }, [activePrimary, activeSecondary, companyFilter, query, regionFilter, resources, stageFilter, toolTypeFilter]);
 
-  const companyCount = new Set(edaResources.map((resource) => resource.company)).size;
-  const secondaryCategoryCount = edaTaxonomy.reduce((count, category) => count + category.items.length, 0);
-  const totalPages = Math.max(1, Math.ceil(filteredResources.length / RESULTS_PAGE_SIZE));
+  const companyCount = new Set(resources.map((resource) => resource.company)).size;
+  const secondaryCategoryCount = taxonomy.reduce((count, category) => count + category.items.length, 0);
+  const sortedResources = useMemo(() => {
+    const next = [...filteredResources];
+    if (sortMode === 'company') {
+      next.sort((left, right) => `${left.company}${left.tool}`.localeCompare(`${right.company}${right.tool}`, 'zh-Hans-CN'));
+    }
+    if (sortMode === 'stage') {
+      next.sort((left, right) => `${left.stage}${left.company}`.localeCompare(`${right.stage}${right.company}`, 'zh-Hans-CN'));
+    }
+    return next;
+  }, [filteredResources, sortMode]);
+  const totalPages = Math.max(1, Math.ceil(sortedResources.length / RESULTS_PAGE_SIZE));
   const currentSafePage = Math.min(currentPage, totalPages);
   const paginatedResources = useMemo(() => {
     const start = (currentSafePage - 1) * RESULTS_PAGE_SIZE;
-    return filteredResources.slice(start, start + RESULTS_PAGE_SIZE);
-  }, [currentSafePage, filteredResources]);
+    return sortedResources.slice(start, start + RESULTS_PAGE_SIZE);
+  }, [currentSafePage, sortedResources]);
   const paginationItems = useMemo(() => {
     if (totalPages <= 7) {
       return Array.from({ length: totalPages }, (_, index) => index + 1);
@@ -1394,6 +1782,12 @@ function EdaLibrary({ onBack }) {
   const getResourceSourceUrl = (resource) => resource.sourceUrl || companySourceUrls[resource.company];
   const getResourceChips = (resource) => [resource.secondaryCategory, resource.stage, resource.region];
   const getApplicationText = (resource) => resource.tags.slice(0, 3).join('、');
+  const getCompanyInitials = (company) => company
+    .split(/\s+/)
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
   const getStageFlow = (resource) => {
     if (resource.primaryCategory.includes('模拟')) return ['电路设计', '仿真验证', '版图/签核'];
     if (resource.primaryCategory.includes('数字前端')) return ['RTL 设计', '验证', '综合'];
@@ -1402,6 +1796,12 @@ function EdaLibrary({ onBack }) {
     if (resource.primaryCategory.includes('封装') || resource.primaryCategory.includes('PCB')) return ['封装/PCB 设计', 'SI/PI 分析', '制造输出'];
     if (resource.primaryCategory.includes('FPGA')) return ['原型设计', '验证', '系统协同'];
     if (resource.primaryCategory.includes('系统')) return ['系统建模', '多物理仿真', '协同优化'];
+    if (resource.primaryCategory.includes('处理器')) return ['架构选型', '软件生态适配', 'SoC 集成'];
+    if (resource.primaryCategory.includes('接口')) return ['协议选型', '控制器/PHY 集成', '合规验证'];
+    if (resource.primaryCategory.includes('存储')) return ['容量/带宽规划', '控制器/PHY 集成', '可靠性验证'];
+    if (resource.primaryCategory.includes('安全')) return ['威胁建模', '安全子系统集成', '密钥生命周期'];
+    if (resource.primaryCategory.includes('基础')) return ['工艺适配', '库验证', '后端实现'];
+    if (resource.primaryCategory.includes('验证')) return ['测试平台', '协议检查', '覆盖率收敛'];
     return [resource.primaryCategory, resource.stage, resource.secondaryCategory];
   };
 
@@ -1442,35 +1842,41 @@ function EdaLibrary({ onBack }) {
     setStageFilter('全部');
     setToolTypeFilter('全部');
     setCurrentPage(1);
-    setExpandedPrimaryCategories(new Set(edaTaxonomy.map((category) => category.label)));
+    setExpandedPrimaryCategories(new Set(taxonomy.map((category) => category.label)));
   };
 
   return (
-    <main className="app-shell library-shell" style={{ '--bg-image': `url(${backgroundUrl})` }}>
+    <main
+      className="app-shell library-shell"
+      style={{
+        '--bg-image': `url(${backgroundUrl})`,
+        '--library-accent': accentColor,
+        '--library-accent-rgb': accentRgb,
+        '--library-contrast': contrastColor,
+      }}
+    >
       <section className="library-page">
         <header className="library-hero">
           <button className="library-back" onClick={onBack}>
             <ArrowLeft size={18} aria-hidden="true" />
             返回首页
           </button>
-          <p className="eyebrow">EDA RESOURCE LIBRARY</p>
-          <h1>EDA 资源库</h1>
-          <p>
-            面向产业研究的 EDA 资源框架，先沉淀工具类型、流程阶段、地域样本与典型能力，后续可替换为真实产业数据。
-          </p>
+          <p className="eyebrow">{eyebrow}</p>
+          <h1>{title}</h1>
+          <p>{description}</p>
         </header>
 
-        <section className="library-metrics" aria-label="EDA 资源概览">
+        <section className="library-metrics" aria-label={`${resourceName} 资源概览`}>
           <div>
-            <span>{edaResources.length}</span>
-            <p>示例资源</p>
+            <span>{resources.length}</span>
+            <p>{metricResourceLabel}</p>
           </div>
           <div>
             <span>{companyCount}</span>
-            <p>EDA 企业</p>
+            <p>{metricCompanyLabel}</p>
           </div>
           <div>
-            <span>{edaTaxonomy.length}</span>
+            <span>{taxonomy.length}</span>
             <p>一级分类</p>
           </div>
           <div>
@@ -1480,7 +1886,7 @@ function EdaLibrary({ onBack }) {
         </section>
 
         <section className="library-layout">
-          <aside className="category-tree" aria-label="EDA 分类树">
+          <aside className="category-tree" aria-label={`${resourceName} 分类树`}>
             <div className="tree-header">
               <h2>资源浏览</h2>
               <div className="tree-actions">
@@ -1498,9 +1904,9 @@ function EdaLibrary({ onBack }) {
                   ) : (
                     <ChevronRight size={16} aria-hidden="true" />
                   )}
-                  EDA 分类
+                  {resourceName} 分类
                 </span>
-                <strong>{edaTaxonomy.length}</strong>
+                <strong>{taxonomy.length}</strong>
               </button>
 
               {isCategorySectionOpen && (
@@ -1510,10 +1916,10 @@ function EdaLibrary({ onBack }) {
                     onClick={() => handlePrimarySelect('全部')}
                   >
                     <span>全部分类</span>
-                    <strong>{edaResources.length}</strong>
+                    <strong>{resources.length}</strong>
                   </button>
 
-                  {edaTaxonomy.map((category) => {
+                  {taxonomy.map((category) => {
                     const isExpanded = expandedPrimaryCategories.has(category.label);
 
                     return (
@@ -1577,7 +1983,7 @@ function EdaLibrary({ onBack }) {
                     }}
                   >
                     <span>全部公司</span>
-                    <strong>{edaResources.length}</strong>
+                    <strong>{resources.length}</strong>
                   </button>
                   {filterOptions.companies.filter((company) => company !== '全部').map((company) => (
                     <button
@@ -1598,7 +2004,7 @@ function EdaLibrary({ onBack }) {
           </aside>
 
           <div className="library-content">
-            <section className="library-toolbar" aria-label="EDA 资源筛选">
+            <section className="library-toolbar" aria-label={`${resourceName} 资源筛选`}>
               <label className="search-box">
                 <Search size={18} aria-hidden="true" />
                 <input
@@ -1607,7 +2013,7 @@ function EdaLibrary({ onBack }) {
                     setQuery(event.target.value);
                     setCurrentPage(1);
                   }}
-                  placeholder="搜索公司、工具、分类、阶段或标签"
+                  placeholder={searchPlaceholder}
                 />
               </label>
 
@@ -1681,13 +2087,28 @@ function EdaLibrary({ onBack }) {
               </p>
               <div className="result-tools" aria-label="结果视图">
                 <span>{filteredResources.length} 条结果</span>
-                <button className="view-toggle active" aria-label="卡片视图">
+                <button
+                  className={viewMode === 'card' ? 'view-toggle active' : 'view-toggle'}
+                  onClick={() => setViewMode('card')}
+                  aria-label="卡片视图"
+                >
                   <Grid2X2 size={16} aria-hidden="true" />
                 </button>
-                <button className="view-toggle" aria-label="列表视图">
+                <button
+                  className={viewMode === 'list' ? 'view-toggle active' : 'view-toggle'}
+                  onClick={() => setViewMode('list')}
+                  aria-label="列表视图"
+                >
                   <List size={17} aria-hidden="true" />
                 </button>
-                <select aria-label="排序方式" defaultValue="default">
+                <select
+                  aria-label="排序方式"
+                  value={sortMode}
+                  onChange={(event) => {
+                    setSortMode(event.target.value);
+                    setCurrentPage(1);
+                  }}
+                >
                   <option value="default">默认排序</option>
                   <option value="company">按公司</option>
                   <option value="stage">按阶段</option>
@@ -1695,7 +2116,10 @@ function EdaLibrary({ onBack }) {
               </div>
             </div>
 
-            <section className="resource-grid" aria-label="EDA 资源列表">
+            <section
+              className={viewMode === 'list' ? 'resource-grid resource-grid-list' : 'resource-grid'}
+              aria-label={`${resourceName} 资源列表`}
+            >
               {paginatedResources.map((resource) => (
                 <button
                   key={`${resource.company}-${resource.tool}-${resource.secondaryCategory}`}
@@ -1703,17 +2127,21 @@ function EdaLibrary({ onBack }) {
                   onClick={() => setSelectedResource(resource)}
                 >
                   <div className="resource-card-head">
-                    {getResourceVisual(resource) && (
-                      <div className="resource-visual">
+                    <div className="resource-visual">
+                      {getResourceVisual(resource) ? (
                         <img
                           src={getResourceVisual(resource)}
                           alt={`${resource.company} 图标`}
                           onError={(event) => {
-                            event.currentTarget.parentElement.style.display = 'none';
+                            event.currentTarget.style.display = 'none';
+                            event.currentTarget.nextElementSibling.hidden = false;
                           }}
                         />
-                      </div>
-                    )}
+                      ) : null}
+                      <span className="resource-visual-fallback" hidden={Boolean(getResourceVisual(resource))}>
+                        {getCompanyInitials(resource.company)}
+                      </span>
+                    </div>
                     <div className="resource-title-block">
                       <p className="resource-company">{resource.company}</p>
                       <h2>{resource.tool}</h2>
@@ -1744,7 +2172,7 @@ function EdaLibrary({ onBack }) {
                   <div className="resource-card-footer">
                     <span>
                       <BookOpen size={14} aria-hidden="true" />
-                      资料
+                      详情
                     </span>
                     <span>
                       <Download size={14} aria-hidden="true" />
@@ -1760,7 +2188,7 @@ function EdaLibrary({ onBack }) {
             </section>
 
             {filteredResources.length > 0 && (
-              <nav className="resource-pagination" aria-label="EDA 资源分页">
+              <nav className="resource-pagination" aria-label={`${resourceName} 资源分页`}>
                 <button
                   onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
                   disabled={currentSafePage === 1}
@@ -1814,17 +2242,21 @@ function EdaLibrary({ onBack }) {
             <p className="eyebrow">{selectedResource.primaryCategory} / {selectedResource.secondaryCategory}</p>
             <h2>{selectedResource.tool}</h2>
             <p className="modal-company">{selectedResource.company}</p>
-            {getResourceVisual(selectedResource) && (
-              <div className="resource-visual modal-visual">
+            <div className="resource-visual modal-visual">
+              {getResourceVisual(selectedResource) ? (
                 <img
                   src={getResourceVisual(selectedResource)}
                   alt={`${selectedResource.company} 图标`}
                   onError={(event) => {
-                    event.currentTarget.parentElement.style.display = 'none';
+                    event.currentTarget.style.display = 'none';
+                    event.currentTarget.nextElementSibling.hidden = false;
                   }}
                 />
-              </div>
-            )}
+              ) : null}
+              <span className="resource-visual-fallback" hidden={Boolean(getResourceVisual(selectedResource))}>
+                {getCompanyInitials(selectedResource.company)}
+              </span>
+            </div>
             <p>{selectedResource.detail}</p>
             <dl>
               <div>
@@ -1857,6 +2289,14 @@ function EdaLibrary({ onBack }) {
   );
 }
 
+function EdaLibrary({ onBack }) {
+  return <ResourceLibrary onBack={onBack} config={libraryConfigs.eda} />;
+}
+
+function IpLibrary({ onBack }) {
+  return <ResourceLibrary onBack={onBack} config={libraryConfigs.ip} />;
+}
+
 function App() {
   const [activeNode, setActiveNode] = useState(null);
   const [selectedNode, setSelectedNode] = useState(null);
@@ -1868,6 +2308,10 @@ function App() {
 
   if (selectedNode === 'eda') {
     return <EdaLibrary onBack={() => setSelectedNode(null)} />;
+  }
+
+  if (selectedNode === 'ip') {
+    return <IpLibrary onBack={() => setSelectedNode(null)} />;
   }
 
   if (currentResource) {
