@@ -26,7 +26,11 @@ import backgroundUrl from './assets/ic-background.png';
 import cadenceLogo from './assets/logos/cadence.png';
 import empyreanLogo from './assets/logos/empyrean-user.jpg';
 import primariusLogo from './assets/logos/primarius-official.svg';
+import samsungLogo from './assets/logos/samsung.svg';
 import synopsysLogo from './assets/logos/synopsys-user.jpg';
+import intelFoundryLogo from './assets/logos/intel-foundry.jpg';
+import smicLogo from './assets/logos/smic.svg';
+import tsmcLogo from './assets/logos/tsmc.svg';
 import univistaLogo from './assets/logos/univista.svg';
 import './styles.css';
 
@@ -1581,12 +1585,200 @@ const ipResources = [
   },
 ];
 
+const foundryResources = [
+  {
+    company: '台积电',
+    tool: 'TSMC',
+    ticker: 'TSM',
+    verification: 'Verified',
+    segment: 'Foundry & Logic',
+    primaryCategory: '代工厂 Foundry',
+    secondaryCategory: '晶圆代工',
+    stage: '先进制程与生态平台',
+    region: '台湾地区',
+    operationMode: 'Foundry',
+    headquarters: '新竹，台湾地区',
+    founded: '1987',
+    processNodes: ['3纳米', '5纳米', '7纳米', '12纳米', '16纳米', '20纳米', '22纳米', '28纳米', '40纳米', '45纳米', '55纳米', '65纳米', '80纳米', '90纳米', '110纳米', '130纳米', '150纳米', '180纳米', '250纳米', '350纳米'],
+    supportAreas: ['PDK 支撑', 'EDA Flow 支撑', 'IP 生态支撑', '先进封装支撑'],
+    tags: ['Pure-play Foundry', '先进制程', 'CoWoS', '3DFabric'],
+    status: 'Demo',
+    summary: '全球代表性的纯晶圆代工厂，是先进逻辑、AI 加速器、移动 SoC 与高性能计算芯片的重要制造平台。',
+    detail: '台积电以晶圆代工为核心，覆盖先进逻辑、成熟节点、特色工艺和先进封装。厂商页重点展示制程节点、供应链依赖、客户关系与关键瓶颈。',
+    detailSections: [
+      {
+        title: '产业定位',
+        body: '台积电位于 Foundry & Logic 层，是全球先进逻辑制造能力最集中的公司之一，也是 AI、移动终端和高性能计算芯片供应链中的关键节点。',
+      },
+      {
+        title: '关键能力',
+        body: '能力画像覆盖先进节点量产、成熟制程平台、3DFabric 与 CoWoS 等先进封装，以及面向 EDA/IP 生态的设计支撑。',
+      },
+      {
+        title: '风险观察',
+        body: '需重点关注先进节点产能、CoWoS 先进封装吞吐、EUV 设备供给、台湾地区地缘集中度和上游硅片/材料供应。',
+      },
+    ],
+    suppliers: ['ASML：EUV/DUV 光刻系统', 'Applied Materials：沉积与刻蚀设备', 'Lam Research：刻蚀系统', 'KLA：检测与量测', 'Shin-Etsu / SUMCO：硅片', 'Entegris：特种化学品', 'Advantest / Teradyne：测试系统'],
+    customers: ['NVIDIA：AI GPU 制造', 'Apple：A/M 系列芯片', 'AMD：CPU/GPU/AI 加速器', 'Qualcomm：Snapdragon SoC', 'Broadcom：网络与定制 AI 芯片', 'MediaTek：移动 SoC', 'Intel：部分先进节点计算芯片'],
+    bottlenecks: ['CoWoS 先进封装', '先进节点产能', 'EUV 光刻', '300mm 硅片', '地缘集中度'],
+    sourceUrl: 'https://www.tsmc.com/',
+    backplaneUrl: 'https://www.backplane.gg/company/tsmc',
+  },
+  {
+    company: '中芯国际',
+    tool: 'SMIC',
+    ticker: '0981.HK',
+    verification: 'Verified',
+    segment: 'Foundry & Logic',
+    primaryCategory: '代工厂 Foundry',
+    secondaryCategory: '晶圆代工',
+    stage: '成熟制程与特色工艺',
+    region: '国内',
+    operationMode: 'Foundry',
+    headquarters: '上海，中国',
+    founded: '2000',
+    processNodes: ['7纳米', '12纳米', '28纳米', '40纳米', '55纳米', '65纳米', '90纳米', '110纳米', '130纳米', '150纳米', '180纳米', '250纳米', '350纳米'],
+    supportAreas: ['PDK 支撑', 'MPW/试产', 'EDA Flow 支撑'],
+    tags: ['Foundry', '成熟制程', '特色工艺', '国内制造'],
+    status: 'Demo',
+    summary: '国内代表性纯晶圆代工厂，覆盖成熟制程、特色工艺和国内设计企业制造支撑。',
+    detail: '中芯国际以客户设计制造为核心，适合在本库中作为国内代工、成熟节点、特色工艺和国产供应链支撑能力的重点样本。',
+    detailSections: [
+      {
+        title: '产业定位',
+        body: '中芯国际位于 Foundry & Logic 层，是国内晶圆代工体系中的核心厂商，服务逻辑、RF、功率及其他成熟节点需求。',
+      },
+      {
+        title: '关键能力',
+        body: '公开官网产品页重点展示 28nm 与成熟制程平台；12nm 可按客户导入/风险生产口径记录，7nm 则按 TechInsights 对华为 Kirin 9000S 的拆解结论记录为 N+2 节点。',
+      },
+      {
+        title: '风险观察',
+        body: '7nm/12nm 与官网公开可订购平台不是同一信息口径，需区分“官方技术平台”“客户导入/风险生产”和“第三方拆解确认”；同时关注先进光刻设备限制与 DUV 多重曝光良率。',
+      },
+    ],
+    suppliers: ['ASML：DUV/EUV 光刻相关系统', 'Applied Materials：沉积与刻蚀设备', 'ARM：CPU/GPU IP 生态', '国产设备与材料供应链：待补充'],
+    customers: ['Qualcomm：SoC 制造合作', '华为/海思：国内先进与成熟节点需求', '国内 Fabless 客户：逻辑、RF、功率与 MCU'],
+    bottlenecks: ['先进光刻设备限制', 'DUV 多重曝光', '国产供应链替代', '成熟节点价格周期'],
+    sourceUrl: 'https://www.smics.com/',
+    backplaneUrl: 'https://www.backplane.gg/company/smic',
+  },
+  {
+    company: '三星',
+    tool: 'Samsung Foundry',
+    ticker: '005930.KS',
+    verification: 'Verified',
+    segment: 'Foundry & Logic',
+    primaryCategory: 'IDM / Foundry 服务',
+    secondaryCategory: '晶圆代工与系统半导体',
+    stage: '先进制程与先进封装',
+    region: '国际',
+    operationMode: 'IDM',
+    headquarters: '华城，韩国',
+    founded: '1969',
+    processNodes: ['3纳米', '5纳米', '7纳米', '12纳米', '16纳米', '20纳米', '28纳米', '45纳米', '65纳米'],
+    supportAreas: ['PDK 支撑', 'EDA Flow 支撑', 'IP 生态支撑', '先进封装支撑'],
+    tags: ['IDM', 'Foundry Service', 'GAA', '先进封装'],
+    status: 'Demo',
+    summary: '三星 Foundry 是三星电子 Device Solutions 下的先进逻辑代工业务，兼具 IDM 背景与外部代工服务能力。',
+    detail: '三星 Foundry 适合用于展示 IDM 厂商开放代工能力，重点关注 GAA、先进节点、先进封装、EDA/IP 生态和外部客户支持。',
+    detailSections: [
+      {
+        title: '产业定位',
+        body: '三星 Foundry 位于 Foundry & Logic 层，既支撑内部 System LSI / Mobile 等业务，也面向外部 Fabless 客户提供制造服务。',
+      },
+      {
+        title: '关键能力',
+        body: '能力画像包括 3nm GAA、先进逻辑平台、成熟节点服务、封装协同和与主流 EDA/IP 生态的流程适配。',
+      },
+      {
+        title: '风险观察',
+        body: '需关注先进节点良率、EUV 设备供给、与 TSMC 的客户竞争、韩国地区产能集中度和 HBM/封装资源配置。',
+      },
+    ],
+    suppliers: ['ASML：EUV 光刻系统', 'Applied Materials：沉积与刻蚀设备', 'Lam Research：刻蚀系统', 'Shin-Etsu：硅片', 'DuPont / JSR：先进材料与光刻胶', 'Screen / Lasertec：清洗与检测设备'],
+    customers: ['Qualcomm：部分 Snapdragon 代工', 'Analog Devices：外部制造服务', 'NXP：合约制造', 'NVIDIA：先进封装/存储协同相关', 'AMD：高性能计算生态相关'],
+    bottlenecks: ['EUV 光刻', '先进节点良率', 'GAA 工艺爬坡', '韩国地缘集中度'],
+    sourceUrl: 'https://semiconductor.samsung.com/foundry/',
+    backplaneUrl: 'https://www.backplane.gg/company/samsung-foundry',
+  },
+  {
+    company: '英特尔',
+    tool: 'Intel Foundry',
+    ticker: 'INTC',
+    verification: 'Needs Review',
+    segment: 'IDM (Integrated)',
+    primaryCategory: 'IDM / Foundry 服务',
+    secondaryCategory: '先进制造与封装',
+    stage: 'IDM 制造与开放代工',
+    region: '国际',
+    operationMode: 'IDM',
+    headquarters: 'Santa Clara, CA，美国',
+    founded: '1968',
+    processNodes: ['3纳米', '5纳米', '7纳米', '16纳米', '22纳米', '65纳米'],
+    supportAreas: ['PDK 支撑', 'EDA Flow 支撑', 'IP 生态支撑', '先进封装支撑'],
+    tags: ['IDM', 'Intel Foundry', '先进封装', '先进制程'],
+    status: 'Demo',
+    summary: 'Intel Foundry 基于英特尔 IDM 制造和先进封装能力拓展开放代工，是系统级代工路线的重要样本。',
+    detail: '英特尔厂商页重点展示 IDM 制造、开放代工、先进封装、玻璃基板/EUV 等瓶颈，以及与云、AI 和芯片客户的供应链关系。',
+    detailSections: [
+      {
+        title: '产业定位',
+        body: 'Intel 属于 IDM 厂商，同时通过 Intel Foundry 推进外部代工服务，覆盖逻辑制造、先进封装和系统级集成路线。',
+      },
+      {
+        title: '关键能力',
+        body: '能力画像包括先进制程路线、美国与欧洲制造布局、先进封装、Chiplet 生态、EDA/IP 合作和系统级代工能力。',
+      },
+      {
+        title: '风险观察',
+        body: '需关注先进节点量产节奏、EUV 设备供给、玻璃基板等新材料路线、外部客户导入速度和 IDM 内外部产能分配。',
+      },
+    ],
+    suppliers: ['ASML：EUV 光刻系统', 'Teradyne：测试系统', 'DuPont：Fab 材料', 'Screen Holdings：湿法处理设备'],
+    customers: ['Qualcomm：Intel Foundry Services 客户', 'Amazon Web Services：Xeon / Gaudi 相关算力供应链', 'Microsoft Azure：Xeon / Gaudi 相关算力供应链', 'Google Cloud：数据中心算力', 'Oracle Cloud：数据中心算力', 'TSMC：历史制造关系与外包调整'],
+    bottlenecks: ['玻璃基板', 'EUV 光刻', '先进封装', '外部客户导入', 'IDM 产能分配'],
+    sourceUrl: 'https://www.intel.com/content/www/us/en/foundry/overview.html',
+    backplaneUrl: 'https://www.backplane.gg/company/intc',
+  },
+];
+
+const foundryProcessNodeOptions = [
+  '3纳米',
+  '5纳米',
+  '7纳米',
+  '12纳米',
+  '16纳米',
+  '20纳米',
+  '22纳米',
+  '28纳米',
+  '32纳米',
+  '40纳米',
+  '45纳米',
+  '55纳米',
+  '65纳米',
+  '80纳米',
+  '90纳米',
+  '110纳米',
+  '130纳米',
+  '150纳米',
+  '160纳米',
+  '180纳米',
+  '250纳米',
+  '350纳米',
+];
+
 const companyVisuals = {
   Cadence: cadenceLogo,
   Synopsys: synopsysLogo,
   '华大九天': empyreanLogo,
   '概伦电子': primariusLogo,
   '合见工软': univistaLogo,
+  '台积电': tsmcLogo,
+  '中芯国际': smicLogo,
+  三星: samsungLogo,
+  英特尔: intelFoundryLogo,
 };
 
 const companySourceUrls = {
@@ -1621,7 +1813,8 @@ const getResourceVisual = (resource) => resource.imageUrl || companyVisuals[reso
 
 const getResourceSourceUrl = (resource) => resource.officialUrl || resource.sourceUrl || companySourceUrls[resource.company];
 
-const getResourceChips = (resource) => [resource.secondaryCategory, resource.stage, resource.region];
+const getResourceChips = (resource) =>
+  [resource.secondaryCategory, resource.stage, resource.region, resource.operationMode].filter(Boolean);
 
 const getApplicationText = (resource) => resource.tags.slice(0, 3).join('、');
 
@@ -1665,6 +1858,15 @@ const getResourceDetailSections = (resource) => resource.detailSections || [
 ];
 
 const getSourceStatus = (resource) => (getResourceSourceUrl(resource) ? '官网整理' : '待补充');
+
+const getRelationParts = (item) => {
+  const [name, ...descriptionParts] = item.split('：');
+
+  return {
+    name,
+    description: descriptionParts.join('：'),
+  };
+};
 
 const productContactItems = [
   { label: '地址', value: '地址信息待补充', icon: MapPin },
@@ -1902,6 +2104,34 @@ const libraryConfigs = {
     metricCompanyLabel: 'IP 企业',
     searchPlaceholder: '搜索公司、IP、协议、分类、阶段或标签',
   },
+  foundry: {
+    resourceName: 'Foundry',
+    accentColor: '#6ee7ff',
+    accentRgb: '110 231 255',
+    contrastColor: '#06152a',
+    eyebrow: 'FOUNDRY RESOURCE LIBRARY',
+    title: '代工厂厂商库',
+    description: '围绕晶圆制造、工艺平台、PDK、MPW、先进封装与生态支撑能力，沉淀代工厂厂商与服务能力信息。',
+    taxonomy: [],
+    resources: foundryResources,
+    metricResourceLabel: '厂商样本',
+    metricCompanyLabel: '代工厂商',
+    metricThirdLabel: '地区分区',
+    metricThirdValue: 3,
+    metricFourthLabel: '制程节点',
+    metricFourthValue: foundryProcessNodeOptions.length,
+    searchPlaceholder: '搜索厂商、地区、制程节点、运营模式或标签',
+    showCategoryTree: false,
+    presetRegions: ['国际', '国内', '台湾地区'],
+    supportOptions: foundryProcessNodeOptions,
+    supportFilterLabel: '制程节点',
+    supportPanelTitle: '按制程节点',
+    supportFilterField: 'processNodes',
+    showToolTypeFilter: false,
+    operationModeOptions: ['Foundry', 'IDM'],
+    operationModeFilterLabel: '运营模式',
+    detailBasePath: 'foundry',
+  },
 };
 
 function ResourceLibrary({ onBack, config }) {
@@ -1917,8 +2147,22 @@ function ResourceLibrary({ onBack, config }) {
     resources,
     metricResourceLabel,
     metricCompanyLabel,
+    metricThirdLabel = '一级分类',
+    metricThirdValue,
+    metricFourthLabel = '二级分类',
+    metricFourthValue,
     searchPlaceholder,
     detailBasePath,
+    showCategoryTree = true,
+    presetRegions = [],
+    supportOptions = [],
+    supportFilterLabel = '支撑能力',
+    supportPanelTitle,
+    supportFilterField = 'supportAreas',
+    toolTypeFilterLabel = '工具类型',
+    showToolTypeFilter = true,
+    operationModeOptions = [],
+    operationModeFilterLabel = '运营模式',
   } = config;
   const [query, setQuery] = useState('');
   const [activePrimary, setActivePrimary] = useState('全部');
@@ -1927,6 +2171,8 @@ function ResourceLibrary({ onBack, config }) {
   const [regionFilter, setRegionFilter] = useState('全部');
   const [stageFilter, setStageFilter] = useState('全部');
   const [toolTypeFilter, setToolTypeFilter] = useState('全部');
+  const [supportFilter, setSupportFilter] = useState('全部');
+  const [operationModeFilter, setOperationModeFilter] = useState('全部');
   const [isCategorySectionOpen, setIsCategorySectionOpen] = useState(true);
   const [isCompanySectionOpen, setIsCompanySectionOpen] = useState(true);
   const [expandedPrimaryCategories, setExpandedPrimaryCategories] = useState(
@@ -1938,15 +2184,20 @@ function ResourceLibrary({ onBack, config }) {
   const [selectedResource, setSelectedResource] = useState(null);
 
   const filterOptions = useMemo(() => {
-    const getOptions = (key) => ['全部', ...Array.from(new Set(resources.map((resource) => resource[key])))];
+    const getOptions = (key, presets = []) => [
+      '全部',
+      ...Array.from(new Set([...presets, ...resources.map((resource) => resource[key]).filter(Boolean)])),
+    ];
 
     return {
       companies: getOptions('company'),
-      regions: getOptions('region'),
+      regions: getOptions('region', presetRegions),
       stages: getOptions('stage'),
       toolTypes: getOptions('secondaryCategory'),
+      supports: ['全部', ...Array.from(new Set(supportOptions))],
+      operationModes: ['全部', ...Array.from(new Set([...operationModeOptions, ...resources.map((resource) => resource.operationMode).filter(Boolean)]))],
     };
-  }, [resources]);
+  }, [operationModeOptions, presetRegions, resources, supportOptions]);
 
   const categoryCounts = useMemo(() => {
     return resources.reduce((counts, resource) => {
@@ -1974,6 +2225,10 @@ function ResourceLibrary({ onBack, config }) {
       const matchesRegion = regionFilter === '全部' || resource.region === regionFilter;
       const matchesStage = stageFilter === '全部' || resource.stage === stageFilter;
       const matchesToolType = toolTypeFilter === '全部' || resource.secondaryCategory === toolTypeFilter;
+      const supportValues = resource[supportFilterField] || resource.supportAreas || [];
+      const tags = resource.tags || [];
+      const matchesSupport = supportFilter === '全部' || supportValues.includes(supportFilter) || tags.includes(supportFilter);
+      const matchesOperationMode = operationModeFilter === '全部' || resource.operationMode === operationModeFilter;
       const searchable = [
         resource.company,
         resource.tool,
@@ -1981,11 +2236,14 @@ function ResourceLibrary({ onBack, config }) {
         resource.secondaryCategory,
         resource.stage,
         resource.region,
+        resource.operationMode,
         resource.summary,
         resource.detail,
         resource.sourceUrl,
         companySourceUrls[resource.company],
-        ...resource.tags,
+        ...supportValues,
+        ...(resource.supportAreas || []),
+        ...tags,
       ].join(' ').toLowerCase();
 
       return (
@@ -1995,13 +2253,17 @@ function ResourceLibrary({ onBack, config }) {
         matchesRegion &&
         matchesStage &&
         matchesToolType &&
+        matchesSupport &&
+        matchesOperationMode &&
         (!keyword || searchable.includes(keyword))
       );
     });
-  }, [activePrimary, activeSecondary, companyFilter, query, regionFilter, resources, stageFilter, toolTypeFilter]);
+  }, [activePrimary, activeSecondary, companyFilter, operationModeFilter, query, regionFilter, resources, stageFilter, supportFilter, supportFilterField, toolTypeFilter]);
 
   const companyCount = new Set(resources.map((resource) => resource.company)).size;
   const secondaryCategoryCount = taxonomy.reduce((count, category) => count + category.items.length, 0);
+  const thirdMetricValue = metricThirdValue ?? taxonomy.length;
+  const fourthMetricValue = metricFourthValue ?? secondaryCategoryCount;
   const sortedResources = useMemo(() => {
     const next = [...filteredResources];
     const keyword = query.trim().toLowerCase();
@@ -2010,7 +2272,7 @@ function ResourceLibrary({ onBack, config }) {
       const tool = resource.tool.toLowerCase();
       const secondary = resource.secondaryCategory.toLowerCase();
       const primary = resource.primaryCategory.toLowerCase();
-      const tags = resource.tags.join(' ').toLowerCase();
+      const tags = [...(resource.tags || []), ...(resource.supportAreas || [])].join(' ').toLowerCase();
 
       if (!keyword) return 0;
       if (company.startsWith(keyword)) return 100;
@@ -2112,6 +2374,8 @@ function ResourceLibrary({ onBack, config }) {
     setRegionFilter('全部');
     setStageFilter('全部');
     setToolTypeFilter('全部');
+    setSupportFilter('全部');
+    setOperationModeFilter('全部');
     setCurrentPage(1);
     setExpandedPrimaryCategories(new Set(taxonomy.map((category) => category.label)));
   };
@@ -2147,16 +2411,17 @@ function ResourceLibrary({ onBack, config }) {
             <p>{metricCompanyLabel}</p>
           </div>
           <div>
-            <span>{taxonomy.length}</span>
-            <p>一级分类</p>
+            <span>{thirdMetricValue}</span>
+            <p>{metricThirdLabel}</p>
           </div>
           <div>
-            <span>{secondaryCategoryCount}</span>
-            <p>二级分类</p>
+            <span>{fourthMetricValue}</span>
+            <p>{metricFourthLabel}</p>
           </div>
         </section>
 
-        <section className="library-layout">
+        <section className={showCategoryTree ? 'library-layout' : 'library-layout library-layout-no-tree'}>
+          {showCategoryTree ? (
           <aside className="category-tree" aria-label={`${resourceName} 分类树`}>
             <div className="tree-header">
               <h2>资源浏览</h2>
@@ -2261,6 +2526,7 @@ function ResourceLibrary({ onBack, config }) {
               )}
             </section>
           </aside>
+          ) : null}
 
           <div className="library-content">
             <section className="library-toolbar" aria-label={`${resourceName} 资源筛选`}>
@@ -2305,25 +2571,66 @@ function ResourceLibrary({ onBack, config }) {
                     ))}
                   </select>
                 </label>
-                <label className="filter-field">
-                  <span>工具类型</span>
-                  <select
-                    value={toolTypeFilter}
-                    onChange={(event) => {
-                      setToolTypeFilter(event.target.value);
-                      setCurrentPage(1);
-                    }}
-                  >
-                    {filterOptions.toolTypes.map((option) => (
-                      <option key={option}>{option}</option>
-                    ))}
-                  </select>
-                </label>
+                {showToolTypeFilter ? (
+                  <label className="filter-field">
+                    <span>{toolTypeFilterLabel}</span>
+                    <select
+                      value={toolTypeFilter}
+                      onChange={(event) => {
+                        setToolTypeFilter(event.target.value);
+                        setCurrentPage(1);
+                      }}
+                    >
+                      {filterOptions.toolTypes.map((option) => (
+                        <option key={option}>{option}</option>
+                      ))}
+                    </select>
+                  </label>
+                ) : null}
+                {filterOptions.operationModes.length > 1 ? (
+                  <label className="filter-field">
+                    <span>{operationModeFilterLabel}</span>
+                    <select
+                      value={operationModeFilter}
+                      onChange={(event) => {
+                        setOperationModeFilter(event.target.value);
+                        setCurrentPage(1);
+                      }}
+                    >
+                      {filterOptions.operationModes.map((option) => (
+                        <option key={option}>{option}</option>
+                      ))}
+                    </select>
+                  </label>
+                ) : null}
                 <button className="reset-filter" onClick={resetFilters}>
                   <RotateCcw size={16} aria-hidden="true" />
                   重置
                 </button>
               </div>
+              {filterOptions.supports.length > 1 ? (
+                <section className="support-filter-panel" aria-label={supportPanelTitle || `按${supportFilterLabel}检索`}>
+                  <div className="support-filter-head">
+                    <Sparkles size={16} aria-hidden="true" />
+                    <span>{supportPanelTitle || `按${supportFilterLabel}检索`}</span>
+                  </div>
+                  <div className="support-filter-list">
+                    {filterOptions.supports.map((option) => (
+                      <button
+                        key={option}
+                        type="button"
+                        className={supportFilter === option ? 'support-filter-chip active' : 'support-filter-chip'}
+                        onClick={() => {
+                          setSupportFilter(option);
+                          setCurrentPage(1);
+                        }}
+                      >
+                        {option === '全部' ? `全部${supportFilterLabel}` : option}
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
             </section>
 
             <div className="result-summary">
@@ -2501,8 +2808,12 @@ function ResourceLibrary({ onBack, config }) {
 
             {filteredResources.length === 0 && (
               <section className="empty-state">
-                <h2>暂无匹配资源</h2>
-                <p>可以换一个关键词，或重置左侧分类与筛选条件继续浏览。</p>
+                <h2>{resources.length === 0 ? '厂商数据待录入' : '暂无匹配资源'}</h2>
+                <p>
+                  {resources.length === 0
+                    ? '当前页面已预留地区筛选与支撑能力检索，具体代工厂条目可在下一阶段继续录入。'
+                    : '可以换一个关键词，或重置左侧分类与筛选条件继续浏览。'}
+                </p>
               </section>
             )}
           </div>
@@ -2577,7 +2888,8 @@ function ResourceDetailPage({ config, resource }) {
   const sourceUrl = resource ? getResourceSourceUrl(resource) : null;
   const visual = resource ? getResourceVisual(resource) : null;
   const detailSections = resource ? getResourceDetailSections(resource) : [];
-  const companyPath = resource ? `#/company/${getCompanySlug(resource.company)}` : null;
+  const isFoundryDetail = resourceName === 'Foundry';
+  const companyPath = resource && !isFoundryDetail ? `#/company/${getCompanySlug(resource.company)}` : null;
   const productFlow = resource ? getProductFlow(resource) : { steps: [], activeIndex: 0 };
 
   return (
@@ -2598,29 +2910,43 @@ function ResourceDetailPage({ config, resource }) {
 
         {!resource ? (
           <section className="empty-state detail-empty">
-            <p className="eyebrow">{resourceName} PRODUCT DETAIL</p>
-            <h1>未找到产品</h1>
-            <p>这个产品条目可能已经被调整。可以返回资源库后重新选择。</p>
+            <p className="eyebrow">{resourceName} DETAIL</p>
+            <h1>{isFoundryDetail ? '未找到厂商' : '未找到产品'}</h1>
+            <p>这个条目可能已经被调整。可以返回资源库后重新选择。</p>
           </section>
         ) : (
           <>
             <header className="product-detail-hero">
-              <a
-                className="product-logo-card company-entry-link"
-                href={companyPath}
-                aria-label={`查看${resource.company}厂商详情`}
-              >
-                {visual ? (
-                  <img src={visual} alt={`${resource.company} 图标`} />
-                ) : (
-                  <span className="resource-visual-fallback">{getCompanyInitials(resource.company)}</span>
-                )}
-              </a>
-              <div className="product-detail-title">
-                <p className="eyebrow">{resourceName} PRODUCT DETAIL</p>
-                <a className="resource-company company-name-link" href={companyPath}>
-                  {resource.company}
+              {companyPath ? (
+                <a
+                  className="product-logo-card company-entry-link"
+                  href={companyPath}
+                  aria-label={`查看${resource.company}厂商详情`}
+                >
+                  {visual ? (
+                    <img src={visual} alt={`${resource.company} 图标`} />
+                  ) : (
+                    <span className="resource-visual-fallback">{getCompanyInitials(resource.company)}</span>
+                  )}
                 </a>
+              ) : (
+                <div className="product-logo-card">
+                  {visual ? (
+                    <img src={visual} alt={`${resource.company} 图标`} />
+                  ) : (
+                    <span className="resource-visual-fallback">{getCompanyInitials(resource.company)}</span>
+                  )}
+                </div>
+              )}
+              <div className="product-detail-title">
+                <p className="eyebrow">{isFoundryDetail ? 'FOUNDRY COMPANY DETAIL' : `${resourceName} PRODUCT DETAIL`}</p>
+                {companyPath ? (
+                  <a className="resource-company company-name-link" href={companyPath}>
+                    {resource.company}
+                  </a>
+                ) : (
+                  <p className="resource-company">{resource.company}</p>
+                )}
                 <h1>{resource.tool}</h1>
                 <div className="resource-chip-row">
                   {getResourceChips(resource).map((chip) => (
@@ -2646,26 +2972,28 @@ function ResourceDetailPage({ config, resource }) {
 
             <section className="detail-layout">
               <article className="detail-panel detail-main-panel">
-                <section className="product-flow-panel" aria-label={`${resource.tool}产品流程位置`}>
-                  <div className="product-flow-heading">
-                    <p className="eyebrow">FLOW POSITION</p>
-                    <h2>产品流程位置</h2>
-                  </div>
-                  <div className="product-flow-track">
-                    {productFlow.steps.map((step, index) => {
-                      const state = index < productFlow.activeIndex ? 'past' : index === productFlow.activeIndex ? 'active' : 'future';
+                {!isFoundryDetail ? (
+                  <section className="product-flow-panel" aria-label={`${resource.tool}产品流程位置`}>
+                    <div className="product-flow-heading">
+                      <p className="eyebrow">FLOW POSITION</p>
+                      <h2>产品流程位置</h2>
+                    </div>
+                    <div className="product-flow-track">
+                      {productFlow.steps.map((step, index) => {
+                        const state = index < productFlow.activeIndex ? 'past' : index === productFlow.activeIndex ? 'active' : 'future';
 
-                      return (
-                        <div key={step} className={`product-flow-step ${state}`}>
-                          <span className="flow-dot" aria-hidden="true" />
-                          <strong>{step}</strong>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </section>
+                        return (
+                          <div key={step} className={`product-flow-step ${state}`}>
+                            <span className="flow-dot" aria-hidden="true" />
+                            <strong>{step}</strong>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </section>
+                ) : null}
                 <p className="eyebrow">OVERVIEW</p>
-                <h2>产品说明</h2>
+                <h2>{isFoundryDetail ? '厂商说明' : '产品说明'}</h2>
                 <p>{resource.summary}</p>
                 <div className="detail-section-grid">
                   {detailSections.map((section) => (
@@ -2675,13 +3003,84 @@ function ResourceDetailPage({ config, resource }) {
                     </section>
                   ))}
                 </div>
+                {isFoundryDetail ? (
+                  <>
+                    <section className="foundry-node-panel" aria-label={`${resource.tool}制程节点`}>
+                      <div>
+                        <p className="eyebrow">PROCESS NODES</p>
+                        <h2>制程节点</h2>
+                      </div>
+                      <div className="foundry-node-list">
+                        {resource.processNodes.map((node) => (
+                          <span key={node}>{node}</span>
+                        ))}
+                      </div>
+                    </section>
+                    <section className="foundry-relation-grid" aria-label={`${resource.tool}供应链关系`}>
+                      <div className="foundry-relation-card">
+                        <p className="eyebrow">SUPPLIERS</p>
+                        <h3>主要供应商/上游依赖</h3>
+                        <div className="foundry-relation-list">
+                          {resource.suppliers.map((item) => {
+                            const relation = getRelationParts(item);
+
+                            return (
+                              <div className="foundry-relation-item" key={item}>
+                                <span className="relation-dot" aria-hidden="true" />
+                                <div>
+                                  <strong>{relation.name}</strong>
+                                  {relation.description ? <span>{relation.description}</span> : null}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                      <div className="foundry-relation-card">
+                        <p className="eyebrow">CUSTOMERS</p>
+                        <h3>主要客户/下游关系</h3>
+                        <div className="foundry-relation-list">
+                          {resource.customers.map((item) => {
+                            const relation = getRelationParts(item);
+
+                            return (
+                              <div className="foundry-relation-item" key={item}>
+                                <span className="relation-dot" aria-hidden="true" />
+                                <div>
+                                  <strong>{relation.name}</strong>
+                                  {relation.description ? <span>{relation.description}</span> : null}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </section>
+                  </>
+                ) : null}
               </article>
 
               <aside className="detail-side">
                 <section className="detail-panel">
                   <p className="eyebrow">CLASSIFICATION</p>
-                  <h2>分类与流程</h2>
+                  <h2>{isFoundryDetail ? '厂商画像' : '分类与流程'}</h2>
                   <dl className="detail-meta">
+                    {isFoundryDetail ? (
+                      <>
+                        <div>
+                          <dt>股票代码</dt>
+                          <dd>{resource.ticker || '待补充'}</dd>
+                        </div>
+                        <div>
+                          <dt>验证状态</dt>
+                          <dd>{resource.verification || '待核验'}</dd>
+                        </div>
+                        <div>
+                          <dt>供应链层级</dt>
+                          <dd>{resource.segment || resource.primaryCategory}</dd>
+                        </div>
+                      </>
+                    ) : null}
                     <div>
                       <dt>一级分类</dt>
                       <dd>{resource.primaryCategory}</dd>
@@ -2698,6 +3097,22 @@ function ResourceDetailPage({ config, resource }) {
                       <dt>来源地区</dt>
                       <dd>{resource.region}</dd>
                     </div>
+                    {isFoundryDetail ? (
+                      <>
+                        <div>
+                          <dt>运营模式</dt>
+                          <dd>{resource.operationMode}</dd>
+                        </div>
+                        <div>
+                          <dt>总部</dt>
+                          <dd>{resource.headquarters}</dd>
+                        </div>
+                        <div>
+                          <dt>成立时间</dt>
+                          <dd>{resource.founded}</dd>
+                        </div>
+                      </>
+                    ) : null}
                   </dl>
                 </section>
 
@@ -2709,18 +3124,6 @@ function ResourceDetailPage({ config, resource }) {
                       <span key={tag}>{tag}</span>
                     ))}
                   </div>
-                </section>
-
-                <section className="detail-panel">
-                  <p className="eyebrow">MATERIALS</p>
-                  <h2>下载产品信息</h2>
-                  {resource.materialUrl ? (
-                    <a className="source-link" href={resource.materialUrl} target="_blank" rel="noreferrer">
-                      下载资料
-                    </a>
-                  ) : (
-                    <p className="material-note">产品信息文件整理上传后，可在此下载。</p>
-                  )}
                 </section>
 
                 <section className="detail-panel product-contact-panel">
@@ -2882,6 +3285,10 @@ function IpLibrary({ onBack }) {
   return <ResourceLibrary onBack={onBack} config={libraryConfigs.ip} />;
 }
 
+function FoundryLibrary({ onBack }) {
+  return <ResourceLibrary onBack={onBack} config={libraryConfigs.foundry} />;
+}
+
 function App() {
   const [activeNode, setActiveNode] = useState(null);
   const [selectedNode, setSelectedNode] = useState(null);
@@ -2904,7 +3311,7 @@ function App() {
     return <CompanyDetailPage company={getCompanyBySlug(companySlug)} />;
   }
 
-  const libraryRouteMatch = routeHash.match(/^#\/(eda|ip)(?:\/product\/(.+))?$/);
+  const libraryRouteMatch = routeHash.match(/^#\/(eda|ip|foundry)(?:\/product\/(.+))?$/);
   if (libraryRouteMatch) {
     const [, libraryKey, productSlug] = libraryRouteMatch;
     const config = libraryConfigs[libraryKey];
@@ -2925,6 +3332,10 @@ function App() {
     if (libraryKey === 'ip') {
       return <IpLibrary onBack={handleRouteBack} />;
     }
+
+    if (libraryKey === 'foundry') {
+      return <FoundryLibrary onBack={handleRouteBack} />;
+    }
   }
 
   if (selectedNode === 'eda') {
@@ -2933,6 +3344,10 @@ function App() {
 
   if (selectedNode === 'ip') {
     return <IpLibrary onBack={() => setSelectedNode(null)} />;
+  }
+
+  if (selectedNode === 'pdk') {
+    return <FoundryLibrary onBack={() => setSelectedNode(null)} />;
   }
 
   if (currentResource) {
