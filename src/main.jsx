@@ -85,6 +85,8 @@ const lines = [
   { id: 'pdk-fabless', type: 'hub', from: 'pdk', to: 'fabless', x1: 79, y1: 68, x2: 59, y2: 54 },
 ];
 
+const topNavItems = ['行业新闻', '研究报告', '产业分析', '产品试用', '厂商资源库', '在线工具'];
+
 const edaTaxonomy = [
   {
     id: 'analog',
@@ -3541,6 +3543,27 @@ function App() {
 
   return (
     <main className="app-shell" style={{ '--bg-image': `url(${backgroundUrl})` }}>
+      <header className="home-top-nav" aria-label="首页导航">
+        <a className="home-nav-brand" href="#" aria-label="返回 IC HUB 首页">
+          <span>IC HUB</span>
+          <strong>集成电路产业库</strong>
+        </a>
+        <nav className="home-nav-links" aria-label="产业库导航">
+          {topNavItems.map((item) => (
+            <a key={item} href="#">
+              {item}
+            </a>
+          ))}
+        </nav>
+        <div className="home-nav-actions">
+          <a className="home-nav-search" href="#" aria-label="搜索">
+            <Search size={16} aria-hidden="true" />
+          </a>
+          <a className="home-nav-entry" href="#">
+            登录/入口
+          </a>
+        </div>
+      </header>
       <section className="hero">
         <div className="triangle-stage" aria-label="集成电路产业库入口关系图">
           <svg className="triangle-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
