@@ -23,11 +23,15 @@ import {
   X,
 } from 'lucide-react';
 import backgroundUrl from './assets/ic-background.png';
+import armLogo from './assets/logos/arm.svg';
+import andesLogo from './assets/logos/andes.png';
+import cambriconLogo from './assets/logos/cambricon.png';
 import cadenceLogo from './assets/logos/cadence.png';
 import empyreanLogo from './assets/logos/empyrean-user.jpg';
 import primariusLogo from './assets/logos/primarius-official.svg';
 import synopsysLogo from './assets/logos/synopsys-user.jpg';
 import univistaLogo from './assets/logos/univista.svg';
+import verisiliconLogo from './assets/logos/verisilicon.jpg';
 import './styles.css';
 
 const nodes = [
@@ -1260,324 +1264,609 @@ const edaResources = [
 const ipTaxonomy = [
   {
     id: 'processor',
-    label: '处理器|Processor',
-    items: ['CPU', 'DPU', 'GPU', 'NPU', 'VPU', 'DSP', 'TPU', 'eFPGA', 'AI Processor/Accelerator'],
+    label: '处理器 | Processor',
+    items: [
+      'CPU',
+      'DPU',
+      'GPU',
+      'NPU',
+      'VPU',
+      'DSP',
+      'TPU',
+      'eFPGA',
+      'AI Processor/Accelerator',
+    ],
   },
   {
     id: 'foundation',
-    label: '基础|Foundation',
-    items: ['Standard Cell Library', 'Memory Compilers', 'General Purpose IOs'],
+    label: '基础 | Foundation',
+    items: [
+      'Standard Cell Library',
+      'Memory Compilers',
+      'General Purpose IOs',
+    ],
   },
   {
-    id: 'analog-mixed',
-    label: '模拟和混合信号|Analog & Mixed Signal',
-    items: ['ADC', 'DAC', 'CODEC', 'PLL', 'DLL', 'Crystal driver', 'RC/LC OSC', 'DCDC', 'LDO', 'POR/BOR', 'PVT Monitors', 'Amplifier', 'Sensor'],
+    id: 'analog-mixed-signal',
+    label: '模拟和混合信号 | Analog & Mixed Signal',
+    items: [
+      'ADC',
+      'DAC',
+      'CODEC',
+      'PLL',
+      'DLL',
+      'Crystal driver',
+      'RC/LC OSC',
+      'DCDC',
+      'LDO',
+      'POR/BOR',
+      'PVT Monitors',
+      'Amplifier',
+      'Sensor',
+    ],
   },
   {
-    id: 'interface',
-    label: '接口和总线协议|Interface & BUS Protocol(PHY&Controller)',
-    items: ['PCIe', 'SATA', 'AMBA', 'CXL', 'CCIX', 'DDR', 'DP', 'HDMI', 'MIPI', 'XAUI', 'LVDS', 'USB', 'HBM', 'Ethernet', 'Die-to-Die', 'Thread', 'EMMC', 'Mobile Storage', 'Datapath IP(PHY & Controller)'],
+    id: 'interface-bus-protocol',
+    label: '接口和总线协议 | Interface & BUS Protocol(Controller&PHY)',
+    items: [
+      'PCIe',
+      'SATA',
+      'AMBA',
+      'CXL',
+      'CCIX',
+      'DDR',
+      'DP',
+      'HDMI',
+      'MIPI',
+      'PCIE',
+      'XAUI',
+      'LVDS',
+      'USB',
+      'HBM',
+      'Ethernet',
+      'Die-to-Die',
+      'Thread',
+      'EMMC',
+      'Mobile Storage',
+      'Datapath IP(PHY & Controller)',
+    ],
   },
   {
-    id: 'memory',
-    label: '存储与逻辑库|Memory & Logic Library',
-    items: ['TCAM Compiler', 'eFlash', 'MTP/OTP', 'SRAM', 'RRAM', 'MRAM', 'FRAM', 'ROM', 'Memory Compilers'],
+    id: 'memory-logic-library',
+    label: '存储与逻辑库 | Memory & Logic Library',
+    items: [
+      'TCAM Compiler',
+      'eFlash',
+      'MTP/OTP',
+      'SRAM',
+      'RRAM',
+      'MRAM',
+      'FRAM',
+      'ROM',
+      'Memory Compilers',
+    ],
   },
   {
     id: 'security',
-    label: '安全加密|Security',
-    items: ['Cryptography Cores', 'PUF', 'tRNG', 'Light/Voltage/Freq.Detector', 'Temperature Sensor'],
+    label: '安全加密 | Security',
+    items: [
+      'Cryptography Cores',
+      'PUF',
+      'tRNG',
+      'Light/Voltage/Freq.Detector',
+      'Temperature Sensor',
+    ],
   },
   {
-    id: 'rf-wireless',
-    label: '射频和无线通信|RF & Wireless Communication',
-    items: ['3GPP-5G/LTE', 'WiFi', 'Bluetooth', 'Zigbee', 'NB-loT', 'Sub-G', 'RFID', 'NFC', 'UWB', 'CAT-1', 'GPS/北斗'],
+    id: 'rf-wireless-communication',
+    label: '射频和无线通信 | RF & Wireless Communication',
+    items: [
+      '3GPP-5G/LTE',
+      'WiFi',
+      'Bluetooth',
+      'Zigbee',
+      'NB-IoT',
+      'Sub-G',
+      'RFID',
+      'NFC',
+      'UWB',
+      'CAT-1',
+      'GPS/北斗',
+    ],
   },
   {
     id: 'graphic-multimedia',
-    label: '图形处理和多媒体|Graphic & Multimedia',
-    items: ['ISP', 'MPEG-4', 'VGA', 'Audio Interfaces', '2D/3D', 'H.263/H.264/h.265/H.266'],
+    label: '图形处理和多媒体 | Graphic & Multimedia',
+    items: [
+      'ISP',
+      'MPEG-4',
+      'VGA',
+      'Audio Interfaces',
+      '2D/3D',
+      'H.263/H.264/H.265/H.266',
+    ],
   },
   {
     id: 'automotive',
-    label: '汽车电子|Automotive',
-    items: ['CAN', 'CAN-FD', 'FlexRay', 'LIN', 'Safe Ethernet'],
+    label: '汽车电子 | Automotive',
+    items: [
+      'CAN',
+      'CAN-FD',
+      'FlexRay',
+      'LIN',
+      'Safe Ethernet',
+    ],
   },
 ];
 
 const ipResources = [
   {
     company: 'Arm',
-    tool: 'Cortex-A / Cortex-M 系列',
-    primaryCategory: '处理器|Processor',
+    tool: 'Arm Cortex CPU',
+    primaryCategory: '处理器 | Processor',
     secondaryCategory: 'CPU',
-    stage: 'SoC 架构与集成',
-    region: '英国/海外',
-    tags: ['CPU', '低功耗', '生态软件'],
-    status: '示例整理',
-    summary: 'Arm CPU IP 覆盖高性能应用处理器与低功耗 MCU 场景，是大量 SoC 的通用计算内核来源。',
-    detail: '适合作为处理器 IP 条目记录指令集生态、软件工具链、互连与安全扩展，以及授权模式对芯片产品规划的影响。',
-    sourceUrl: 'https://www.arm.com/products/silicon-ip-cpu',
+    stage: '架构授权与 SoC 集成',
+    region: '国际',
+    tags: ['Cortex', 'CPU', '移动终端', '嵌入式', '汽车电子'],
+    status: '精选演示',
+    summary: 'Arm Cortex 处理器 IP 覆盖应用处理器、实时控制与微控制器场景，是 Arm 生态中最典型的 CPU IP 产品线。',
+    detail: '适合用于手机、消费电子、工业控制、车载电子和嵌入式 SoC 的主控计算核心，强调性能、功耗、软件生态和授权灵活性。',
+    sourceUrl: 'https://www.arm.com/products',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'Cortex-A、Cortex-R、Cortex-M 等处理器系列。' },
+      { title: '典型应用', body: '移动终端、IoT、工业控制、汽车电子、边缘计算。' },
+      { title: '资料来源', body: 'Arm 官方 Products 页面列出 CPUs 作为核心产品入口。' },
+    ],
   },
   {
     company: 'Arm',
-    tool: 'Mali GPU / Ethos NPU',
-    primaryCategory: '处理器|Processor',
-    secondaryCategory: 'GPU',
-    stage: '图形与 AI 加速',
-    region: '英国/海外',
-    tags: ['GPU', 'NPU', '边缘 AI'],
-    status: '示例整理',
-    summary: 'Arm 面向移动、嵌入式和边缘设备提供图形与神经网络加速 IP。',
-    detail: '可用于记录多媒体 SoC、智能终端和边缘 AI 芯片中的图形渲染、视觉推理和软件栈适配能力。',
-    sourceUrl: 'https://www.arm.com/products/silicon-ip-multimedia',
+    tool: 'Arm Mali GPU',
+    primaryCategory: '图形处理和多媒体 | Graphic & Multimedia',
+    secondaryCategory: '2D/3D',
+    stage: '图形与视觉计算集成',
+    region: '国际',
+    tags: ['Mali', 'GPU', '图形渲染', '移动终端', '视觉计算'],
+    status: '精选演示',
+    summary: 'Mali GPU 是 Arm 面向图形渲染和视觉计算的 GPU IP 产品线。',
+    detail: '主要服务移动设备、消费电子、嵌入式显示和车载座舱等场景，可与 CPU、NPU 和显示链路共同组成多媒体子系统。',
+    sourceUrl: 'https://www.arm.com/products',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'Mali GPU 产品线。' },
+      { title: '典型应用', body: '智能手机、平板、可穿戴、智能座舱、嵌入式图形。' },
+      { title: '资料来源', body: 'Arm 官方 Products 页面列出 Mali GPUs 作为产品入口。' },
+    ],
   },
   {
-    company: 'Synopsys',
-    tool: 'ARC Processor IP',
-    primaryCategory: '处理器|Processor',
-    secondaryCategory: 'DSP',
-    stage: '可配置处理器集成',
-    region: '美国/海外',
-    tags: ['Configurable CPU', 'DSP', '嵌入式'],
-    status: '示例整理',
-    summary: 'Synopsys ARC 处理器 IP 面向可配置嵌入式处理和 DSP 场景。',
-    detail: '适合记录可配置指令、处理器子系统、软件工具链，以及在存储、连接和低功耗控制芯片中的应用。',
-    sourceUrl: 'https://www.synopsys.com/designware-ip/processor-solutions.html',
+    company: 'Arm',
+    tool: 'Arm Ethos NPU',
+    primaryCategory: '处理器 | Processor',
+    secondaryCategory: 'NPU',
+    stage: '边缘 AI 加速集成',
+    region: '国际',
+    tags: ['Ethos', 'NPU', 'AI', '边缘智能', '机器学习'],
+    status: '精选演示',
+    summary: 'Ethos NPU 是 Arm 面向机器学习推理的神经网络处理器 IP。',
+    detail: '用于在端侧和边缘设备中加速 AI 推理，常与 Cortex CPU、Mali GPU 或 Corstone 子系统组合。',
+    sourceUrl: 'https://www.arm.com/products',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'Ethos NPU 产品线。' },
+      { title: '典型应用', body: '语音识别、视觉检测、智能摄像头、工业和消费类边缘 AI。' },
+      { title: '资料来源', body: 'Arm 官方 Products 页面列出 Ethos NPUs 作为产品入口。' },
+    ],
   },
   {
-    company: 'SiFive',
-    tool: 'SiFive RISC-V Core IP',
-    primaryCategory: '处理器|Processor',
+    company: 'Arm',
+    tool: 'Arm System IP',
+    primaryCategory: '接口和总线协议 | Interface & BUS Protocol(Controller&PHY)',
+    secondaryCategory: 'AMBA',
+    stage: 'SoC 互连与系统集成',
+    region: '国际',
+    tags: ['System IP', 'CoreLink', 'CoreSight', '互连', '调试'],
+    status: '精选演示',
+    summary: 'Arm System IP 支撑片上互连、调试追踪、内存与系统级集成。',
+    detail: '这类 IP 帮助芯片团队把处理器、加速器、存储和外设组织成可验证、可调试的完整 SoC。',
+    sourceUrl: 'https://www.arm.com/products',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'System IP、CoreLink、CoreSight 等系统级 IP 方向。' },
+      { title: '典型应用', body: '复杂 SoC 互连、调试追踪、系统一致性和平台集成。' },
+      { title: '资料来源', body: 'Arm 官方 Products 页面列出 System IP 作为产品入口。' },
+    ],
+  },
+  {
+    company: 'Arm',
+    tool: 'Arm Security IP',
+    primaryCategory: '安全加密 | Security',
+    secondaryCategory: 'Cryptography Cores',
+    stage: '安全子系统集成',
+    region: '国际',
+    tags: ['Security IP', 'TrustZone', 'Crypto', '安全启动', '密钥保护'],
+    status: '精选演示',
+    summary: 'Arm Security IP 面向芯片安全防护、隔离、加密和可信执行。',
+    detail: '适合需要可信启动、密钥保护、硬件隔离和安全生命周期管理的终端、IoT、汽车和基础设施芯片。',
+    sourceUrl: 'https://www.arm.com/products/silicon-ip-security',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'TrustZone 相关安全架构与 Arm Security IP 产品线。' },
+      { title: '典型应用', body: '安全启动、可信执行环境、设备身份、加密和密钥管理。' },
+      { title: '资料来源', body: 'Arm 官方 Security IP 页面。' },
+    ],
+  },
+  {
+    company: 'Arm',
+    tool: 'Arm Corstone Subsystems',
+    primaryCategory: '基础 | Foundation',
+    secondaryCategory: 'General Purpose IOs',
+    stage: '参考子系统与快速集成',
+    region: '国际',
+    tags: ['Corstone', 'Subsystem', 'Cortex', 'Ethos', '参考设计'],
+    status: '精选演示',
+    summary: 'Corstone 是 Arm 面向特定终端和 IoT 场景的参考子系统 IP。',
+    detail: '通过预集成处理器、安全、系统 IP 和软件参考，降低端侧 AI、IoT 与嵌入式 SoC 的集成复杂度。',
+    sourceUrl: 'https://www.arm.com/products',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'Corstone 子系统与参考设计包。' },
+      { title: '典型应用', body: 'IoT、端侧 AI、低功耗嵌入式平台、快速原型设计。' },
+      { title: '资料来源', body: 'Arm 官方 Products 页面列出 Compute Subsystems / Subsystem IP 入口。' },
+    ],
+  },
+  {
+    company: 'Andes',
+    tool: 'AndesCore N / NX 系列',
+    primaryCategory: '处理器 | Processor',
     secondaryCategory: 'CPU',
-    stage: '开放指令集处理器',
-    region: '美国/海外',
-    tags: ['RISC-V', 'CPU', '可定制'],
-    status: '示例整理',
-    summary: 'SiFive 提供基于 RISC-V 的处理器 IP，覆盖 MCU、应用处理和高性能计算方向。',
-    detail: '可用于观察 RISC-V IP 的授权、可扩展指令、生态工具链和面向国产替代或专用芯片的定制空间。',
-    sourceUrl: 'https://www.sifive.com/risc-v-core-ip',
+    stage: 'RISC-V CPU 选型',
+    region: '台湾地区',
+    tags: ['AndesCore', 'RISC-V', 'N25F', 'NX25F', '低功耗'],
+    status: '精选演示',
+    summary: 'AndesCore N / NX 系列面向快速、紧凑、低功耗的 RISC-V CPU 核。',
+    detail: '适合 MCU、控制器、IoT 和成本敏感型 SoC，用于替代或补充传统嵌入式 CPU 核。',
+    sourceUrl: 'https://www.andestech.com/en/products-solutions/andescore-processors/',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'N25F、NX25F 等 N / NX 系列处理器核。' },
+      { title: '典型应用', body: 'MCU、IoT、低功耗控制、嵌入式 SoC。' },
+      { title: '资料来源', body: 'Andes 官方 AndesCore Processors 页面。' },
+    ],
   },
   {
-    company: 'Cadence',
-    tool: 'Tensilica DSP IP',
-    primaryCategory: '处理器|Processor',
+    company: 'Andes',
+    tool: 'AndesCore D 系列',
+    primaryCategory: '处理器 | Processor',
     secondaryCategory: 'DSP',
-    stage: '信号处理加速',
-    region: '美国/海外',
-    tags: ['DSP', '音频', '视觉'],
-    status: '示例整理',
-    summary: 'Cadence Tensilica 面向音频、视觉、通信和 AI 推理提供可配置 DSP IP。',
-    detail: '适合记录专用信号处理、指令扩展、编译器支持，以及与算法团队协同优化的芯片设计流程。',
-    sourceUrl: 'https://www.cadence.com/en_US/home/tools/ip/tensilica-ip.html',
+    stage: 'RISC-V CPU 选型',
+    region: '台湾地区',
+    tags: ['AndesCore', 'RISC-V', 'D25F', 'DSP', '控制计算'],
+    status: '精选演示',
+    summary: 'AndesCore D 系列偏向带 DSP/控制增强能力的 RISC-V 处理器核。',
+    detail: '用于需要信号处理、控制算法或特定指令扩展的嵌入式 SoC。',
+    sourceUrl: 'https://www.andestech.com/en/products-solutions/andescore-processors/',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'D25F、D45 等 D 系列处理器核。' },
+      { title: '典型应用', body: '数字信号处理、传感器控制、电机控制、嵌入式加速。' },
+      { title: '资料来源', body: 'Andes 官方 AndesCore Processors 页面。' },
+    ],
   },
   {
-    company: 'Synopsys',
-    tool: 'DesignWare PCI Express IP',
-    primaryCategory: '接口和总线协议|Interface & BUS Protocol(PHY&Controller)',
-    secondaryCategory: 'PCIe',
-    stage: '高速互连接口',
-    region: '美国/海外',
-    tags: ['PCIe', 'Controller', 'PHY'],
-    status: '示例整理',
-    summary: 'Synopsys DesignWare PCIe IP 覆盖控制器、PHY 与验证资源，是高速互连常用商用 IP。',
-    detail: '适合记录不同 PCIe 代际、控制器/PHY 组合、验证 IP 与合规测试需求。',
-    sourceUrl: 'https://www.synopsys.com/designware-ip/interface-ip/pci-express.html',
+    company: 'Andes',
+    tool: 'AndesCore A / AX25 系列',
+    primaryCategory: '处理器 | Processor',
+    secondaryCategory: 'CPU',
+    stage: 'RISC-V CPU 选型',
+    region: '台湾地区',
+    tags: ['AndesCore', 'RISC-V', 'A25', 'AX25', '应用处理器'],
+    status: '精选演示',
+    summary: 'A / AX25 系列面向更高性能的 RISC-V 应用处理和 SoC 主控场景。',
+    detail: '适合需要较高主频、Linux 或复杂软件栈支持的应用型芯片。',
+    sourceUrl: 'https://www.andestech.com/en/products-solutions/andescore-processors/v5-64bit/',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'A25、AX25、A25MP、AX25MP 等。' },
+      { title: '典型应用', body: '应用处理器、边缘网关、工业控制、智能设备。' },
+      { title: '资料来源', body: 'Andes 官方 64-bit AndesCore 页面。' },
+    ],
   },
   {
-    company: 'Cadence',
-    tool: 'Cadence PCIe / USB / Ethernet IP',
-    primaryCategory: '接口和总线协议|Interface & BUS Protocol(PHY&Controller)',
-    secondaryCategory: 'PCIe',
-    stage: '协议接口集成',
-    region: '美国/海外',
-    tags: ['PCIe', 'USB', 'Ethernet'],
-    status: '示例整理',
-    summary: 'Cadence 提供多类接口 IP，覆盖常见高速协议控制器、PHY 和验证模型。',
-    detail: '用于归档接口 IP 的协议版本、控制器能力、PHY 工艺适配和系统验证资源。',
-    sourceUrl: 'https://www.cadence.com/en_US/home/tools/ip.html',
+    company: 'Andes',
+    tool: 'AndesCore AX45 / AX45MPV 系列',
+    primaryCategory: '处理器 | Processor',
+    secondaryCategory: 'CPU',
+    stage: '高性能 RISC-V 集成',
+    region: '台湾地区',
+    tags: ['AndesCore', 'RISC-V', 'AX45', 'AX45MPV', '多核'],
+    status: '精选演示',
+    summary: 'AX45 / AX45MPV 系列面向多核、向量计算和更高性能 RISC-V SoC。',
+    detail: '适合 AI 边缘推理、网络处理、存储控制和高性能嵌入式计算。',
+    sourceUrl: 'https://www.andestech.com/en/products-solutions/andescore-processors/',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'AX45、AX45MP、AX45MPV 等。' },
+      { title: '典型应用', body: '边缘 AI、网络芯片、存储控制、工业计算。' },
+      { title: '资料来源', body: 'Andes 官方 AndesCore Processors 页面。' },
+    ],
   },
   {
-    company: 'Rambus',
-    tool: 'DDR / HBM Memory Interface IP',
-    primaryCategory: '存储与逻辑库|Memory & Logic Library',
-    secondaryCategory: 'Memory Compilers',
-    stage: '高带宽存储接口',
-    region: '美国/海外',
-    tags: ['DDR', 'HBM', 'PHY'],
-    status: '示例整理',
-    summary: 'Rambus 面向高性能 SoC 提供 DDR、GDDR、HBM 等存储接口 IP。',
-    detail: '适合记录存储带宽、PHY 工艺节点、控制器兼容性和数据中心/AI 芯片中的接口需求。',
-    sourceUrl: 'https://www.rambus.com/interface-ip/',
-  },
-  {
-    company: 'Synopsys',
-    tool: 'DesignWare DDR Controller / PHY',
-    primaryCategory: '存储与逻辑库|Memory & Logic Library',
-    secondaryCategory: 'Memory Compilers',
-    stage: '外部存储控制',
-    region: '美国/海外',
-    tags: ['DDR', 'Controller', 'PHY'],
-    status: '示例整理',
-    summary: 'Synopsys DDR IP 提供控制器、PHY 与验证环境，服务高性能 SoC 外部存储接口。',
-    detail: '可用于记录 DDR5/LPDDR/HBM 等存储协议、功耗模式、训练校准和一致性验证需求。',
-    sourceUrl: 'https://www.synopsys.com/designware-ip/interface-ip/ddr.html',
-  },
-  {
-    company: 'eMemory',
-    tool: 'NeoFuse / NeoMTP NVM IP',
-    primaryCategory: '存储与逻辑库|Memory & Logic Library',
-    secondaryCategory: 'eFlash',
-    stage: '嵌入式非易失存储',
-    region: '中国台湾/国产生态',
-    tags: ['NVM', 'eFlash', 'OTP/MTP'],
-    status: '示例整理',
-    summary: 'eMemory 提供嵌入式非易失存储 IP，用于芯片配置、校准、安全和少量数据保存。',
-    detail: '适合记录一次性可编程、多次可编程、可靠性、工艺适配及与安全启动/密钥存储的关系。',
-    sourceUrl: 'https://www.ememory.com.tw/en-US/Products',
-  },
-  {
-    company: 'Rambus',
-    tool: 'Root of Trust / Crypto IP',
-    primaryCategory: '安全加密|Security',
-    secondaryCategory: 'Cryptography Cores',
-    stage: '芯片安全子系统',
-    region: '美国/海外',
-    tags: ['RoT', 'Crypto', 'Secure Boot'],
-    status: '示例整理',
-    summary: 'Rambus 安全 IP 覆盖硬件信任根、密码引擎和密钥保护能力。',
-    detail: '可用于记录安全启动、固件认证、密钥管理、防篡改和面向车规/数据中心的安全合规需求。',
-    sourceUrl: 'https://www.rambus.com/security/',
-  },
-  {
-    company: 'Synopsys',
-    tool: 'Security IP for SoC',
-    primaryCategory: '安全加密|Security',
-    secondaryCategory: 'Cryptography Cores',
-    stage: '数据保护与认证',
-    region: '美国/海外',
-    tags: ['Crypto', 'TRNG', 'Security'],
-    status: '示例整理',
-    summary: 'Synopsys 安全 IP 包含密码、随机数、安全协议和保护模块。',
-    detail: '适合记录算法覆盖、侧信道防护、密钥生命周期和与处理器/存储子系统的集成边界。',
-    sourceUrl: 'https://www.synopsys.com/designware-ip/security-ip.html',
+    company: 'Andes',
+    tool: 'AndesCore AX60 / AX65 系列',
+    primaryCategory: '处理器 | Processor',
+    secondaryCategory: 'CPU',
+    stage: '高性能 RISC-V 集成',
+    region: '台湾地区',
+    tags: ['AndesCore', 'RISC-V', 'AX65', '乱序执行', 'Linux'],
+    status: '精选演示',
+    summary: 'AX60 / AX65 系列面向中高端 RISC-V 应用处理器和 Linux 级计算场景。',
+    detail: '适合需要更强单核性能、多核扩展和复杂操作系统生态的芯片项目。',
+    sourceUrl: 'https://www.andestech.com/en/products-solutions/andescore-processors/riscv-ax65/',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'AX65 以及 AX60 系列相关产品线。' },
+      { title: '典型应用', body: '边缘服务器、AI SoC、网络处理、Linux 应用处理器。' },
+      { title: '资料来源', body: 'Andes 官方 AX65 产品页面。' },
+    ],
   },
   {
     company: '芯原股份',
-    tool: 'Vivante GPU / NPU IP',
-    primaryCategory: '处理器|Processor',
-    secondaryCategory: 'GPU',
-    stage: '图形与 AI 加速',
-    region: '中国/国产',
-    tags: ['GPU', 'NPU', '视觉处理'],
-    status: '示例整理',
-    summary: '芯原提供图形处理器、神经网络处理器和视频处理相关 IP，服务 SoC 平台化设计。',
-    detail: '适合作为国产 IP 厂商样本，记录 GPU/NPU、VPU、显示处理和芯片定制服务之间的组合能力。',
-    sourceUrl: 'https://www.verisilicon.com/en/IPPortfolio',
+    tool: 'Vivante GPU IP',
+    primaryCategory: '图形处理和多媒体 | Graphic & Multimedia',
+    secondaryCategory: '2D/3D',
+    stage: '图形与显示子系统集成',
+    region: '国内',
+    tags: ['Vivante', 'GPU', '图形渲染', '显示', '芯原'],
+    status: '精选演示',
+    summary: 'Vivante GPU IP 是芯原自研处理器 IP 组合中的图形处理产品线。',
+    detail: '用于图形渲染、GUI、2D/3D 显示和低功耗视觉系统，可与 ISP、VPU 和 Display Processing IP 组合。',
+    sourceUrl: 'https://verisilicon.com/en/IPPORTFOLIO',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'Vivante GPU IP。' },
+      { title: '典型应用', body: '消费电子、智能显示、车载座舱、边缘多媒体 SoC。' },
+      { title: '资料来源', body: '芯原官方 IP Portfolio 页面。' },
+    ],
   },
   {
     company: '芯原股份',
-    tool: 'Video Processor / Display Processor IP',
-    primaryCategory: '模拟和混合信号|Analog & Mixed Signal',
-    secondaryCategory: 'Sensor',
-    stage: '多媒体子系统',
-    region: '中国/国产',
-    tags: ['Video', 'Display', 'Camera'],
-    status: '示例整理',
-    summary: '芯原多媒体 IP 面向视频编解码、图像信号处理和显示管线。',
-    detail: '当前归入传感与多媒体接口，后续可单独拆为多媒体 IP 分类，便于研究智能终端与边缘视觉芯片。',
-    sourceUrl: 'https://www.verisilicon.com/en/IPPortfolio',
+    tool: 'VeriSilicon NPU IP',
+    primaryCategory: '处理器 | Processor',
+    secondaryCategory: 'NPU',
+    stage: 'AI 推理加速集成',
+    region: '国内',
+    tags: ['NPU', 'AI', '计算机视觉', '边缘设备', '芯原'],
+    status: '精选演示',
+    summary: '芯原 NPU IP 是面向计算机视觉和人工智能推理的可扩展处理器 IP。',
+    detail: '用于端侧、边缘和云侧设备的 AI 推理加速，可结合软件栈与多媒体处理 IP 形成视觉 AI 子系统。',
+    sourceUrl: 'https://verisilicon.com/en/IPPORTFOLIO',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'VeriSilicon NPU IP、Coral NPU 相关公开 IP 方向。' },
+      { title: '典型应用', body: '智能摄像头、边缘 AI、机器视觉、AIoT、数据中心边缘推理。' },
+      { title: '资料来源', body: '芯原官方 IP Portfolio 页面。' },
+    ],
   },
   {
-    company: '芯动科技',
-    tool: 'SerDes / DDR / PCIe IP',
-    primaryCategory: '接口和总线协议|Interface & BUS Protocol(PHY&Controller)',
+    company: '芯原股份',
+    tool: 'Hantro VPU IP',
+    primaryCategory: '处理器 | Processor',
+    secondaryCategory: 'VPU',
+    stage: '视频编解码子系统集成',
+    region: '国内',
+    tags: ['Hantro', 'VPU', '视频编解码', '多媒体', '芯原'],
+    status: '精选演示',
+    summary: 'Hantro VPU IP 是芯原面向视频编解码和视频处理的处理器 IP。',
+    detail: '支持主流视频格式处理和多核扩展，适合视频监控、消费电子、IoT、云服务和数据中心视频场景。',
+    sourceUrl: 'https://verisilicon.com/en/IPPORTFOLIO',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'Hantro Video Processing Unit IP。' },
+      { title: '典型应用', body: '视频监控、OTT/机顶盒、智能摄像头、无人机、云视频处理。' },
+      { title: '资料来源', body: '芯原官方 IP Portfolio 页面。' },
+    ],
+  },
+  {
+    company: '芯原股份',
+    tool: 'ZSP DSP IP',
+    primaryCategory: '处理器 | Processor',
+    secondaryCategory: 'DSP',
+    stage: '信号处理子系统集成',
+    region: '国内',
+    tags: ['ZSP', 'DSP', '音频', '语音', '无线连接'],
+    status: '精选演示',
+    summary: 'ZSP DSP IP 是芯原面向信号处理和数据流计算的可编程 DSP 内核。',
+    detail: '适合音频、语音、影像、视觉、无线连接和电力线通信等嵌入式信号处理任务。',
+    sourceUrl: 'https://verisilicon.com/en/IPPORTFOLIO',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'ZSP Digital Signal Processing IP。' },
+      { title: '典型应用', body: '音频处理、语音处理、图像与视觉算法、无线连接、低功耗 DSP。' },
+      { title: '资料来源', body: '芯原官方 IP Portfolio 页面。' },
+    ],
+  },
+  {
+    company: '芯原股份',
+    tool: 'Vivante ISP / Display Processing IP',
+    primaryCategory: '图形处理和多媒体 | Graphic & Multimedia',
+    secondaryCategory: 'ISP',
+    stage: '图像与显示链路集成',
+    region: '国内',
+    tags: ['Vivante', 'ISP', 'Display', '图像处理', '显示处理'],
+    status: '精选演示',
+    summary: '芯原 ISP 与 Display Processing IP 覆盖摄像头输入、图像质量处理和显示输出链路。',
+    detail: '用于移动设备、视频会议、视频监控、汽车视觉和智能显示，能与 VPU、GPU、NPU 组合成完整视觉处理链路。',
+    sourceUrl: 'https://verisilicon.com/en/IPPORTFOLIO',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'Vivante ISP IP、Vivante Display Processing IP。' },
+      { title: '典型应用', body: '摄像头 ISP、视频会议、智能座舱、图像增强、显示合成。' },
+      { title: '资料来源', body: '芯原官方 IP Portfolio 页面。' },
+    ],
+  },
+  {
+    company: '芯原股份',
+    tool: 'VeriSilicon Analog / Interface / RF IP',
+    primaryCategory: '模拟和混合信号 | Analog & Mixed Signal',
+    secondaryCategory: 'ADC',
+    stage: '物理接口与基础 IP 集成',
+    region: '国内',
+    tags: ['模拟混合信号', 'RF', 'MIPI', 'USB', 'PCIe', 'Foundation IP'],
+    status: '精选演示',
+    summary: '芯原提供模拟混合信号、RF、接口和基础库 IP 组合，用于补齐 SoC 的物理接口与工艺相关模块。',
+    detail: '公开资料显示其组合覆盖模拟/混合信号、MIPI、USB、PCIe、RF、Foundation IP 等方向，具体规格需以项目资料确认。',
+    sourceUrl: 'https://verisilicon.com/en/IPPORTFOLIO',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'Analog and Mixed Signal IP、RF IP、Foundation IP、MIPI / USB / PCIe 等接口 IP。' },
+      { title: '典型应用', body: 'SoC 基础库、低功耗模拟模块、高速接口、IoT 无线连接、先进工艺适配。' },
+      { title: '资料来源', body: '芯原官方 IP Portfolio 页面。' },
+    ],
+  },
+  {
+    company: '寒武纪',
+    tool: 'Cambricon-1H16',
+    primaryCategory: '处理器 | Processor',
+    secondaryCategory: 'AI Processor/Accelerator',
+    stage: '终端 AI 处理器 IP 集成',
+    region: '国内',
+    tags: ['Cambricon-1H', '1H16', 'AI', '终端智能', '寒武纪'],
+    status: '精选演示',
+    summary: 'Cambricon-1H16 是寒武纪终端智能处理器 IP 系列中的代表型号。',
+    detail: '面向终端侧智能计算和神经网络推理场景，用于在 SoC 中集成专用 AI 加速能力。',
+    sourceUrl: 'https://www.cambricon.com/index.php?a=lists&c=index&catid=13&m=content',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'Cambricon-1H16。' },
+      { title: '典型应用', body: '智能终端、视觉识别、语音交互、端侧 AI 推理。' },
+      { title: '资料来源', body: '寒武纪官方 Cambricon-1H 页面。' },
+    ],
+  },
+  {
+    company: '寒武纪',
+    tool: 'Cambricon-1H8',
+    primaryCategory: '处理器 | Processor',
+    secondaryCategory: 'AI Processor/Accelerator',
+    stage: '终端 AI 处理器 IP 集成',
+    region: '国内',
+    tags: ['Cambricon-1H', '1H8', 'AI', '终端智能', '寒武纪'],
+    status: '精选演示',
+    summary: 'Cambricon-1H8 是寒武纪终端智能处理器 IP 系列中的轻量化产品方向。',
+    detail: '用于在功耗、面积和 AI 算力之间做平衡的终端 SoC 场景。',
+    sourceUrl: 'https://www.cambricon.com/index.php?a=lists&c=index&catid=13&m=content',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'Cambricon-1H8。' },
+      { title: '典型应用', body: '智能摄像头、可穿戴、IoT 终端、低功耗 AI 推理。' },
+      { title: '资料来源', body: '寒武纪官方 Cambricon-1H 页面。' },
+    ],
+  },
+  {
+    company: '寒武纪',
+    tool: 'Cambricon-1H8mini',
+    primaryCategory: '处理器 | Processor',
+    secondaryCategory: 'AI Processor/Accelerator',
+    stage: '终端 AI 处理器 IP 集成',
+    region: '国内',
+    tags: ['Cambricon-1H', '1H8mini', 'AI', '低功耗', '寒武纪'],
+    status: '精选演示',
+    summary: 'Cambricon-1H8mini 是寒武纪终端智能处理器 IP 系列中更小型的嵌入式 AI IP。',
+    detail: '适合面积与功耗约束更强的端侧智能设备，作为 demo 中寒武纪轻量 IP 代表。',
+    sourceUrl: 'https://www.cambricon.com/index.php?a=lists&c=index&catid=13&m=content',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'Cambricon-1H8mini。' },
+      { title: '典型应用', body: '小型智能终端、传感器节点、低功耗视觉或语音 AI。' },
+      { title: '资料来源', body: '寒武纪官方 Cambricon-1H 页面。' },
+    ],
+  },
+  {
+    company: '合见工软',
+    tool: 'UniVista PCIe Gen5 IP',
+    primaryCategory: '接口和总线协议 | Interface & BUS Protocol(Controller&PHY)',
+    secondaryCategory: 'PCIe',
+    stage: '高速互连接口集成',
+    region: '国内',
+    tags: ['PCIe Gen5', '高速接口', '控制器', 'PHY', '合见工软'],
+    status: '精选演示',
+    summary: 'UniVista PCIe Gen5 IP 是合见工软高性能 IP 组合中的高速接口产品线。',
+    detail: '面向高性能计算、AI 加速器、存储和网络芯片中的 PCIe 高速互连需求。',
+    sourceUrl: 'https://www.univista-isg.com/site/high_performance',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'PCIe Gen5 IP。' },
+      { title: '典型应用', body: 'AI 加速卡、服务器 SoC、存储控制器、网络处理器。' },
+      { title: '资料来源', body: '合见工软官方高性能 IP 页面。' },
+    ],
+  },
+  {
+    company: '合见工软',
+    tool: 'UniVista UCIe IP',
+    primaryCategory: '接口和总线协议 | Interface & BUS Protocol(Controller&PHY)',
+    secondaryCategory: 'Die-to-Die',
+    stage: 'Chiplet 互连集成',
+    region: '国内',
+    tags: ['UCIe', 'Chiplet', 'Die-to-Die', '先进封装', '合见工软'],
+    status: '精选演示',
+    summary: 'UniVista UCIe IP 面向 Chiplet 和先进封装中的 Die-to-Die 互连。',
+    detail: '用于多芯粒系统中的高速互联、封装内通信和异构集成。',
+    sourceUrl: 'https://www.univista-isg.com/site/high_performance',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'UCIe IP。' },
+      { title: '典型应用', body: 'Chiplet、先进封装、AI/HPC 多芯粒系统、D2D/C2C 互连。' },
+      { title: '资料来源', body: '合见工软官方高性能 IP 页面。' },
+    ],
+  },
+  {
+    company: '合见工软',
+    tool: 'UniVista HBM3/E IP',
+    primaryCategory: '接口和总线协议 | Interface & BUS Protocol(Controller&PHY)',
+    secondaryCategory: 'HBM',
+    stage: '高带宽存储接口集成',
+    region: '国内',
+    tags: ['HBM3', 'HBM3E', 'Memory IP', 'AI 芯片', '合见工软'],
+    status: '精选演示',
+    summary: 'UniVista HBM3/E IP 面向 AI、HPC 和高带宽存储接口场景。',
+    detail: '用于需要极高片外存储带宽的 AI 加速器、GPU、HPC 和数据中心芯片。',
+    sourceUrl: 'https://www.univista-isg.com/site/high_performance',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'HBM3/E IP。' },
+      { title: '典型应用', body: 'AI 训练/推理芯片、HPC、GPU、数据中心加速器。' },
+      { title: '资料来源', body: '合见工软官方高性能 IP 页面。' },
+    ],
+  },
+  {
+    company: '合见工软',
+    tool: 'UniVista Ethernet Controller IP',
+    primaryCategory: '接口和总线协议 | Interface & BUS Protocol(Controller&PHY)',
+    secondaryCategory: 'Ethernet',
+    stage: '高速网络接口集成',
+    region: '国内',
+    tags: ['Ethernet', '400G', '800G', '网络芯片', '合见工软'],
+    status: '精选演示',
+    summary: '合见工软 Ethernet Controller IP 面向高速以太网控制器和网络芯片。',
+    detail: '公开资料显示其以太网控制器覆盖 400G / 800G 等高速网络芯片场景，并支持定制化子系统集成。',
+    sourceUrl: 'https://www.univista-isg.com/site/product_detail/21',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'Ethernet Controller IP。' },
+      { title: '典型应用', body: '交换芯片、网络处理器、服务器芯片、数据中心互连。' },
+      { title: '资料来源', body: '合见工软官方 Ethernet Controller IP 产品详情页。' },
+    ],
+  },
+  {
+    company: '合见工软',
+    tool: 'UniVista UEC MAC IP',
+    primaryCategory: '接口和总线协议 | Interface & BUS Protocol(Controller&PHY)',
+    secondaryCategory: 'Ethernet',
+    stage: '智算网络互连集成',
+    region: '国内',
+    tags: ['UEC', 'MAC', 'AI/ML', 'HPC', '数据中心'],
+    status: '精选演示',
+    summary: 'UniVista UEC MAC IP 面向超以太网和智算网络互连。',
+    detail: '用于 AI/ML、HPC 和云数据中心的高性能网络连接，公开资料强调 LLR、CBFC 等可靠传输能力。',
+    sourceUrl: 'https://www.univista-isg.com/site/product_detail/444',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'UEC MAC IP。' },
+      { title: '典型应用', body: 'AI 集群互连、HPC、云数据中心、智算网络。' },
+      { title: '资料来源', body: '合见工软官方 UEC MAC IP 产品详情页。' },
+    ],
+  },
+  {
+    company: '合见工软',
+    tool: 'UniVista 32G MPS IP',
+    primaryCategory: '接口和总线协议 | Interface & BUS Protocol(Controller&PHY)',
     secondaryCategory: 'Datapath IP(PHY & Controller)',
-    stage: '高速接口与物理层',
-    region: '中国/国产',
-    tags: ['SerDes', 'DDR', 'PCIe'],
-    status: '示例整理',
-    summary: '芯动科技提供高速混合信号 IP，覆盖 SerDes、DDR、PCIe 等接口方向。',
-    detail: '适合记录国产高速 PHY IP 的工艺节点、量产案例、协议覆盖和高性能芯片集成价值。',
-    sourceUrl: 'https://www.innosilicon.com/',
-  },
-  {
-    company: '芯动科技',
-    tool: 'GPU IP',
-    primaryCategory: '处理器|Processor',
-    secondaryCategory: 'GPU',
-    stage: '图形处理与显示',
-    region: '中国/国产',
-    tags: ['GPU', '国产 IP', '图形处理'],
-    status: '示例整理',
-    summary: '芯动科技布局国产 GPU IP，可服务图形显示、桌面和嵌入式图形处理需求。',
-    detail: '适合跟踪国产 GPU IP 在生态驱动、性能档位、应用场景和 SoC 集成中的成熟度。',
-    sourceUrl: 'https://www.innosilicon.com/',
-  },
-  {
-    company: '灿芯股份',
-    tool: 'SerDes / DDR / Analog IP',
-    primaryCategory: '模拟和混合信号|Analog & Mixed Signal',
-    secondaryCategory: 'PLL',
-    stage: '定制芯片 IP 集成',
-    region: '中国/国产',
-    tags: ['SerDes', 'DDR', 'Analog IP'],
-    status: '示例整理',
-    summary: '灿芯在一站式芯片定制服务中提供接口、模拟和基础 IP 支持。',
-    detail: '可作为 IP 与 ASIC 设计服务结合的样本，记录自有 IP、工艺平台和客户定制交付之间的关系。',
-    sourceUrl: 'https://www.brite-semi.com/',
-  },
-  {
-    company: 'Synopsys',
-    tool: 'DesignWare Foundation IP',
-    primaryCategory: '基础|Foundation',
-    secondaryCategory: 'Standard Cell Library',
-    stage: '工艺平台基础库',
-    region: '美国/海外',
-    tags: ['Foundation IP', 'Std Cell', 'I/O'],
-    status: '示例整理',
-    summary: 'Synopsys Foundation IP 覆盖标准单元库、存储器编译器和通用基础库。',
-    detail: '用于记录不同工艺节点上的基础库、低功耗变体、编译器和 SoC 后端实现所需的工艺绑定资源。',
-    sourceUrl: 'https://www.synopsys.com/designware-ip/foundation-ip.html',
-  },
-  {
-    company: 'Cadence',
-    tool: 'Verification IP Portfolio',
-    primaryCategory: '接口和总线协议|Interface & BUS Protocol(PHY&Controller)',
-    secondaryCategory: 'Datapath IP(PHY & Controller)',
-    stage: '协议验证与合规',
-    region: '美国/海外',
-    tags: ['VIP', 'UVM', 'Protocol'],
-    status: '示例整理',
-    summary: 'Cadence 验证 IP 支持常见协议的测试平台、检查器和覆盖模型。',
-    detail: '适合记录接口 IP 导入后的协议验证、合规套件、覆盖率收敛和仿真/硬件仿真复用能力。',
-    sourceUrl: 'https://www.cadence.com/en_US/home/tools/system-design-and-verification/verification-ip.html',
-  },
-  {
-    company: 'Synopsys',
-    tool: 'Verification IP for Protocols',
-    primaryCategory: '接口和总线协议|Interface & BUS Protocol(PHY&Controller)',
-    secondaryCategory: 'Datapath IP(PHY & Controller)',
-    stage: '协议验证与合规',
-    region: '美国/海外',
-    tags: ['VIP', 'Compliance', 'Protocol'],
-    status: '示例整理',
-    summary: 'Synopsys VIP 覆盖多类接口协议，支持仿真、形式验证和硬件辅助验证流程。',
-    detail: '可用于跟踪协议覆盖、参考测试、UVM 集成和与 DesignWare 接口 IP 的协同验证。',
-    sourceUrl: 'https://www.synopsys.com/verification/verification-ip.html',
-  },
-  {
-    company: '华大九天',
-    tool: 'Qualib 标准单元库/IP 验证',
-    primaryCategory: '基础|Foundation',
-    secondaryCategory: 'Standard Cell Library',
-    stage: 'IP 质量验证',
-    region: '中国/国产',
-    tags: ['Library QA', 'IP Validation', '国产 EDA'],
-    status: '示例整理',
-    summary: '华大九天 Qualib 面向标准单元库与 IP 的质量验证，可作为基础 IP 质量流程样本。',
-    detail: '虽然它本身属于 EDA 工具，但与 IP 入库、库质量评估和 Foundry/设计公司交付流程强相关。',
-    sourceUrl: 'https://www.empyrean.com.cn/product/eda.html',
+    stage: '多协议 SerDes PHY 集成',
+    region: '国内',
+    tags: ['SerDes', '32G', 'Multi-Protocol', 'PHY', '高速接口'],
+    status: '精选演示',
+    summary: 'UniVista 32G Multi-Protocol SerDes IP 是合见工软面向多协议高速传输接口的 SerDes IP。',
+    detail: '适合 PCIe、以太网、Interlaken 等多种高速互连协议的物理层传输接口集成。',
+    sourceUrl: 'https://www.univista-isg.com/site/news_detail/454',
+    detailSections: [
+      { title: '代表产品 / 系列', body: 'UniVista 32G Multi-Protocol SerDes IP。' },
+      { title: '典型应用', body: '高速接口 PHY、AI/HPC 芯片、网络芯片、数据中心互连。' },
+      { title: '资料来源', body: '合见工软官方新闻与高性能 IP 页面。' },
+    ],
   },
 ];
 
@@ -1587,6 +1876,10 @@ const companyVisuals = {
   '华大九天': empyreanLogo,
   '概伦电子': primariusLogo,
   '合见工软': univistaLogo,
+  Arm: armLogo,
+  Andes: andesLogo,
+  '芯原股份': verisiliconLogo,
+  '寒武纪': cambriconLogo,
 };
 
 const companySourceUrls = {
@@ -1596,10 +1889,12 @@ const companySourceUrls = {
   '概伦电子': 'https://www.primarius-tech.com/',
   '合见工软': 'https://www.univista-isg.com/',
   Arm: 'https://www.arm.com/products/silicon-ip',
+  Andes: 'https://www.andestech.com/en/products-solutions/andescore-processors/',
   SiFive: 'https://www.sifive.com/risc-v-core-ip',
   Rambus: 'https://www.rambus.com/interface-ip/',
   eMemory: 'https://www.ememory.com.tw/en-US/Products',
   '芯原股份': 'https://www.verisilicon.com/en/IPPortfolio',
+  '寒武纪': 'https://www.cambricon.com/index.php?a=lists&c=index&catid=13&m=content',
   '芯动科技': 'https://www.innosilicon.com/',
   '灿芯股份': 'https://www.brite-semi.com/',
 };
@@ -1612,18 +1907,48 @@ const findResourceBySlug = (resources, slug) => resources.find((resource) => get
 
 const getCompanySlug = (company) => encodeURIComponent(company);
 
-const getCompanyBySlug = (slug) =>
-  Array.from(new Set(edaResources.map((resource) => resource.company))).find((company) => getCompanySlug(company) === slug);
+const allResources = [...edaResources, ...ipResources];
 
-const getCompanyResources = (company) => edaResources.filter((resource) => resource.company === company);
+const getResourceLibraryKey = (resource) => (ipResources.includes(resource) ? 'ip' : 'eda');
+
+const getCompanyBySlug = (slug) =>
+  Array.from(new Set(allResources.map((resource) => resource.company))).find((company) => getCompanySlug(company) === slug);
+
+const getCompanyResources = (company) => allResources.filter((resource) => resource.company === company);
 
 const getResourceVisual = (resource) => resource.imageUrl || companyVisuals[resource.company];
 
 const getResourceSourceUrl = (resource) => resource.officialUrl || resource.sourceUrl || companySourceUrls[resource.company];
 
-const getResourceChips = (resource) => [resource.secondaryCategory, resource.stage, resource.region];
+const getResourceDisplayName = (resource) =>
+  resource.tool.startsWith(resource.company) ? resource.tool : `${resource.company} ${resource.tool}`;
 
-const getApplicationText = (resource) => resource.tags.slice(0, 3).join('、');
+const isIpDictionaryResource = (resource) =>
+  Boolean(resource.fullName || resource.specs || resource.exampleApplications || resource.applicationDomains || resource.vendors);
+
+const getResourceChips = (resource) => {
+  if (isIpDictionaryResource(resource)) {
+    return [
+      resource.secondaryCategory,
+      resource.primaryCategory.split('|')[0].trim(),
+      resource.status,
+    ].filter(Boolean);
+  }
+
+  return [resource.secondaryCategory, resource.stage, resource.region].filter(Boolean);
+};
+
+const getApplicationText = (resource) => resource.exampleApplications || resource.tags.slice(0, 3).join('、');
+
+const getVendorPreview = (resource, limit = 4) => {
+  if (!resource.vendors) return '';
+  const vendors = resource.vendors
+    .split(/[；;]/)
+    .map((vendor) => vendor.trim())
+    .filter(Boolean);
+  if (vendors.length <= limit) return vendors.join('；');
+  return `${vendors.slice(0, limit).join('；')} 等 ${vendors.length} 家`;
+};
 
 const getCompanyInitials = (company) => company
   .split(/\s+/)
@@ -1633,6 +1958,7 @@ const getCompanyInitials = (company) => company
   .toUpperCase();
 
 const getStageFlow = (resource) => {
+  if (isIpDictionaryResource(resource)) return ['分类定位', '规格评估', '厂商选型', '集成验证'];
   if (resource.primaryCategory.includes('模拟')) return ['电路设计', '仿真验证', '版图/签核'];
   if (resource.primaryCategory.includes('数字前端')) return ['RTL 设计', '验证', '综合'];
   if (resource.primaryCategory.includes('数字后端')) return ['物理实现', '分析', '签核'];
@@ -1649,20 +1975,111 @@ const getStageFlow = (resource) => {
   return [resource.primaryCategory, resource.stage, resource.secondaryCategory];
 };
 
-const getResourceDetailSections = (resource) => resource.detailSections || [
-  {
-    title: '产品定位',
-    body: resource.detail || resource.summary,
-  },
-  {
-    title: '核心用途',
-    body: `${resource.summary} 该条目归入「${resource.primaryCategory} / ${resource.secondaryCategory}」，用于快速判断其在 EDA 流程中的位置。`,
-  },
-  {
-    title: '典型应用',
-    body: getApplicationText(resource) || '典型应用待补充，后续可随具体厂商资料继续扩写。',
-  },
-];
+const getResourceDetailSections = (resource) => {
+  if (resource.detailSections) return resource.detailSections;
+
+  if (isIpDictionaryResource(resource)) {
+    return [
+      { title: 'IP 全称', body: resource.fullName || resource.tool },
+      { title: '核心功能', body: resource.detail || resource.summary },
+      { title: '关键规格参数', body: resource.specs || '关键规格参数待结合具体厂商资料补充。' },
+      { title: '典型应用与领域', body: `${resource.exampleApplications || '典型应用待补充'}；${resource.applicationDomains || '典型应用领域待补充'}` },
+      { title: '代表厂商', body: resource.vendors || '代表厂商待补充。' },
+      { title: '备注', body: resource.note || '具体性能、工艺节点、授权范围以厂商 datasheet/协议规范/NDA 资料为准。' },
+    ];
+  }
+
+  return [
+    {
+      title: '产品定位',
+      body: resource.detail || resource.summary,
+    },
+    {
+      title: '核心用途',
+      body: `${resource.summary} 该条目归入「${resource.primaryCategory} / ${resource.secondaryCategory}」，用于快速判断其在 EDA 流程中的位置。`,
+    },
+    {
+      title: '典型应用',
+      body: getApplicationText(resource) || '典型应用待补充，后续可随具体厂商资料继续扩写。',
+    },
+  ];
+};
+
+const getDetailSectionBody = (resource, titlePattern) =>
+  resource.detailSections?.find((section) => titlePattern.test(section.title))?.body;
+
+const getIpFoundryInfo = (resource) => {
+  if (resource.foundry || resource.processNode || resource.maturity || resource.availability) {
+    return {
+      foundryNode: [resource.foundry, resource.processNode].filter(Boolean).join(' · ') || '公开资料未披露固定代工厂/节点。',
+      maturity: resource.maturity || '需结合厂商 datasheet、硅验证报告或 NDA 资料确认。',
+      availability: resource.availability || '需联系厂商确认授权范围、交付物和可用版本。',
+    };
+  }
+
+  if (resource.company === 'Andes' || /Cortex|AndesCore|CPU|DSP|NPU|VPU|Security|System|Corstone/.test(`${resource.tool} ${resource.secondaryCategory}`)) {
+    return {
+      foundryNode: '可综合软核或系统级 IP，通常不绑定单一代工厂/节点；最终节点由 SoC 项目和后端实现决定。',
+      maturity: '成熟度以对应 IP 版本、参考设计、软件栈和客户项目验证情况为准。',
+      availability: '需联系厂商确认授权模式、交付物、验证包和目标工艺支持。',
+    };
+  }
+
+  if (/PCIe|UCIe|HBM|Ethernet|SerDes|Datapath|Analog|RF|MIPI|USB/.test(`${resource.tool} ${resource.secondaryCategory}`)) {
+    return {
+      foundryNode: '高速接口、模拟/混合信号或 PHY 类 IP 通常与具体 foundry、节点和 PDK 强相关；公开页面未披露固定组合时需单独确认。',
+      maturity: '需确认是否 silicon proven、是否已有目标节点 tape-out 记录，以及是否覆盖目标 PVT corner。',
+      availability: '需向厂商确认可授权节点、硬宏/PHY 交付物、验证报告和集成支持范围。',
+    };
+  }
+
+  return {
+    foundryNode: '公开资料未披露固定代工厂/节点。',
+    maturity: '需结合厂商 datasheet、硅验证报告或 NDA 资料确认。',
+    availability: '需联系厂商确认授权范围、交付物和可用版本。',
+  };
+};
+
+const getIpMarketSections = (resource) => {
+  const representativeProducts = getDetailSectionBody(resource, /代表产品|系列/) || resource.secondaryCategory;
+  const applications = getDetailSectionBody(resource, /典型应用|应用/) || resource.stage;
+  const foundryInfo = getIpFoundryInfo(resource);
+  const featureText = `代表产品/系列：${representativeProducts}。核心能力：${resource.tags.slice(0, 5).join('、')}。`;
+  const customerText = resource.customers || '主要客户信息待补充，后续可根据公开客户案例、授权公告或厂商访谈资料完善。';
+  const blockDiagramText = resource.blockDiagram || 'Block Diagram 待补充，后续可放置 IP 框图、接口关系图或集成示意图。';
+  const specText = resource.specifications || '规格参数待补充，后续可补充工艺节点、接口协议、数据速率、面积、功耗、交付物和验证状态等信息。';
+
+  return [
+    {
+      title: '概述',
+      body: resource.detail || resource.summary,
+    },
+    {
+      title: '主要特点',
+      body: featureText,
+    },
+    {
+      title: '适用范围',
+      body: applications,
+    },
+    {
+      title: '主要客户',
+      body: customerText,
+    },
+    {
+      title: 'Block Diagram',
+      body: blockDiagramText,
+    },
+    {
+      title: '规格',
+      body: specText,
+    },
+    {
+      title: '代工厂信息',
+      body: `代工厂/节点：${foundryInfo.foundryNode} 成熟度：${foundryInfo.maturity} 可获得性：${foundryInfo.availability}`,
+    },
+  ];
+};
 
 const getSourceStatus = (resource) => (getResourceSourceUrl(resource) ? '官网整理' : '待补充');
 
@@ -1870,6 +2287,10 @@ const companyDescriptions = {
   '华大九天': '华大九天是国内 EDA 代表企业之一，产品覆盖模拟/混合信号设计、数字设计、平板显示、晶圆制造与先进封装等方向。',
   '概伦电子': '概伦电子聚焦器件建模、模型验证、仿真验证、良率提升和测试等 EDA 方向，产品常用于工艺开发、模拟设计与制造协同场景。',
   '合见工软': '合见工软聚焦芯片验证与系统级设计工具，产品覆盖仿真验证、硬件辅助验证、原型验证、DFT、PCB/原理图与工程数据管理等方向。',
+  Arm: 'Arm 提供处理器、GPU、NPU、系统与安全 IP 等可授权芯片 IP，广泛用于移动终端、嵌入式、汽车电子、IoT 与基础设施芯片。',
+  Andes: 'Andes 聚焦 RISC-V 处理器 IP，产品覆盖低功耗嵌入式核、DSP/控制核、高性能应用处理器和多核向量计算方向。',
+  '芯原股份': '芯原股份提供 GPU、NPU、VPU、DSP、ISP、显示处理以及模拟/接口/RF 等半导体 IP，并结合芯片设计服务形成平台化能力。',
+  '寒武纪': '寒武纪终端智能处理器 IP 面向端侧人工智能推理场景，可用于智能终端、视觉识别、语音交互和低功耗 AI 设备。',
 };
 
 const libraryConfigs = {
@@ -1895,12 +2316,13 @@ const libraryConfigs = {
     contrastColor: '#100b2d',
     eyebrow: 'IP RESOURCE LIBRARY',
     title: 'IP 资源库',
-    description: '围绕可复用芯片功能模块沉淀处理器、接口、存储、安全、模拟混合信号与基础库资源，支持从架构选型到集成验证的产业研究。',
+    description: 'IP 是芯片设计中可重复授权和集成的功能模块，相当于 SoC 里的成熟积木。通过处理器、接口、存储、安全、模拟混合信号等 IP，设计企业可以缩短研发周期、降低验证风险，并把更多精力放在系统架构和产品差异化上。您可以通过搜索和筛选，按具体需求定位合适的 IP，进一步找到匹配的 IP 解决方案。',
     taxonomy: ipTaxonomy,
     resources: ipResources,
-    metricResourceLabel: 'IP 样本',
-    metricCompanyLabel: 'IP 企业',
+    metricResourceLabel: 'IP 总数',
+    metricCompanyLabel: '厂商数量',
     searchPlaceholder: '搜索公司、IP、协议、分类、阶段或标签',
+    detailBasePath: 'ip',
   },
 };
 
@@ -1983,6 +2405,12 @@ function ResourceLibrary({ onBack, config }) {
         resource.region,
         resource.summary,
         resource.detail,
+        resource.fullName,
+        resource.specs,
+        resource.exampleApplications,
+        resource.applicationDomains,
+        resource.vendors,
+        resource.note,
         resource.sourceUrl,
         companySourceUrls[resource.company],
         ...resource.tags,
@@ -2368,16 +2796,18 @@ function ResourceLibrary({ onBack, config }) {
               {paginatedResources.map((resource) => {
                 const detailPath = getInternalDetailPath(resource);
                 const sourceUrl = getResourceSourceUrl(resource);
+                const isIpResource = isIpDictionaryResource(resource);
+                const resourceDisplayName = getResourceDisplayName(resource);
                 const MainElement = detailPath ? 'a' : 'button';
                 const mainProps = detailPath
                   ? {
                       href: detailPath,
-                      'aria-label': `打开${resource.company} ${resource.tool}内部详情页`,
+                      'aria-label': `打开${resourceDisplayName}内部详情页`,
                     }
                   : {
                       type: 'button',
                       onClick: () => setSelectedResource(resource),
-                      'aria-label': `查看${resource.company} ${resource.tool}详情`,
+                      'aria-label': `查看${resourceDisplayName}详情`,
                     };
 
                 return (
@@ -2403,7 +2833,7 @@ function ResourceLibrary({ onBack, config }) {
                           </span>
                         </div>
                         <div className="resource-title-block">
-                          <p className="resource-company">{resource.company}</p>
+                          <p className="resource-company">{isIpResource ? resource.fullName : resource.company}</p>
                           <h2>{resource.tool}</h2>
                           <div className="resource-chip-row">
                             {getResourceChips(resource).map((chip) => (
@@ -2415,19 +2845,26 @@ function ResourceLibrary({ onBack, config }) {
                       <div className="resource-browse-profile" aria-label={`${resource.tool}产品信息`}>
                         <p>
                           <Sparkles size={14} aria-hidden="true" />
-                          <strong>产品简介：</strong>
+                          <strong>{isIpResource ? 'IP 简介：' : '产品简介：'}</strong>
                           {resource.summary}
                         </p>
                         <p>
                           <Workflow size={14} aria-hidden="true" />
-                          <strong>典型应用：</strong>
-                          {getApplicationText(resource)}
+                          <strong>{isIpResource ? '核心功能：' : '典型应用：'}</strong>
+                          {isIpResource ? resource.detail : getApplicationText(resource)}
                         </p>
                         <p>
                           <Workflow size={14} aria-hidden="true" />
-                          <strong>适用阶段：</strong>
-                          {getStageFlow(resource).join(' → ')}
+                          <strong>{isIpResource ? '应用领域：' : '适用阶段：'}</strong>
+                          {isIpResource ? resource.applicationDomains : getStageFlow(resource).join(' → ')}
                         </p>
+                        {isIpResource && (
+                          <p>
+                            <Bookmark size={14} aria-hidden="true" />
+                            <strong>代表厂商：</strong>
+                            {getVendorPreview(resource)}
+                          </p>
+                        )}
                       </div>
                     </MainElement>
                     <div className="resource-card-footer">
@@ -2517,7 +2954,7 @@ function ResourceLibrary({ onBack, config }) {
             </button>
             <p className="eyebrow">{selectedResource.primaryCategory} / {selectedResource.secondaryCategory}</p>
             <h2>{selectedResource.tool}</h2>
-            <p className="modal-company">{selectedResource.company}</p>
+            <p className="modal-company">{selectedResource.fullName || selectedResource.company}</p>
             <div className="resource-visual modal-visual">
               {getResourceVisual(selectedResource) ? (
                 <img
@@ -2536,23 +2973,49 @@ function ResourceLibrary({ onBack, config }) {
             <p>{selectedResource.detail}</p>
             <dl>
               <div>
-                <dt>适用阶段</dt>
-                <dd>{selectedResource.stage}</dd>
+                <dt>{isIpDictionaryResource(selectedResource) ? '典型应用' : '适用阶段'}</dt>
+                <dd>{selectedResource.exampleApplications || selectedResource.stage}</dd>
               </div>
               <div>
-                <dt>来源类型</dt>
-                <dd>{selectedResource.region}</dd>
+                <dt>{isIpDictionaryResource(selectedResource) ? '应用领域' : '来源类型'}</dt>
+                <dd>{selectedResource.applicationDomains || selectedResource.region}</dd>
               </div>
               <div>
-                      <dt>二级分类</dt>
+                <dt>二级分类</dt>
                 <dd>{selectedResource.secondaryCategory}</dd>
               </div>
+              {isIpDictionaryResource(selectedResource) && (
+                <>
+                  <div>
+                    <dt>关键规格参数</dt>
+                    <dd>{selectedResource.specs}</dd>
+                  </div>
+                  <div>
+                    <dt>代表厂商</dt>
+                    <dd>{selectedResource.vendors}</dd>
+                  </div>
+                  <div>
+                    <dt>备注</dt>
+                    <dd>{selectedResource.note}</dd>
+                  </div>
+                </>
+              )}
             </dl>
             <div className="resource-tags">
               {selectedResource.tags.map((tag) => (
                 <span key={tag}>{tag}</span>
               ))}
             </div>
+            {getResourceDetailSections(selectedResource).length > 0 && (
+              <div className="modal-detail-sections">
+                {getResourceDetailSections(selectedResource).map((section) => (
+                  <section key={section.title} className="modal-detail-section">
+                    <h3>{section.title}</h3>
+                    <p>{section.body}</p>
+                  </section>
+                ))}
+              </div>
+            )}
             {getResourceSourceUrl(selectedResource) && (
               <a className="source-link" href={getResourceSourceUrl(selectedResource)} target="_blank" rel="noreferrer">
                 官网来源
@@ -2577,6 +3040,8 @@ function ResourceDetailPage({ config, resource }) {
   const sourceUrl = resource ? getResourceSourceUrl(resource) : null;
   const visual = resource ? getResourceVisual(resource) : null;
   const detailSections = resource ? getResourceDetailSections(resource) : [];
+  const isIpDetail = detailBasePath === 'ip';
+  const ipMarketSections = resource && isIpDetail ? getIpMarketSections(resource) : [];
   const companyPath = resource ? `#/company/${getCompanySlug(resource.company)}` : null;
   const productFlow = resource ? getProductFlow(resource) : { steps: [], activeIndex: 0 };
 
@@ -2604,23 +3069,37 @@ function ResourceDetailPage({ config, resource }) {
           </section>
         ) : (
           <>
-            <header className="product-detail-hero">
-              <a
-                className="product-logo-card company-entry-link"
-                href={companyPath}
-                aria-label={`查看${resource.company}厂商详情`}
-              >
-                {visual ? (
-                  <img src={visual} alt={`${resource.company} 图标`} />
-                ) : (
-                  <span className="resource-visual-fallback">{getCompanyInitials(resource.company)}</span>
-                )}
-              </a>
-              <div className="product-detail-title">
-                <p className="eyebrow">{resourceName} PRODUCT DETAIL</p>
-                <a className="resource-company company-name-link" href={companyPath}>
-                  {resource.company}
+            <header className={isIpDetail ? 'product-detail-hero ip-product-hero' : 'product-detail-hero'}>
+              {companyPath ? (
+                <a
+                  className="product-logo-card company-entry-link"
+                  href={companyPath}
+                  aria-label={`查看${resource.company}厂商详情`}
+                >
+                  {visual ? (
+                    <img src={visual} alt={`${resource.company} 图标`} />
+                  ) : (
+                    <span className="resource-visual-fallback">{getCompanyInitials(resource.company)}</span>
+                  )}
                 </a>
+              ) : (
+                <div className="product-logo-card">
+                  {visual ? (
+                    <img src={visual} alt={`${resource.company} 图标`} />
+                  ) : (
+                    <span className="resource-visual-fallback">{getCompanyInitials(resource.company)}</span>
+                  )}
+                </div>
+              )}
+              <div className="product-detail-title">
+                <p className="eyebrow">{isIpDetail ? 'IP PRODUCT PROFILE' : `${resourceName} PRODUCT DETAIL`}</p>
+                {companyPath ? (
+                  <a className="resource-company company-name-link" href={companyPath}>
+                    {resource.company}
+                  </a>
+                ) : (
+                  <p className="resource-company">{resource.company}</p>
+                )}
                 <h1>{resource.tool}</h1>
                 <div className="resource-chip-row">
                   {getResourceChips(resource).map((chip) => (
@@ -2631,7 +3110,7 @@ function ResourceDetailPage({ config, resource }) {
               <div className="detail-actions">
                 {sourceUrl ? (
                   <a className="source-link" href={sourceUrl} target="_blank" rel="noreferrer">
-                    官网详情
+                    {isIpDetail ? '官网 / 来源' : '官网详情'}
                   </a>
                 ) : (
                   <span className="source-link disabled-link">官网待补充</span>
@@ -2644,121 +3123,219 @@ function ResourceDetailPage({ config, resource }) {
               </div>
             </header>
 
-            <section className="detail-layout">
-              <article className="detail-panel detail-main-panel">
-                <section className="product-flow-panel" aria-label={`${resource.tool}产品流程位置`}>
-                  <div className="product-flow-heading">
-                    <p className="eyebrow">FLOW POSITION</p>
-                    <h2>产品流程位置</h2>
-                  </div>
-                  <div className="product-flow-track">
-                    {productFlow.steps.map((step, index) => {
-                      const state = index < productFlow.activeIndex ? 'past' : index === productFlow.activeIndex ? 'active' : 'future';
-
-                      return (
-                        <div key={step} className={`product-flow-step ${state}`}>
-                          <span className="flow-dot" aria-hidden="true" />
-                          <strong>{step}</strong>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </section>
-                <p className="eyebrow">OVERVIEW</p>
-                <h2>产品说明</h2>
-                <p>{resource.summary}</p>
-                <div className="detail-section-grid">
-                  {detailSections.map((section) => (
-                    <section key={section.title} className="detail-section">
-                      <h3>{section.title}</h3>
-                      <p>{section.body}</p>
-                    </section>
-                  ))}
-                </div>
-              </article>
-
-              <aside className="detail-side">
-                <section className="detail-panel">
-                  <p className="eyebrow">CLASSIFICATION</p>
-                  <h2>分类与流程</h2>
-                  <dl className="detail-meta">
-                    <div>
-                      <dt>一级分类</dt>
-                      <dd>{resource.primaryCategory}</dd>
-                    </div>
-                    <div>
-                      <dt>二级分类</dt>
-                      <dd>{resource.secondaryCategory}</dd>
-                    </div>
-                    <div>
-                      <dt>适用阶段</dt>
-                      <dd>{resource.stage}</dd>
-                    </div>
-                    <div>
-                      <dt>来源地区</dt>
-                      <dd>{resource.region}</dd>
-                    </div>
-                  </dl>
-                </section>
-
-                <section className="detail-panel">
-                  <p className="eyebrow">TAGS</p>
-                  <h2>能力标签</h2>
-                  <div className="resource-tags">
-                    {resource.tags.map((tag) => (
-                      <span key={tag}>{tag}</span>
+            {isIpDetail ? (
+              <section className="detail-layout ip-detail-layout">
+                <article className="detail-panel detail-main-panel ip-market-panel">
+                  <p className="eyebrow">IP PRODUCT DATASHEET</p>
+                  <h2>产品详情</h2>
+                  <p>{resource.summary}</p>
+                  <div className="ip-market-section-grid">
+                    {ipMarketSections.map((section) => (
+                      <section key={section.title} className="ip-market-section">
+                        <h3>{section.title}</h3>
+                        <p>{section.body}</p>
+                      </section>
                     ))}
                   </div>
-                </section>
+                </article>
 
-                <section className="detail-panel">
-                  <p className="eyebrow">MATERIALS</p>
-                  <h2>下载产品信息</h2>
-                  {resource.materialUrl ? (
-                    <a className="source-link" href={resource.materialUrl} target="_blank" rel="noreferrer">
-                      下载资料
-                    </a>
-                  ) : (
-                    <p className="material-note">产品信息文件整理上传后，可在此下载。</p>
-                  )}
-                </section>
+                <aside className="detail-side">
+                  <section className="detail-panel">
+                    <p className="eyebrow">CLASSIFICATION</p>
+                    <h2>分类信息</h2>
+                    <dl className="detail-meta">
+                      <div>
+                        <dt>一级分类</dt>
+                        <dd>{resource.primaryCategory}</dd>
+                      </div>
+                      <div>
+                        <dt>二级分类</dt>
+                        <dd>{resource.secondaryCategory}</dd>
+                      </div>
+                      <div>
+                        <dt>应用阶段</dt>
+                        <dd>{resource.stage}</dd>
+                      </div>
+                    </dl>
+                  </section>
 
-                <section className="detail-panel product-contact-panel">
-                  <p className="eyebrow">CONTACT</p>
-                  <h2>联系方式</h2>
-                  <div className="product-contact-list">
-                    {productContactItems.map((item) => {
-                      const Icon = item.icon;
-
-                      return (
-                        <div className="product-contact-row" key={item.label}>
-                          <Icon size={16} aria-hidden="true" />
-                          <span>{item.label}</span>
-                          <strong>{item.value}</strong>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <div className="follow-us-block">
-                    <p>Follow Us</p>
-                    <div className="follow-channel-list">
-                      {productFollowChannels.map((channel) => (
-                        <button
-                          type="button"
-                          className="follow-channel"
-                          key={channel.label}
-                          title={channel.label}
-                          data-label={channel.label}
-                          aria-label={`${channel.label}入口待补充`}
-                        >
-                          <BrandIcon name={channel.icon} />
-                        </button>
+                  <section className="detail-panel">
+                    <p className="eyebrow">TAGS</p>
+                    <h2>能力标签</h2>
+                    <div className="resource-tags">
+                      {resource.tags.map((tag) => (
+                        <span key={tag}>{tag}</span>
                       ))}
                     </div>
-                  </div>
+                  </section>
+
+                  <section className="detail-panel">
+                    <p className="eyebrow">MATERIALS</p>
+                    <h2>下载产品信息</h2>
+                    {resource.materialUrl ? (
+                      <a className="source-link" href={resource.materialUrl} target="_blank" rel="noreferrer">
+                        下载资料
+                      </a>
+                    ) : (
+                      <p className="material-note">产品信息文件整理上传后，可在此下载。当前可先通过官网来源查看公开资料。</p>
+                    )}
+                  </section>
+
+                  <section className="detail-panel product-contact-panel">
+                    <p className="eyebrow">CONTACT</p>
+                    <h2>联系方式</h2>
+                    <div className="product-contact-list">
+                      {productContactItems.map((item) => {
+                        const Icon = item.icon;
+
+                        return (
+                          <div className="product-contact-row" key={item.label}>
+                            <Icon size={16} aria-hidden="true" />
+                            <span>{item.label}</span>
+                            <strong>{item.value}</strong>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div className="follow-us-block">
+                      <p>Follow Us</p>
+                      <div className="follow-channel-list">
+                        {productFollowChannels.map((channel) => (
+                          <button
+                            type="button"
+                            className="follow-channel"
+                            key={channel.label}
+                            title={channel.label}
+                            data-label={channel.label}
+                            aria-label={`${channel.label}入口待补充`}
+                          >
+                            <BrandIcon name={channel.icon} />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </section>
+                </aside>
+              </section>
+            ) : (
+              <>
+                <section className="detail-layout">
+                  <article className="detail-panel detail-main-panel">
+                    <section className="product-flow-panel" aria-label={`${resource.tool}产品流程位置`}>
+                      <div className="product-flow-heading">
+                        <p className="eyebrow">FLOW POSITION</p>
+                        <h2>产品流程位置</h2>
+                      </div>
+                      <div className="product-flow-track">
+                        {productFlow.steps.map((step, index) => {
+                          const state = index < productFlow.activeIndex ? 'past' : index === productFlow.activeIndex ? 'active' : 'future';
+
+                          return (
+                            <div key={step} className={`product-flow-step ${state}`}>
+                              <span className="flow-dot" aria-hidden="true" />
+                              <strong>{step}</strong>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </section>
+                    <p className="eyebrow">OVERVIEW</p>
+                    <h2>产品说明</h2>
+                    <p>{resource.summary}</p>
+                    <div className="detail-section-grid">
+                      {detailSections.map((section) => (
+                        <section key={section.title} className="detail-section">
+                          <h3>{section.title}</h3>
+                          <p>{section.body}</p>
+                        </section>
+                      ))}
+                    </div>
+                  </article>
+
+                  <aside className="detail-side">
+                    <section className="detail-panel">
+                      <p className="eyebrow">CLASSIFICATION</p>
+                      <h2>分类与流程</h2>
+                      <dl className="detail-meta">
+                        <div>
+                          <dt>一级分类</dt>
+                          <dd>{resource.primaryCategory}</dd>
+                        </div>
+                        <div>
+                          <dt>二级分类</dt>
+                          <dd>{resource.secondaryCategory}</dd>
+                        </div>
+                        <div>
+                          <dt>适用阶段</dt>
+                          <dd>{resource.stage}</dd>
+                        </div>
+                        <div>
+                          <dt>来源地区</dt>
+                          <dd>{resource.region}</dd>
+                        </div>
+                      </dl>
+                    </section>
+
+                    <section className="detail-panel">
+                      <p className="eyebrow">TAGS</p>
+                      <h2>能力标签</h2>
+                      <div className="resource-tags">
+                        {resource.tags.map((tag) => (
+                          <span key={tag}>{tag}</span>
+                        ))}
+                      </div>
+                    </section>
+
+                    <section className="detail-panel">
+                      <p className="eyebrow">MATERIALS</p>
+                      <h2>下载产品信息</h2>
+                      {resource.materialUrl ? (
+                        <a className="source-link" href={resource.materialUrl} target="_blank" rel="noreferrer">
+                          下载资料
+                        </a>
+                      ) : (
+                        <p className="material-note">产品信息文件整理上传后，可在此下载。</p>
+                      )}
+                    </section>
+
+                    <section className="detail-panel product-contact-panel">
+                      <p className="eyebrow">CONTACT</p>
+                      <h2>联系方式</h2>
+                      <div className="product-contact-list">
+                        {productContactItems.map((item) => {
+                          const Icon = item.icon;
+
+                          return (
+                            <div className="product-contact-row" key={item.label}>
+                              <Icon size={16} aria-hidden="true" />
+                              <span>{item.label}</span>
+                              <strong>{item.value}</strong>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className="follow-us-block">
+                        <p>Follow Us</p>
+                        <div className="follow-channel-list">
+                          {productFollowChannels.map((channel) => (
+                            <button
+                              type="button"
+                              className="follow-channel"
+                              key={channel.label}
+                              title={channel.label}
+                              data-label={channel.label}
+                              aria-label={`${channel.label}入口待补充`}
+                            >
+                              <BrandIcon name={channel.icon} />
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </section>
+                  </aside>
                 </section>
-              </aside>
-            </section>
+              </>
+            )}
           </>
         )}
       </section>
@@ -2768,6 +3345,8 @@ function ResourceDetailPage({ config, resource }) {
 
 function CompanyDetailPage({ company }) {
   const resources = company ? getCompanyResources(company) : [];
+  const preferredLibraryKey = resources.some((resource) => getResourceLibraryKey(resource) === 'ip') ? 'ip' : 'eda';
+  const preferredLibraryConfig = libraryConfigs[preferredLibraryKey];
   const visual = company ? companyVisuals[company] : null;
   const sourceUrl = company ? companySourceUrls[company] : null;
   const categoryCount = new Set(resources.map((resource) => resource.primaryCategory)).size;
@@ -2778,15 +3357,15 @@ function CompanyDetailPage({ company }) {
       className="app-shell library-shell"
       style={{
         '--bg-image': `url(${backgroundUrl})`,
-        '--library-accent': libraryConfigs.eda.accentColor,
-        '--library-accent-rgb': libraryConfigs.eda.accentRgb,
-        '--library-contrast': libraryConfigs.eda.contrastColor,
+        '--library-accent': preferredLibraryConfig.accentColor,
+        '--library-accent-rgb': preferredLibraryConfig.accentRgb,
+        '--library-contrast': preferredLibraryConfig.contrastColor,
       }}
     >
       <section className="resource-detail-page company-detail-page">
-        <a className="library-back detail-back" href="#/eda">
+        <a className="library-back detail-back" href={`#/${preferredLibraryKey}`}>
           <ArrowLeft size={18} aria-hidden="true" />
-          返回 EDA 资源库
+          返回 {preferredLibraryConfig.title}
         </a>
 
         {!company ? (
@@ -2807,7 +3386,7 @@ function CompanyDetailPage({ company }) {
               </div>
               <div className="product-detail-title">
                 <p className="eyebrow">COMPANY PROFILE</p>
-                <p className="resource-company">EDA 厂商信息</p>
+                <p className="resource-company">{preferredLibraryConfig.resourceName} 厂商信息</p>
                 <h1>{company}</h1>
                 <p className="company-profile-copy">
                   {companyDescriptions[company] || '厂商简介待补充，当前页面先聚合已收录产品与分类覆盖。'}
@@ -2852,7 +3431,7 @@ function CompanyDetailPage({ company }) {
                     <a
                       key={`${resource.company}-${resource.tool}-${resource.secondaryCategory}`}
                       className="company-product-row"
-                      href={`#/eda/product/${getResourceSlug(resource)}`}
+                      href={`#/${getResourceLibraryKey(resource)}/product/${getResourceSlug(resource)}`}
                     >
                       <span>
                         <strong>{resource.tool}</strong>
