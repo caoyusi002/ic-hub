@@ -2083,6 +2083,12 @@ const getIpMarketSections = (resource) => {
   ];
 };
 
+const getIpSpecificationRows = (resource) => [
+  { label: '产品编号', value: resource.partNumber || '待补充' },
+  { label: '供应商', value: resource.company },
+  { label: '类型', value: resource.ipType || '硅 IP' },
+];
+
 const getSourceStatus = (resource) => (getResourceSourceUrl(resource) ? '官网整理' : '待补充');
 
 const productContactItems = [
@@ -3135,7 +3141,21 @@ function ResourceDetailPage({ config, resource }) {
                     {ipMarketSections.map((section) => (
                       <section key={section.title} className="ip-market-section">
                         <h3>{section.title}</h3>
-                        <p>{section.body}</p>
+                        {section.title === '规格' ? (
+                          <div className="ip-specification-table" aria-label={`${resource.tool}规格信息`}>
+                            <h4>身份信息</h4>
+                            <dl>
+                              {getIpSpecificationRows(resource).map((row) => (
+                                <div key={row.label}>
+                                  <dt>{row.label}</dt>
+                                  <dd>{row.value}</dd>
+                                </div>
+                              ))}
+                            </dl>
+                          </div>
+                        ) : (
+                          <p>{section.body}</p>
+                        )}
                       </section>
                     ))}
                   </div>
