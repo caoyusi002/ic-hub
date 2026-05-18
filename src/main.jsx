@@ -5,6 +5,7 @@ import {
   Blocks,
   BookOpen,
   Bookmark,
+  Calculator,
   ChevronDown,
   ChevronRight,
   Download,
@@ -43,7 +44,7 @@ const nodes = [
     id: 'ip',
     label: 'IP',
     subtitle: '半导体 IP 核',
-    position: { x: 50, y: 2 },
+    position: { x: 50, y: 0.8 },
     accentColor: '#a995ff',
     icon: Blocks,
     meaning: 'IP 是可复用的芯片功能模块，如处理器、接口、存储和安全模块，可缩短研发周期，降低重复设计成本。',
@@ -52,7 +53,7 @@ const nodes = [
     id: 'eda',
     label: 'EDA',
     subtitle: '电子设计自动化',
-    position: { x: 12.5, y: 73 },
+    position: { x: 9, y: 73 },
     accentColor: '#8bffcf',
     icon: DraftingCompass,
     meaning: 'EDA 是芯片设计软件工具体系，覆盖电路设计、仿真、验证、布局布线和签核，是 IC 设计企业完成复杂芯片开发的基础工具。',
@@ -61,7 +62,7 @@ const nodes = [
     id: 'pdk',
     label: 'PDK',
     subtitle: '工艺设计套件',
-    position: { x: 87.5, y: 73 },
+    position: { x: 91, y: 73 },
     accentColor: '#6ee7ff',
     icon: Factory,
     meaning: 'PDK 是芯片设计与晶圆制造之间的工艺接口，提供器件模型、设计规则和验证文件，帮助设计能够被特定工艺稳定制造。',
@@ -3860,6 +3861,411 @@ function FoundryLibrary({ onBack }) {
   return <ResourceLibrary onBack={onBack} config={libraryConfigs.foundry} />;
 }
 
+const processLibrary = {
+  tsmc: {
+    label: 'TSMC',
+    nodes: {
+      '180nm': { gateDensityM: 0.25, sramDensity: 0.6, nvmDensity: 0.18, ioPitchUm: 4.0, padDepthUm: 120 },
+      '130nm': { gateDensityM: 0.45, sramDensity: 1.0, nvmDensity: 0.3, ioPitchUm: 3.5, padDepthUm: 110 },
+      '90nm': { gateDensityM: 0.8, sramDensity: 1.5, nvmDensity: 0.5, ioPitchUm: 3.0, padDepthUm: 105 },
+      '65nm': { gateDensityM: 1.2, sramDensity: 2.0, nvmDensity: 0.7, ioPitchUm: 2.5, padDepthUm: 100 },
+      '55nm': { gateDensityM: 1.35, sramDensity: 2.2, nvmDensity: 0.8, ioPitchUm: 2.35, padDepthUm: 98 },
+      '40nm': { gateDensityM: 1.6, sramDensity: 2.8, nvmDensity: 0.95, ioPitchUm: 2.2, padDepthUm: 150 },
+      '28nm': { gateDensityM: 3.0, sramDensity: 3.8, nvmDensity: 1.2, ioPitchUm: 2.0, padDepthUm: 145 },
+      '22nm': { gateDensityM: 4.0, sramDensity: 4.2, nvmDensity: 1.3, ioPitchUm: 1.8, padDepthUm: 140 },
+      '16nm': { gateDensityM: 6.5, sramDensity: 4.5, nvmDensity: 1.4, ioPitchUm: 1.5, padDepthUm: 135 },
+      '7nm': { gateDensityM: 18, sramDensity: 5.5, nvmDensity: 1.65, ioPitchUm: 1.2, padDepthUm: 130 },
+    },
+  },
+  smic: {
+    label: 'SMIC',
+    nodes: {
+      '180nm': { gateDensityM: 0.22, sramDensity: 0.55, nvmDensity: 0.16, ioPitchUm: 4.2, padDepthUm: 122 },
+      '130nm': { gateDensityM: 0.4, sramDensity: 0.95, nvmDensity: 0.28, ioPitchUm: 3.7, padDepthUm: 112 },
+      '90nm': { gateDensityM: 0.72, sramDensity: 1.4, nvmDensity: 0.45, ioPitchUm: 3.1, padDepthUm: 108 },
+      '65nm': { gateDensityM: 1.05, sramDensity: 1.9, nvmDensity: 0.62, ioPitchUm: 2.6, padDepthUm: 102 },
+      '55nm': { gateDensityM: 1.18, sramDensity: 2.1, nvmDensity: 0.72, ioPitchUm: 2.5, padDepthUm: 100 },
+      '40nm': { gateDensityM: 1.4, sramDensity: 2.5, nvmDensity: 0.82, ioPitchUm: 2.3, padDepthUm: 148 },
+      '28nm': { gateDensityM: 2.55, sramDensity: 3.4, nvmDensity: 1.0, ioPitchUm: 2.05, padDepthUm: 145 },
+    },
+  },
+  gf: {
+    label: 'GlobalFoundries',
+    nodes: {
+      '130nm': { gateDensityM: 0.46, sramDensity: 1.0, nvmDensity: 0.3, ioPitchUm: 3.6, padDepthUm: 110 },
+      '90nm': { gateDensityM: 0.82, sramDensity: 1.55, nvmDensity: 0.5, ioPitchUm: 3.1, padDepthUm: 106 },
+      '65nm': { gateDensityM: 1.15, sramDensity: 2.05, nvmDensity: 0.68, ioPitchUm: 2.6, padDepthUm: 100 },
+      '40nm': { gateDensityM: 1.55, sramDensity: 2.7, nvmDensity: 0.88, ioPitchUm: 2.25, padDepthUm: 148 },
+      '28nm': { gateDensityM: 2.85, sramDensity: 3.7, nvmDensity: 1.1, ioPitchUm: 2.0, padDepthUm: 144 },
+      '22nm': { gateDensityM: 3.8, sramDensity: 4.1, nvmDensity: 1.22, ioPitchUm: 1.8, padDepthUm: 140 },
+      '12nm': { gateDensityM: 5.2, sramDensity: 4.3, nvmDensity: 1.3, ioPitchUm: 1.55, padDepthUm: 136 },
+    },
+  },
+};
+
+const chipProfiles = {
+  digital: { label: '纯数字 ASIC', ioMultiplier: 1.0, overheadBias: 0.9, rangeMinus: 0.1, rangePlus: 0.18, confidence: '较高', note: '纯数字 ASIC 和大块 SRAM 的组合最适合这种估算方式。' },
+  mcu: { label: 'MCU / 控制类 SoC', ioMultiplier: 1.45, overheadBias: 1.12, rangeMinus: 0.18, rangePlus: 0.3, confidence: '中等', note: 'MCU 往往被 pad ring、模拟 IP、电源管理和测试结构拉大面积。' },
+  mixed: { label: 'Mixed-Signal SoC', ioMultiplier: 1.6, overheadBias: 1.2, rangeMinus: 0.22, rangePlus: 0.36, confidence: '中等偏低', note: '如果片上有 ADC、DAC、PLL、USB、SerDes，这个区间会比纯数字估算更重要。' },
+  rf: { label: 'RF / 无线 SoC', ioMultiplier: 1.75, overheadBias: 1.34, rangeMinus: 0.25, rangePlus: 0.42, confidence: '偏低', note: 'RF SoC 的前端、匹配网络、隔离和模拟宏会明显推高真实 die area。' },
+};
+
+const chipAreaPresets = {
+  custom: null,
+  rp2040: { chipType: 'mcu', foundry: 'tsmc', node: '40nm', gatesM: 0.45, sramMbit: 2.16, nvmMbit: 0, ioCount: 36, utilization: 70, hardMacroArea: 0.25, routingOverhead: 24, edgeArea: 0.1 },
+  esp32: { chipType: 'rf', foundry: 'tsmc', node: '40nm', gatesM: 2.5, sramMbit: 4.26, nvmMbit: 0, ioCount: 48, utilization: 64, hardMacroArea: 1.9, routingOverhead: 30, edgeArea: 0.12 },
+  stm32f103: { chipType: 'mcu', foundry: 'tsmc', node: '180nm', gatesM: 0.45, sramMbit: 0.164, nvmMbit: 0.524, ioCount: 37, utilization: 62, hardMacroArea: 2.4, routingOverhead: 26, edgeArea: 0.18 },
+  'digital-asic': { chipType: 'digital', foundry: 'tsmc', node: '28nm', gatesM: 12, sramMbit: 16, nvmMbit: 0, ioCount: 220, utilization: 72, hardMacroArea: 0.2, routingOverhead: 18, edgeArea: 0.1 },
+};
+
+const chipAreaDefaultValues = chipAreaPresets.rp2040;
+
+const onlineTools = [
+  {
+    id: 'chip-area-calculator',
+    title: '芯片面积估算器',
+    source: 'IC HUB',
+    status: '已上线',
+    summary: '按逻辑、存储、IO、硬宏、布线开销和封边估算 die area，并给出工程区间。',
+    route: '#/tools/chip-area-calculator',
+  },
+  {
+    id: 'asic-price-calculator',
+    title: 'ASIC Price Calculator',
+    source: 'AnySilicon Resources',
+    status: '预留',
+    summary: '用于估算 ASIC 项目 NRE、制造、封装测试和量产成本的工具入口。',
+  },
+  {
+    id: 'ic-package-price-estimator',
+    title: 'IC Packages Price Calculator',
+    source: 'AnySilicon Resources',
+    status: '预留',
+    summary: '面向封装类型、引脚数量、批量和测试需求的 IC 封装成本估算入口。',
+  },
+  {
+    id: 'die-per-wafer-calculator',
+    title: 'Die Per Wafer Calculator',
+    source: 'AnySilicon Resources',
+    status: '预留',
+    summary: '根据晶圆尺寸、die 尺寸和边缘损耗估算单片晶圆可切割 die 数。',
+  },
+  {
+    id: 'bonding-diagram-tool',
+    title: 'Bonding Diagram Tool',
+    source: 'AnySilicon Resources',
+    status: '预留',
+    summary: '用于规划芯片 pad、封装 pin 与键合线关系的图形化工具入口。',
+  },
+  {
+    id: 'cpu-ip-core-search-engine',
+    title: 'CPU IP Core Search Engine',
+    source: 'AnySilicon Resources',
+    status: '预留',
+    summary: '面向 CPU / processor IP 的检索与筛选工具入口。',
+  },
+  {
+    id: 'mpw-booking-tool',
+    title: 'MPW Booking Tool',
+    source: 'AnySilicon Resources',
+    status: '预留',
+    summary: '用于查看 MPW 班车、节点、时间窗口和预约信息的工具入口。',
+  },
+  {
+    id: 'chip-size-calculator',
+    title: 'Chip Size Calculator',
+    source: 'AnySilicon Resources',
+    status: '预留',
+    summary: '面向早期芯片尺寸规划的公开工具入口，后续可与本面积估算器合并或对照。',
+  },
+  {
+    id: 'semipedia',
+    title: 'Semipedia',
+    source: 'AnySilicon Resources',
+    status: '预留',
+    summary: '半导体术语与知识条目的查询入口。',
+  },
+  {
+    id: 'fabless-boost',
+    title: 'Fabless Boost',
+    source: 'AnySilicon Resources',
+    status: '预留',
+    summary: '面向 Fabless 项目启动、供应商连接和设计制造路径的资源入口。',
+  },
+];
+
+function formatNumber(value, digits = 2) {
+  return Number(value).toFixed(digits);
+}
+
+function calculateChipArea(values) {
+  const params = processLibrary[values.foundry].nodes[values.node];
+  const profile = chipProfiles[values.chipType];
+  const gatesM = Number(values.gatesM) || 0;
+  const sramMbit = Number(values.sramMbit) || 0;
+  const nvmMbit = Number(values.nvmMbit) || 0;
+  const ioCount = Number(values.ioCount) || 0;
+  const utilizationPct = Math.max(1, Number(values.utilization) || 0);
+  const hardMacroArea = Number(values.hardMacroArea) || 0;
+  const routingOverheadPct = Number(values.routingOverhead) || 0;
+  const edgeArea = Number(values.edgeArea) || 0;
+  const utilization = utilizationPct / 100;
+  const logicArea = gatesM / (params.gateDensityM * utilization);
+  const sramArea = sramMbit / params.sramDensity;
+  const nvmArea = nvmMbit > 0 ? nvmMbit / params.nvmDensity : 0;
+  const ioBaseArea = ioCount * (params.ioPitchUm / 1000) * (params.padDepthUm / 1000);
+  const ioArea = ioBaseArea * profile.ioMultiplier;
+  const memoryArea = sramArea + nvmArea;
+  const baseArea = logicArea + memoryArea + ioArea + hardMacroArea;
+  const routingArea = baseArea * (routingOverheadPct / 100) * profile.overheadBias;
+  const totalArea = baseArea + routingArea + edgeArea;
+
+  return {
+    params,
+    profile,
+    inputs: { gatesM, sramMbit, nvmMbit, ioCount, utilizationPct, hardMacroArea, routingOverheadPct, edgeArea, utilization },
+    logicArea,
+    memoryArea,
+    ioArea,
+    hardMacroArea,
+    routingArea,
+    edgeArea,
+    totalArea,
+    lower: totalArea * (1 - profile.rangeMinus),
+    upper: totalArea * (1 + profile.rangePlus),
+  };
+}
+
+function OnlineToolsPage() {
+  return (
+    <main className="app-shell tools-shell" style={{ '--bg-image': `url(${backgroundUrl})` }}>
+      <header className="library-hero tools-hero" style={{ '--library-accent': '#8bffcf', '--library-accent-rgb': '139 255 207' }}>
+        <a className="back-button" href="#">
+          <ArrowLeft size={18} aria-hidden="true" />
+          返回首页
+        </a>
+        <div className="library-hero-copy">
+          <p className="eyebrow">ONLINE TOOLS</p>
+          <h1>在线工具</h1>
+          <p>集中放置芯片设计、制造、封装、成本和供应链相关的小工具。当前先上线芯片面积估算器，其他工具保留入口，后续逐步补齐。</p>
+        </div>
+        <div className="library-hero-mark" aria-hidden="true">
+          <Calculator size={58} strokeWidth={1.4} />
+        </div>
+      </header>
+
+      <section className="tools-directory" aria-label="在线工具目录">
+        {onlineTools.map((tool) => {
+          const isReady = tool.status === '已上线';
+          const card = (
+            <article className={`tool-directory-card ${isReady ? 'ready' : 'reserved'}`}>
+              <div className="tool-directory-icon" aria-hidden="true">
+                <Calculator size={24} strokeWidth={1.7} />
+              </div>
+              <div>
+                <span className="tool-source">{tool.source}</span>
+                <h2>{tool.title}</h2>
+                <p>{tool.summary}</p>
+              </div>
+              <strong>{tool.status}</strong>
+            </article>
+          );
+
+          return isReady ? (
+            <a key={tool.id} className="tool-directory-link" href={tool.route}>
+              {card}
+            </a>
+          ) : (
+            <div key={tool.id} className="tool-directory-link tool-directory-disabled" aria-disabled="true">
+              {card}
+            </div>
+          );
+        })}
+      </section>
+    </main>
+  );
+}
+
+function ChipAreaCalculator() {
+  const [preset, setPreset] = useState('rp2040');
+  const [values, setValues] = useState(chipAreaDefaultValues);
+  const locked = preset !== 'custom';
+  const availableNodes = Object.keys(processLibrary[values.foundry].nodes);
+  const result = useMemo(() => calculateChipArea(values), [values]);
+  const bars = [
+    ['逻辑', result.logicArea],
+    ['存储', result.memoryArea],
+    ['IO', result.ioArea],
+    ['硬宏', result.hardMacroArea],
+    ['布线开销', result.routingArea],
+    ['封边', result.edgeArea],
+  ];
+
+  const updateValue = (key, nextValue) => {
+    setPreset('custom');
+    setValues((current) => {
+      if (key === 'foundry') {
+        const nextNodes = processLibrary[nextValue].nodes;
+        return { ...current, foundry: nextValue, node: nextNodes[current.node] ? current.node : Object.keys(nextNodes)[0] };
+      }
+      return { ...current, [key]: nextValue };
+    });
+  };
+
+  const applyPreset = (nextPreset) => {
+    setPreset(nextPreset);
+    if (chipAreaPresets[nextPreset]) {
+      setValues(chipAreaPresets[nextPreset]);
+    }
+  };
+
+  return (
+    <main className="app-shell tools-shell" style={{ '--bg-image': `url(${backgroundUrl})` }}>
+      <header className="library-hero tools-hero" style={{ '--library-accent': '#8bffcf', '--library-accent-rgb': '139 255 207' }}>
+        <a className="back-button" href="#" onClick={() => { window.location.hash = ''; }}>
+          <ArrowLeft size={18} aria-hidden="true" />
+          返回工具目录
+        </a>
+        <div className="library-hero-copy">
+          <p className="eyebrow">ONLINE TOOL</p>
+          <h1>芯片面积估算器</h1>
+          <p>用于早期规格讨论的工程估算工具，把面积拆成逻辑、SRAM、NVM、IO、模拟/PHY、版图开销和封边开销，并根据芯片类型给出区间。</p>
+        </div>
+        <div className="library-hero-mark" aria-hidden="true">
+          <Calculator size={58} strokeWidth={1.4} />
+        </div>
+      </header>
+
+      <section className="tool-layout" aria-label="芯片面积估算器">
+        <form className="tool-panel tool-inputs" onSubmit={(event) => event.preventDefault()}>
+          <div className="tool-panel-head">
+            <h2>输入参数</h2>
+            <p>先选一个预设做 sanity check，再切到自定义修改。非自定义预设会锁定输入，避免误改参考参数。</p>
+          </div>
+
+          <div className="tool-field-grid">
+            <label className="tool-field">
+              <span>预设芯片</span>
+              <select value={preset} onChange={(event) => applyPreset(event.target.value)}>
+                <option value="custom">自定义</option>
+                <option value="rp2040">RP2040</option>
+                <option value="esp32">ESP32</option>
+                <option value="stm32f103">STM32F103C8</option>
+                <option value="digital-asic">中等规模纯数字 ASIC</option>
+              </select>
+            </label>
+            <label className="tool-field">
+              <span>芯片类型</span>
+              <select value={values.chipType} disabled={locked} onChange={(event) => updateValue('chipType', event.target.value)}>
+                {Object.entries(chipProfiles).map(([key, profile]) => (
+                  <option key={key} value={key}>{profile.label}</option>
+                ))}
+              </select>
+            </label>
+            <label className="tool-field">
+              <span>代工厂</span>
+              <select value={values.foundry} disabled={locked} onChange={(event) => updateValue('foundry', event.target.value)}>
+                {Object.entries(processLibrary).map(([key, foundry]) => (
+                  <option key={key} value={key}>{foundry.label}</option>
+                ))}
+              </select>
+            </label>
+            <label className="tool-field">
+              <span>工艺节点</span>
+              <select value={values.node} disabled={locked} onChange={(event) => updateValue('node', event.target.value)}>
+                {availableNodes.map((nodeName) => (
+                  <option key={nodeName} value={nodeName}>{nodeName}</option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          <div className="tool-field-grid tool-field-grid-three">
+            {[
+              ['gatesM', '门数量 (M gates)', '0.1'],
+              ['sramMbit', 'SRAM (Mbit)', '0.01'],
+              ['nvmMbit', 'NVM / Flash (Mbit)', '0.01'],
+              ['ioCount', 'IO 数量', '1'],
+              ['utilization', '利用率 (%)', '1'],
+              ['hardMacroArea', '模拟 / PHY 宏面积 (mm²)', '0.01'],
+              ['routingOverhead', '版图与布线开销 (%)', '1'],
+              ['edgeArea', '封边 / 测试 / Keepout (mm²)', '0.01'],
+            ].map(([key, label, step]) => (
+              <label className="tool-field" key={key}>
+                <span>{label}</span>
+                <input
+                  type="number"
+                  min="0"
+                  step={step}
+                  value={values[key]}
+                  disabled={locked}
+                  onChange={(event) => updateValue(key, event.target.value)}
+                />
+              </label>
+            ))}
+          </div>
+
+          <p className="tool-note">建议：小 MCU、带 USB / ADC / PLL 的芯片，不要把模拟 / PHY 宏面积留在 0。纯数字 ASIC 才比较接近“门数 + SRAM + IO”这种简化模型。</p>
+
+          <div className="tool-actions">
+            <button type="button" className="tool-primary" onClick={() => setPreset('custom')}>进入自定义</button>
+            <button type="button" className="tool-secondary" onClick={() => applyPreset('rp2040')}>恢复默认</button>
+          </div>
+        </form>
+
+        <section className="tool-panel tool-results">
+          <div className="tool-score-card">
+            <span>Estimated Die Area</span>
+            <strong>{formatNumber(result.totalArea, 2)} mm²</strong>
+            <p>建议把这类芯片看成 {formatNumber(result.lower, 2)} - {formatNumber(result.upper, 2)} mm² 的区间，而不是单点。</p>
+          </div>
+
+          <div className="tool-metric-grid">
+            {[
+              ['核心逻辑面积', result.logicArea, '基于百万门、门密度和利用率计算。'],
+              ['SRAM + NVM 面积', result.memoryArea, 'SRAM 和非易失存储分别按不同密度估算。'],
+              ['IO / Pad Ring 面积', result.ioArea, '由 IO 数、pad pitch 和 pad depth 推导。'],
+              ['模拟 / PHY / 其他硬宏', result.hardMacroArea, '把 ADC、PLL、USB、RF、PMU 等显式计入。'],
+              ['布线 / Floorplan 开销', result.routingArea, '由基础面积、版图布线开销比例和芯片类型修正共同推导。'],
+              ['封边 / 测试保留面积', result.edgeArea, '对应 seal ring、keepout、测试与边缘保留区域。'],
+            ].map(([label, value, meta]) => (
+              <div className="tool-metric" key={label}>
+                <span>{label}</span>
+                <strong>{formatNumber(value, 2)}</strong>
+                <p>{meta}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="tool-breakdown">
+            <h2>面积拆分</h2>
+            {bars.map(([label, value]) => {
+              const pct = result.totalArea > 0 ? (value / result.totalArea) * 100 : 0;
+              return (
+                <div className="tool-bar-row" key={label}>
+                  <span>{label}</span>
+                  <div className="tool-bar-track"><div style={{ width: `${pct}%` }} /></div>
+                  <em>{formatNumber(pct, 1)}%</em>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="tool-formula">
+            <div>
+              <span className="status-pill">置信度: {result.profile.confidence}</span>
+              <p>{result.profile.note} 当前工艺参数采用经验库和公开口径，真正 tape-out 前仍需用 memory compiler、pad library、硬宏 datasheet 和 floorplan 复核。</p>
+            </div>
+            <code>
+              {`Die Area = (Logic + SRAM + NVM + IO + Hard Macros) × (1 + Routing Overhead × ${formatNumber(result.profile.overheadBias, 2)}) + Edge Area\nLogic = ${result.inputs.gatesM}M / (${result.params.gateDensityM}M gates/mm² × ${formatNumber(result.inputs.utilization, 2)})\nSRAM = ${formatNumber(result.inputs.sramMbit, 2)} / ${result.params.sramDensity} | NVM = ${formatNumber(result.inputs.nvmMbit, 2)} / ${result.params.nvmDensity}\nIO = ${result.inputs.ioCount} × ${result.params.ioPitchUm}µm × ${result.params.padDepthUm}µm × ${formatNumber(result.profile.ioMultiplier, 2)}`}
+            </code>
+          </div>
+        </section>
+      </section>
+    </main>
+  );
+}
+
 function App() {
   const [activeNode, setActiveNode] = useState(null);
   const [selectedNode, setSelectedNode] = useState(null);
@@ -3880,6 +4286,14 @@ function App() {
   if (companyRouteMatch) {
     const [, companySlug] = companyRouteMatch;
     return <CompanyDetailPage company={getCompanyBySlug(companySlug)} />;
+  }
+
+  if (routeHash === '#/tools') {
+    return <OnlineToolsPage />;
+  }
+
+  if (routeHash === '#/tools/chip-area-calculator') {
+    return <ChipAreaCalculator />;
   }
 
   const libraryRouteMatch = routeHash.match(/^#\/(eda|ip|foundry)(?:\/product\/(.+))?$/);
@@ -3955,7 +4369,7 @@ function App() {
         </a>
         <nav className="home-nav-links" aria-label="产业库导航">
           {topNavItems.map((item) => (
-            <a key={item} href="#">
+            <a key={item} href={item === '在线工具' ? '#/tools' : '#'}>
               {item}
             </a>
           ))}
@@ -4001,9 +4415,9 @@ function App() {
               </linearGradient>
               <mask id="resourceOverlapMask">
                 <rect width="100" height="100" fill="white" />
-                <rect x="41" y="0" width="18" height="14" fill="rgba(255,255,255,0.3)" />
-                <rect x="5" y="63" width="20" height="18" fill="rgba(255,255,255,0.3)" />
-                <rect x="75" y="63" width="20" height="18" fill="rgba(255,255,255,0.3)" />
+                <rect x="41" y="0" width="18" height="13" fill="rgba(255,255,255,0.3)" />
+                <rect x="0" y="63" width="24" height="18" fill="rgba(255,255,255,0.3)" />
+                <rect x="76" y="63" width="24" height="18" fill="rgba(255,255,255,0.3)" />
               </mask>
             </defs>
 
