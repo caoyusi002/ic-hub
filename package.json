@@ -1,15 +1,18 @@
 {
   "scripts": {
-    "dev": "vite --host 127.0.0.1",
+    "dev": "node server.js",
+    "dev:vite": "vite --host 127.0.0.1",
     "build": "vite build",
-    "preview": "vite preview --host 127.0.0.1"
+    "preview": "NODE_ENV=production node server.js"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
-    "vite": "latest",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "lucide-react": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "lucide-react": "latest"
+    "vite": "latest"
   },
   "devDependencies": {
     "typescript": "latest"

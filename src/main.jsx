@@ -19,7 +19,9 @@ import {
   Phone,
   RotateCcw,
   Search,
+  Send,
   Sparkles,
+  Trash2,
   Workflow,
   X,
 } from 'lucide-react';
@@ -4036,6 +4038,187 @@ function calculateChipArea(values) {
   };
 }
 
+const assistantQuickQuestions = [
+  'EDA、IP、PDK 分别是什么？',
+  'Fabless 企业如何使用产业资源？',
+  '芯片设计流程一般包括哪些阶段？',
+];
+
+function HomeAssistantEntry() {
+  return (
+    <button
+      className="assistant-entry-card"
+      type="button"
+      onClick={() => {
+        window.location.hash = '#/assistant';
+      }}
+      aria-label="进入IC问答助手"
+    >
+      <span className="assistant-entry-orbit" aria-hidden="true">
+        <span className="assistant-entry-core">
+          <Microchip size={27} strokeWidth={1.55} />
+        </span>
+        <Sparkles className="assistant-entry-spark" size={17} strokeWidth={1.8} />
+      </span>
+      <span className="assistant-entry-copy">
+        <strong>IC问答助手</strong>
+        <span>通用模型问答，暂未接入产业库检索</span>
+      </span>
+      <ChevronRight size={18} strokeWidth={1.8} aria-hidden="true" />
+    </button>
+  );
+}
+
+function AssistantPage() {
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+  const [isSending, setIsSending] = useState(false);
+  const [error, setError] = useState('');
+  const inputLimit = 500;
+
+  const sendQuestion = async (rawQuestion) => {
+    const question = rawQuestion.trim();
+    if (!question || isSending) return;
+
+    const userMessage = { role: 'user', content: question };
+    const nextMessages = [...messages, userMessage].slice(-6);
+    setMessages((currentMessages) => [...currentMessages, userMessage]);
+    setInput('');
+    setError('');
+    setIsSending(true);
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: nextMessages }),
+      });
+      const payload = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(payload?.error || '助手暂时无法连接');
+      }
+
+      setMessages((currentMessages) => [
+        ...currentMessages,
+        { role: 'assistant', content: payload.answer || '助手没有返回有效内容。' },
+      ].slice(-8));
+    } catch (requestError) {
+      setError(requestError.message || '助手暂时无法连接');
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    sendQuestion(input);
+  };
+
+  const hasMessages = messages.length > 0;
+
+  return (
+    <main className="app-shell assistant-shell" style={{ '--bg-image': `url(${backgroundUrl})` }}>
+      <header className="assistant-hero">
+        <button
+          className="back-button"
+          type="button"
+          onClick={() => {
+            window.location.hash = '';
+          }}
+        >
+          <ArrowLeft size={18} aria-hidden="true" />
+          返回首页
+        </button>
+        <div className="assistant-title">
+          <span className="assistant-title-mark" aria-hidden="true">
+            <Microchip size={32} strokeWidth={1.5} />
+          </span>
+          <div>
+            <p className="eyebrow">IC INDUSTRY ASSISTANT</p>
+            <h1>IC问答助手</h1>
+            <p>{isSending ? '正在生成回答' : '通用模型问答，暂未接入产业库检索'}</p>
+          </div>
+        </div>
+      </header>
+
+      <section className="assistant-workspace" aria-label="IC问答助手对话区">
+        <div className="assistant-thread" aria-live="polite">
+          {!hasMessages && (
+            <div className="assistant-empty">
+              <Sparkles size={28} strokeWidth={1.6} aria-hidden="true" />
+              <h2>从一个产业问题开始</h2>
+              <p>适合快速解释概念、梳理芯片设计流程、准备调研提纲。当前阶段不读取产业库数据库。</p>
+              <div className="assistant-quick-grid">
+                {assistantQuickQuestions.map((question) => (
+                  <button
+                    key={question}
+                    type="button"
+                    onClick={() => sendQuestion(question)}
+                    disabled={isSending}
+                  >
+                    {question}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {messages.map((message, index) => (
+            <article key={`${message.role}-${index}`} className={`assistant-message ${message.role}`}>
+              <span>{message.role === 'user' ? '你' : '助手'}</span>
+              <p>{message.content}</p>
+            </article>
+          ))}
+
+          {isSending && (
+            <article className="assistant-message assistant loading">
+              <span>助手</span>
+              <p>正在思考...</p>
+            </article>
+          )}
+
+          {error && (
+            <article className="assistant-message error">
+              <span>提示</span>
+              <p>{error}</p>
+            </article>
+          )}
+        </div>
+
+        <form className="assistant-input-bar" onSubmit={handleSubmit}>
+          <label className="sr-only" htmlFor="assistant-input">输入问题</label>
+          <input
+            id="assistant-input"
+            value={input}
+            maxLength={inputLimit}
+            onChange={(event) => setInput(event.target.value)}
+            placeholder="输入你的产业问题..."
+            disabled={isSending}
+          />
+          <span>{input.length}/{inputLimit}</span>
+          <button type="submit" disabled={!input.trim() || isSending}>
+            <Send size={16} aria-hidden="true" />
+            发送
+          </button>
+          <button
+            type="button"
+            className="assistant-clear"
+            disabled={!hasMessages || isSending}
+            onClick={() => {
+              setMessages([]);
+              setError('');
+            }}
+            aria-label="清空对话"
+          >
+            <Trash2 size={16} aria-hidden="true" />
+          </button>
+        </form>
+      </section>
+    </main>
+  );
+}
+
 function OnlineToolsPage() {
   return (
     <main className="app-shell tools-shell" style={{ '--bg-image': `url(${backgroundUrl})` }}>
@@ -4296,6 +4479,10 @@ function App() {
     return <ChipAreaCalculator />;
   }
 
+  if (routeHash === '#/assistant') {
+    return <AssistantPage />;
+  }
+
   const libraryRouteMatch = routeHash.match(/^#\/(eda|ip|foundry)(?:\/product\/(.+))?$/);
   if (libraryRouteMatch) {
     const [, libraryKey, productSlug] = libraryRouteMatch;
@@ -4502,6 +4689,7 @@ function App() {
             <span>产业库</span>
           </h1>
           <p>以 IC 设计企业为核心，连接 EDA、IP 与 PDK 三类关键产业资源，构建可扩展的产业知识入口。</p>
+          <HomeAssistantEntry />
         </div>
       </section>
     </main>
