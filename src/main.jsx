@@ -55,7 +55,7 @@ const nodes = [
     id: 'eda',
     label: 'EDA',
     subtitle: '电子设计自动化',
-    position: { x: 9, y: 73 },
+    position: { x: 6.8, y: 75.2 },
     accentColor: '#8bffcf',
     icon: DraftingCompass,
     meaning: 'EDA 是芯片设计软件工具体系，覆盖电路设计、仿真、验证、布局布线和签核，是 IC 设计企业完成复杂芯片开发的基础工具。',
@@ -64,7 +64,7 @@ const nodes = [
     id: 'pdk',
     label: 'PDK',
     subtitle: '工艺设计套件',
-    position: { x: 91, y: 73 },
+    position: { x: 93.2, y: 75.2 },
     accentColor: '#6ee7ff',
     icon: Factory,
     meaning: 'PDK 是芯片设计与晶圆制造之间的工艺接口，提供器件模型、设计规则和验证文件，帮助设计能够被特定工艺稳定制造。',
@@ -92,7 +92,7 @@ const lines = [
   { id: 'pdk-fabless', type: 'hub', from: 'pdk', to: 'fabless', x1: 79, y1: 68, x2: 59, y2: 54 },
 ];
 
-const topNavItems = ['行业新闻', '研究报告', '产业分析', '产品试用', '厂商资源库', '在线工具'];
+const topNavItems = ['行业新闻', '研究报告', '技术文档', '产品试用', '厂商资源库', '在线工具'];
 
 const reportCategories = ['全部', '产业发展', '上市公司', '投融资', '政策汇编', '细分赛道'];
 
@@ -4224,7 +4224,7 @@ function HomeAssistantEntry() {
       </span>
       <span className="assistant-entry-copy">
         <strong>IC问答助手</strong>
-        <span>通用模型问答，暂未接入产业库检索</span>
+        <span>AI for chip</span>
       </span>
       <ChevronRight size={18} strokeWidth={1.8} aria-hidden="true" />
     </button>
