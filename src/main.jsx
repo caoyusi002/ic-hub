@@ -94,6 +94,168 @@ const lines = [
 
 const topNavItems = ['行业新闻', '研究报告', '产业分析', '产品试用', '厂商资源库', '在线工具'];
 
+const reportCategories = ['全部', '产业发展', '上市公司', '投融资', '政策汇编', '细分赛道'];
+
+const researchReports = [
+  {
+    id: 'china-semiconductor-2025',
+    title: '2025中国半导体产业发展报告',
+    category: '产业发展',
+    publishDate: '2026-02-28',
+    pages: 168,
+    summary: '梳理中国半导体产业集群、区域生态、重点园区与AI相关产业机会，适合产业研究、投资判断和地方招商参考。',
+    tags: ['产业地图', '区域生态', 'AI'],
+    formats: ['web', 'pdf'],
+    fileUrl: '/reports/china-semiconductor-2025.pdf',
+  },
+  {
+    id: 'sino-us-listed-company-data',
+    title: '2025中美半导体上市公司数据分析',
+    category: '上市公司',
+    publishDate: '2026-01-05',
+    pages: 126,
+    summary: '对比中美半导体上市公司在营收、盈利能力、研发投入和业务结构上的变化，用数据观察全球竞争格局。',
+    tags: ['上市公司', '财务数据', '全球格局'],
+  },
+  {
+    id: 'semiconductor-ai-investment',
+    title: '2025中国半导体及AI领域股权投资白皮书',
+    category: '投融资',
+    publishDate: '2026-01-05',
+    pages: 142,
+    summary: '追踪硬科技投资脉络，聚焦半导体和AI融资节奏、机构策略、热门赛道与未来资本配置方向。',
+    tags: ['股权投资', 'AI', '融资'],
+  },
+  {
+    id: 'us-china-trade-policy',
+    title: '美国对华贸易政策透视',
+    category: '政策汇编',
+    publishDate: '2026-01-05',
+    pages: 112,
+    summary: '分析主要贸易政策变化对ICT与半导体供应链的影响，辅助企业进行合规、市场和供应链风险研判。',
+    tags: ['贸易政策', '供应链', '合规'],
+  },
+  {
+    id: 'signal-chain-listed-companies',
+    title: '2025中国信号链芯片行业上市公司研究报告',
+    category: '细分赛道',
+    publishDate: '2025-12-15',
+    pages: 88,
+    summary: '聚焦信号链芯片市场、核心玩家、产品结构和上市公司经营表现，呈现行业发展态势与竞争位置。',
+    tags: ['信号链', '模拟芯片', '上市公司'],
+  },
+  {
+    id: 'power-line-carrier-chip',
+    title: '2025中国电力载波芯片行业上市公司研究报告',
+    category: '细分赛道',
+    publishDate: '2025-12-15',
+    pages: 82,
+    summary: '围绕电力载波芯片应用场景、市场需求、重点企业和技术演进进行梳理，适合细分赛道跟踪。',
+    tags: ['电力载波', '智能电网', '芯片公司'],
+  },
+  {
+    id: 'packaging-materials',
+    title: '2025中国半导体封装材料行业上市公司研究报告',
+    category: '细分赛道',
+    publishDate: '2025-12-15',
+    pages: 94,
+    summary: '覆盖封装材料产业链、关键材料国产化、企业经营表现和下游需求变化，辅助封装材料赛道研究。',
+    tags: ['封装材料', '国产化', '产业链'],
+  },
+  {
+    id: 'cpu-gpu-industry',
+    title: '2025中国CPU/GPU行业上市公司研究报告',
+    category: '细分赛道',
+    publishDate: '2025-12-15',
+    pages: 108,
+    summary: '从产品、生态、客户结构和资本市场表现观察CPU/GPU企业，关注高性能计算与AI算力需求。',
+    tags: ['CPU', 'GPU', 'AI算力'],
+  },
+  {
+    id: 'navigation-chip',
+    title: '2025中国导航芯片行业上市公司研究报告',
+    category: '细分赛道',
+    publishDate: '2025-12-15',
+    pages: 76,
+    summary: '梳理导航芯片市场规模、终端应用、上市公司业务布局和技术迭代方向，支持车载与IoT场景判断。',
+    tags: ['导航芯片', '车载', 'IoT'],
+  },
+  {
+    id: 'memory-ecosystem',
+    title: '2025中国存储产业生态研究报告',
+    category: '产业发展',
+    publishDate: '2025-11-28',
+    pages: 118,
+    summary: '围绕存储芯片、模组、控制器、设备材料和应用市场建立产业视图，观察国产存储生态的成长路径。',
+    tags: ['存储', '控制器', '产业生态'],
+  },
+  {
+    id: 'eda-ip-foundry-map',
+    title: 'EDA/IP/Foundry协同生态观察',
+    category: '产业发展',
+    publishDate: '2025-11-18',
+    pages: 72,
+    summary: '从设计工具、半导体IP、晶圆制造和先进封装协同关系出发，建立IC设计企业的产业资源图谱。',
+    tags: ['EDA', 'IP', 'Foundry'],
+  },
+];
+
+const chinaSemiconductorWebReport = {
+  subtitle: '2026半导体投资年会专题报告',
+  source: '集微报告 PDF 附件整理',
+  chapters: [
+    { id: 'global-market', label: '全球半导体市场发展形势' },
+    { id: 'china-industry', label: '中国半导体产业发展形势' },
+    { id: 'priorities-2026', label: '2026中国产业发展重点' },
+  ],
+  metrics: [
+    { label: '2025全球市场规模', value: '7720亿美元', note: 'WSTS 预计，同比约 +22%' },
+    { label: '2026全球市场规模', value: '9750亿美元', note: '预测同比约 +25%' },
+    { label: '行业周期', value: '8个季度', note: '自2023Q4起连续增长' },
+    { label: '报告结构', value: '3章', note: '全球、中国、2026重点' },
+  ],
+  globalSignals: [
+    { label: 'AI算力牵引', value: 92 },
+    { label: '存储复苏', value: 84 },
+    { label: '先进制程需求', value: 78 },
+    { label: '汽车与工业修复', value: 62 },
+  ],
+  sections: [
+    {
+      id: 'global-market',
+      title: '全球半导体市场发展形势',
+      summary: '全球半导体进入由AI算力、存储复苏和先进制程需求共同驱动的新一轮增长周期。报告首页显示，2025年全球市场规模预计达到7720亿美元，2026年有望继续上探至9750亿美元。',
+      points: [
+        '周期维度上，半导体成长周期通常为3-5年；从谷底到上行周期高点约1-3年，再从高点回落至低谷约1-2年。',
+        '本轮周期自2023Q4开始修复，至报告观察时点已连续增长多个季度，AI相关需求是最强变量。',
+        '高性能计算、存储、先进封装和云端基础设施投资共同塑造全球景气主线。',
+      ],
+    },
+    {
+      id: 'china-industry',
+      title: '中国半导体产业发展形势',
+      summary: '中国半导体产业从单点突破走向生态协同，区域集群、设计企业、制造能力、设备材料和应用需求之间的联动变得更重要。',
+      points: [
+        '产业园区和区域生态成为观察产业竞争力的重要维度，地方政策、资本、人才和应用场景共同影响产业集聚效率。',
+        'IC设计企业仍是产业知识入口的核心，需要同时连接EDA、IP、PDK、制造、封装和市场需求。',
+        '国产替代进入更细颗粒度阶段，单一公司能力之外，供应链协同和验证闭环决定落地速度。',
+      ],
+    },
+    {
+      id: 'priorities-2026',
+      title: '2026中国半导体产业发展重点',
+      summary: '面向2026，产业重点不只是扩产，而是围绕AI、先进工艺、成熟制程效率、封装材料、工具链和资本效率建立更稳定的产业能力。',
+      points: [
+        'AI算力、存储、模拟/信号链、功率半导体和先进封装仍是重点跟踪方向。',
+        '企业需要从“单点产品”升级为“产品组合 + 生态协同 + 客户验证”的综合能力。',
+        '产业服务平台可围绕报告、厂商、EDA/IP/PDK资源和数据工具建立长期知识资产。',
+      ],
+    },
+  ],
+};
+
+const getReportById = (reportId) => researchReports.find((report) => report.id === decodeURIComponent(reportId || ''));
+
 const edaTaxonomy = [
   {
     id: 'analog',
@@ -4449,6 +4611,508 @@ function ChipAreaCalculator() {
   );
 }
 
+function ResearchReportsPage() {
+  const [query, setQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState('全部');
+  const [visibleCount, setVisibleCount] = useState(8);
+  const [selectedReport, setSelectedReport] = useState(null);
+  const [activePanel, setActivePanel] = useState('all');
+  const [downloadedReportIds, setDownloadedReportIds] = useState(() => new Set(researchReports.slice(0, 3).map((report) => report.id)));
+
+  const filteredReports = useMemo(() => {
+    const keyword = query.trim().toLowerCase();
+
+    return researchReports.filter((report) => {
+      const matchesCategory = activeCategory === '全部' || report.category === activeCategory;
+      const searchable = [
+        report.title,
+        report.category,
+        report.publishDate,
+        report.summary,
+        ...report.tags,
+      ].join(' ').toLowerCase();
+      return matchesCategory && (!keyword || searchable.includes(keyword));
+    });
+  }, [activeCategory, query]);
+
+  const visibleReports = filteredReports.slice(0, visibleCount);
+  const latestReports = researchReports.slice(0, 5);
+  const downloadedReports = researchReports.filter((report) => downloadedReportIds.has(report.id));
+
+  const unlockReport = (report) => {
+    setDownloadedReportIds((current) => new Set(current).add(report.id));
+    setSelectedReport(report);
+  };
+
+  const openReport = (report) => {
+    if (report.formats?.includes('web')) {
+      window.location.hash = `#/reports/${report.id}`;
+      return;
+    }
+    setSelectedReport(report);
+  };
+
+  const resetReports = () => {
+    setQuery('');
+    setActiveCategory('全部');
+    setVisibleCount(8);
+  };
+
+  return (
+    <main
+      className="app-shell reports-shell"
+      style={{
+        '--bg-image': `url(${backgroundUrl})`,
+        '--library-accent': '#62d6ff',
+        '--library-accent-rgb': '98 214 255',
+        '--library-contrast': '#06152a',
+      }}
+    >
+      <section className="reports-page">
+        <header className="reports-hero">
+          <a className="library-back" href="#" onClick={() => { window.location.hash = ''; }}>
+            <ArrowLeft size={18} aria-hidden="true" />
+            返回首页
+          </a>
+          <div className="reports-hero-grid">
+            <div>
+              <p className="eyebrow">IC RESEARCH REPORTS</p>
+              <h1>研究报告</h1>
+              <p>沉淀半导体产业发展、上市公司、投融资、政策和细分赛道研究，先以报告列表与检索入口为主。</p>
+            </div>
+          </div>
+
+          <form className="reports-search" onSubmit={(event) => event.preventDefault()}>
+            <Search size={18} aria-hidden="true" />
+            <input
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setVisibleCount(8);
+              }}
+              placeholder="请输入您查询的报告列表内容"
+            />
+            <button type="submit">搜索</button>
+          </form>
+        </header>
+
+        <nav className="reports-section-nav" aria-label="报告模块导航">
+          <button className={activePanel === 'all' ? 'active' : ''} onClick={() => setActivePanel('all')}>
+            全部报告
+          </button>
+          <button className={activePanel === 'mine' ? 'active' : ''} onClick={() => setActivePanel('mine')}>
+            我的报告
+            <span>{downloadedReports.length}</span>
+          </button>
+        </nav>
+
+        {activePanel === 'mine' ? (
+          <section className="my-reports-panel" aria-label="我的报告">
+            <div className="my-reports-head">
+              <div>
+                <p className="eyebrow">MY REPORTS</p>
+                <h2>我的报告</h2>
+                <p>这里展示已经下载或解锁的报告，当前 demo 默认放入几份样例报告。</p>
+              </div>
+              <button onClick={() => setActivePanel('all')}>返回全部报告</button>
+            </div>
+
+            <div className="my-report-grid">
+              {downloadedReports.map((report) => (
+                <article className="my-report-card" key={report.id}>
+                  <div className="report-cover" aria-hidden="true">
+                    <BookOpen size={34} strokeWidth={1.45} />
+                    <em>{report.category}</em>
+                  </div>
+                  <h3>{report.title}</h3>
+                  <p>{report.summary}</p>
+                  <div className="my-report-meta">
+                    <span>{report.publishDate}</span>
+                    <strong>已下载</strong>
+                  </div>
+                  <button onClick={() => setSelectedReport(report)}>查看报告</button>
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : (
+          <>
+        <section className="reports-toolbar" aria-label="报告筛选">
+          <div className="category-tabs">
+            {reportCategories.map((category) => (
+              <button
+                key={category}
+                className={activeCategory === category ? 'active' : ''}
+                onClick={() => {
+                  setActiveCategory(category);
+                  setVisibleCount(8);
+                }}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+          <button className="reports-reset" onClick={resetReports}>
+            <RotateCcw size={15} aria-hidden="true" />
+            重置
+          </button>
+        </section>
+
+        <section className="reports-layout">
+          <div className="reports-list" aria-label="研究报告列表">
+            {visibleReports.map((report, index) => (
+              <article
+                className={`report-card ${report.formats?.includes('web') ? 'report-card-web' : ''}`}
+                key={report.id}
+                onClick={() => openReport(report)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') openReport(report);
+                }}
+                role="button"
+                tabIndex={0}
+              >
+                <div className="report-cover" aria-hidden="true">
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  <BookOpen size={34} strokeWidth={1.45} />
+                  <em>{report.category}</em>
+                </div>
+                <div className="report-main">
+                  <div className="report-title-row">
+                    <h2>{report.title}</h2>
+                    <div className="report-format-row">
+                      {report.formats?.includes('web') ? <span className="format-badge format-web">网页应用</span> : null}
+                      {report.formats?.includes('pdf') ? <span className="format-badge">PDF</span> : null}
+                      {report.formats?.includes('ppt') ? <span className="format-badge">PPT</span> : null}
+                      <span>{report.category}</span>
+                    </div>
+                  </div>
+                  <p>{report.summary}</p>
+                  <div className="report-tags">
+                    {report.tags.map((tag) => (
+                      <span key={tag}>{tag}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="report-meta">
+                  <div>
+                    <span>发布时间</span>
+                    <strong>{report.publishDate}</strong>
+                  </div>
+                  <div>
+                    <span>报告价格</span>
+                    <strong className="report-price">0元</strong>
+                  </div>
+                  <div>
+                    <span>会员</span>
+                    <strong className="report-member">免费</strong>
+                  </div>
+                  <button onClick={(event) => {
+                    event.stopPropagation();
+                    if (report.formats?.includes('web')) {
+                      window.location.hash = `#/reports/${report.id}`;
+                    } else {
+                      unlockReport(report);
+                    }
+                  }}>
+                    {report.formats?.includes('web') ? '查看报告' : '下载报告'}
+                  </button>
+                </div>
+              </article>
+            ))}
+
+            {visibleReports.length === 0 ? (
+              <div className="empty-state">
+                <h3>没有找到匹配报告</h3>
+                <p>换一个关键词或分类试试。</p>
+              </div>
+            ) : null}
+
+            {visibleCount < filteredReports.length ? (
+              <button className="reports-load-more" onClick={() => setVisibleCount((count) => count + 4)}>
+                加载更多
+              </button>
+            ) : (
+              <p className="reports-no-more">没有更多了</p>
+            )}
+          </div>
+
+          <aside className="reports-side" aria-label="报告侧栏">
+            <section>
+              <h2>最新报告</h2>
+              <div className="reports-rank-list">
+                {latestReports.map((report, index) => (
+                  <button key={report.id} onClick={() => openReport(report)}>
+                    <span>{index + 1}</span>
+                    <strong>{report.title}</strong>
+                    <em>{report.publishDate}</em>
+                  </button>
+                ))}
+              </div>
+            </section>
+            <section>
+              <h2>价格规则</h2>
+              <div className="reports-price-note">
+                <p>当前 demo 阶段所有单个报告价格统一为：</p>
+                <strong>0元</strong>
+                <span>会员免费</span>
+              </div>
+            </section>
+          </aside>
+        </section>
+          </>
+        )}
+      </section>
+
+      {selectedReport ? (
+        <div className="report-modal" role="dialog" aria-modal="true" aria-label={`${selectedReport.title}详情`}>
+          <div className="report-modal-panel">
+            <button className="report-modal-close" onClick={() => setSelectedReport(null)} aria-label="关闭">
+              <X size={18} aria-hidden="true" />
+            </button>
+            <p className="eyebrow">{selectedReport.category}</p>
+            <h2>{selectedReport.title}</h2>
+            <p>{selectedReport.summary}</p>
+            <dl>
+              <div>
+                <dt>发布时间</dt>
+                <dd>{selectedReport.publishDate}</dd>
+              </div>
+              <div>
+                <dt>页数</dt>
+                <dd>{selectedReport.pages} 页</dd>
+              </div>
+              <div>
+                <dt>报告价格</dt>
+                <dd>0元</dd>
+              </div>
+              <div>
+                <dt>会员</dt>
+                <dd>免费</dd>
+              </div>
+            </dl>
+            <button className="report-unlock-button" onClick={() => setDownloadedReportIds((current) => new Set(current).add(selectedReport.id))}>
+              <Download size={16} aria-hidden="true" />
+              {downloadedReportIds.has(selectedReport.id) ? '查看已下载报告' : '立即解锁'}
+            </button>
+          </div>
+        </div>
+      ) : null}
+    </main>
+  );
+}
+
+function ReportDetailPage({ report, initialMode = 'summary' }) {
+  const [mode, setMode] = useState(initialMode === 'download' ? 'download' : 'summary');
+
+  if (!report) {
+    return (
+      <main className="app-shell reports-shell" style={{ '--bg-image': `url(${backgroundUrl})` }}>
+        <section className="reports-page">
+          <a className="library-back" href="#/reports">
+            <ArrowLeft size={18} aria-hidden="true" />
+            返回研究报告
+          </a>
+          <div className="empty-state">
+            <h3>未找到报告</h3>
+            <p>请返回研究报告列表重新选择。</p>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  const hasWebReport = report.formats?.includes('web');
+
+  return (
+    <main
+      className="app-shell reports-shell"
+      style={{
+        '--bg-image': `url(${backgroundUrl})`,
+        '--library-accent': '#62d6ff',
+        '--library-accent-rgb': '98 214 255',
+        '--library-contrast': '#06152a',
+      }}
+    >
+      <section className="report-detail-page">
+        <a className="library-back" href="#/reports">
+          <ArrowLeft size={18} aria-hidden="true" />
+          返回研究报告
+        </a>
+
+        <header className="report-detail-hero">
+          <div>
+            <p className="eyebrow">RESEARCH REPORT</p>
+            <h1>{report.title}</h1>
+            <p>{report.summary}</p>
+            <div className="report-detail-tags">
+              {hasWebReport ? <span className="format-badge format-web">网页应用</span> : null}
+              {report.formats?.includes('pdf') ? <span className="format-badge">PDF</span> : null}
+              {report.tags.map((tag) => <span key={tag}>{tag}</span>)}
+            </div>
+          </div>
+          <aside className="report-detail-card">
+            <dl>
+              <div>
+                <dt>发布时间</dt>
+                <dd>{report.publishDate}</dd>
+              </div>
+              <div>
+                <dt>报告价格</dt>
+                <dd>0元</dd>
+              </div>
+              <div>
+                <dt>会员</dt>
+                <dd>免费</dd>
+              </div>
+              <div>
+                <dt>附件格式</dt>
+                <dd>{report.formats?.filter((format) => format !== 'web').join(' / ')?.toUpperCase() || '暂无'}</dd>
+              </div>
+            </dl>
+          </aside>
+        </header>
+
+        <nav className="report-view-switch" aria-label="报告查看方式">
+          <button className={mode === 'summary' ? 'active' : ''} onClick={() => setMode('summary')}>
+            报告详情
+          </button>
+          {hasWebReport ? (
+            <button className={mode === 'web' ? 'active' : ''} onClick={() => setMode('web')}>
+              网页端
+            </button>
+          ) : null}
+          <button className={mode === 'download' ? 'active' : ''} onClick={() => setMode('download')}>
+            下载附件
+          </button>
+        </nav>
+
+        {mode === 'web' && hasWebReport ? (
+          <ChinaSemiconductorReportApp fileUrl={report.fileUrl} />
+        ) : mode === 'download' ? (
+          <section className="report-download-panel">
+            <div>
+              <p className="eyebrow">ATTACHMENT</p>
+              <h2>下载附件</h2>
+              <p>当前附件为你提供的 PDF 报告文件。后续如果有 PPT，可以继续加入同一区域。</p>
+            </div>
+            {report.fileUrl ? (
+              <a className="report-download-button" href={report.fileUrl} download>
+                <Download size={17} aria-hidden="true" />
+                下载 PDF
+              </a>
+            ) : (
+              <button className="report-download-button" disabled>
+                暂无附件
+              </button>
+            )}
+          </section>
+        ) : (
+          <section className="report-summary-panel">
+            <div className="report-cover report-summary-cover" aria-hidden="true">
+              <BookOpen size={44} strokeWidth={1.4} />
+              <em>{report.category}</em>
+            </div>
+            <div>
+              <p className="eyebrow">REPORT DETAIL</p>
+              <h2>{report.title}</h2>
+              <p>{report.summary}</p>
+              <div className="report-summary-actions">
+                {hasWebReport ? <button onClick={() => setMode('web')}>进入网页端</button> : null}
+                {report.fileUrl ? <a href={report.fileUrl} download>下载附件</a> : null}
+              </div>
+            </div>
+          </section>
+        )}
+      </section>
+    </main>
+  );
+}
+
+function ChinaSemiconductorReportApp({ fileUrl }) {
+  const scrollToReportSection = (sectionId) => {
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  return (
+    <section className="web-report-app" aria-label="2025中国半导体产业发展报告网页端">
+      <aside className="web-report-toc">
+        <span>目录</span>
+        {chinaSemiconductorWebReport.chapters.map((chapter) => (
+          <button key={chapter.id} onClick={() => scrollToReportSection(chapter.id)}>{chapter.label}</button>
+        ))}
+        {fileUrl ? <button onClick={() => scrollToReportSection('report-original')}>完整图表原文</button> : null}
+      </aside>
+
+      <div className="web-report-content">
+        <header className="web-report-cover">
+          <p className="eyebrow">{chinaSemiconductorWebReport.subtitle}</p>
+          <h2>2025中国半导体产业发展报告</h2>
+          <p>根据你提供的 PDF 报告整理为网页端阅读结构，先呈现目录、关键数据、全球市场、中国产业和2026重点方向。</p>
+        </header>
+
+        <section className="web-report-metrics" aria-label="关键数据">
+          {chinaSemiconductorWebReport.metrics.map((metric) => (
+            <div key={metric.label}>
+              <span>{metric.label}</span>
+              <strong>{metric.value}</strong>
+              <p>{metric.note}</p>
+            </div>
+          ))}
+        </section>
+
+        <section className="web-report-panel" id="global-market">
+          <div className="web-report-panel-head">
+            <span>01</span>
+            <h3>全球半导体市场发展形势</h3>
+          </div>
+          <p>{chinaSemiconductorWebReport.sections[0].summary}</p>
+          <div className="web-report-signal-grid">
+            {chinaSemiconductorWebReport.globalSignals.map((signal) => (
+              <div key={signal.label} className="web-report-signal">
+                <div>
+                  <strong>{signal.label}</strong>
+                  <em>{signal.value}%</em>
+                </div>
+                <span><i style={{ width: `${signal.value}%` }} /></span>
+              </div>
+            ))}
+          </div>
+          <ul>
+            {chinaSemiconductorWebReport.sections[0].points.map((point) => <li key={point}>{point}</li>)}
+          </ul>
+        </section>
+
+        {chinaSemiconductorWebReport.sections.slice(1).map((section, index) => (
+          <section className="web-report-panel" id={section.id} key={section.id}>
+            <div className="web-report-panel-head">
+              <span>{String(index + 2).padStart(2, '0')}</span>
+              <h3>{section.title}</h3>
+            </div>
+            <p>{section.summary}</p>
+            <ul>
+              {section.points.map((point) => <li key={point}>{point}</li>)}
+            </ul>
+          </section>
+        ))}
+
+        {fileUrl ? (
+          <section className="web-report-panel web-report-original" id="report-original">
+            <div className="web-report-panel-head">
+              <span>PDF</span>
+              <h3>完整图表原文</h3>
+            </div>
+            <p>下方嵌入原始 PDF 报告，保留完整页面、图表和视觉内容。若浏览器不显示内嵌 PDF，可使用下载附件查看。</p>
+            <iframe
+              title="2025中国半导体产业发展报告 PDF 原文"
+              src={`${fileUrl}#toolbar=1&navpanes=0`}
+            />
+          </section>
+        ) : null}
+      </div>
+    </section>
+  );
+}
+
 function App() {
   const [activeNode, setActiveNode] = useState(null);
   const [selectedNode, setSelectedNode] = useState(null);
@@ -4475,12 +5139,22 @@ function App() {
     return <OnlineToolsPage />;
   }
 
+  if (routeHash === '#/reports') {
+    return <ResearchReportsPage />;
+  }
+
   if (routeHash === '#/tools/chip-area-calculator') {
     return <ChipAreaCalculator />;
   }
 
   if (routeHash === '#/assistant') {
     return <AssistantPage />;
+  }
+
+  const reportRouteMatch = routeHash.match(/^#\/reports\/([^/]+)(?:\/(web|download))?$/);
+  if (reportRouteMatch) {
+    const [, reportId, viewMode] = reportRouteMatch;
+    return <ReportDetailPage report={getReportById(reportId)} initialMode={viewMode || 'summary'} />;
   }
 
   const libraryRouteMatch = routeHash.match(/^#\/(eda|ip|foundry)(?:\/product\/(.+))?$/);
@@ -4556,7 +5230,7 @@ function App() {
         </a>
         <nav className="home-nav-links" aria-label="产业库导航">
           {topNavItems.map((item) => (
-            <a key={item} href={item === '在线工具' ? '#/tools' : '#'}>
+            <a key={item} href={item === '在线工具' ? '#/tools' : item === '研究报告' ? '#/reports' : '#'}>
               {item}
             </a>
           ))}
