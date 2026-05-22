@@ -26,6 +26,7 @@ import {
   X,
 } from 'lucide-react';
 import backgroundUrl from './assets/ic-background.png';
+import waferDieCalculatorUrl from './assets/wafer-die-calculator.webp';
 import { companyDescriptions, companySourceUrls, companyVisuals } from './data/company.js';
 import { edaResources, edaTaxonomy } from './data/eda.js';
 import { foundryProcessNodeOptions, foundryResources } from './data/foundry.js';
@@ -1905,6 +1906,279 @@ function calculateChipArea(values) {
   };
 }
 
+const diePerWaferPresets = {
+  advanced: {
+    waferDiameterMm: 300,
+    dieWidthMm: 8,
+    dieHeightMm: 10,
+    scribeLineUm: 80,
+    edgeExclusionMm: 3,
+    defectDensity: 0.12,
+    yieldModel: 'negative-binomial',
+    clusteringFactor: 3,
+  },
+  mature: {
+    waferDiameterMm: 200,
+    dieWidthMm: 4,
+    dieHeightMm: 4,
+    scribeLineUm: 90,
+    edgeExclusionMm: 2,
+    defectDensity: 0.25,
+    yieldModel: 'poisson',
+    clusteringFactor: 3,
+  },
+  largeSoc: {
+    waferDiameterMm: 300,
+    dieWidthMm: 18,
+    dieHeightMm: 22,
+    scribeLineUm: 100,
+    edgeExclusionMm: 3,
+    defectDensity: 0.08,
+    yieldModel: 'negative-binomial',
+    clusteringFactor: 2,
+  },
+};
+
+const diePerWaferDefaultValues = diePerWaferPresets.advanced;
+
+function calculateDiePerWafer(values) {
+  const waferDiameterMm = Math.max(1, Number(values.waferDiameterMm) || 0);
+  const dieWidthMm = Math.max(0.001, Number(values.dieWidthMm) || 0);
+  const dieHeightMm = Math.max(0.001, Number(values.dieHeightMm) || 0);
+  const scribeLineUm = Math.max(0, Number(values.scribeLineUm) || 0);
+  const edgeExclusionMm = Math.max(0, Number(values.edgeExclusionMm) || 0);
+  const defectDensity = Math.max(0, Number(values.defectDensity) || 0);
+  const clusteringFactor = Math.max(0.1, Number(values.clusteringFactor) || 1);
+  const usableDiameterMm = Math.max(1, waferDiameterMm - edgeExclusionMm * 2);
+  const effectiveDieWidthMm = dieWidthMm + scribeLineUm / 1000;
+  const effectiveDieHeightMm = dieHeightMm + scribeLineUm / 1000;
+  const bareDieAreaMm2 = dieWidthMm * dieHeightMm;
+  const streetedDieAreaMm2 = effectiveDieWidthMm * effectiveDieHeightMm;
+  const waferAreaMm2 = Math.PI * (usableDiameterMm / 2) ** 2;
+  const idealAreaDies = waferAreaMm2 / streetedDieAreaMm2;
+  const edgeLossDies = Math.PI * usableDiameterMm / Math.sqrt(2 * streetedDieAreaMm2);
+  const grossDies = Math.max(0, Math.floor(idealAreaDies - edgeLossDies));
+  const grossUtilization = waferAreaMm2 > 0 ? (grossDies * streetedDieAreaMm2) / waferAreaMm2 : 0;
+  const bareDieAreaCm2 = bareDieAreaMm2 / 100;
+  const poissonYield = Math.exp(-defectDensity * bareDieAreaCm2);
+  const negativeBinomialYield = (1 + (defectDensity * bareDieAreaCm2) / clusteringFactor) ** (-clusteringFactor);
+  const yieldRate = values.yieldModel === 'poisson' ? poissonYield : negativeBinomialYield;
+  const goodDies = Math.floor(grossDies * yieldRate);
+  const edgeExclusionAreaMm2 = Math.PI * (waferDiameterMm / 2) ** 2 - waferAreaMm2;
+  const streetOverheadMm2 = streetedDieAreaMm2 - bareDieAreaMm2;
+
+  return {
+    inputs: {
+      waferDiameterMm,
+      dieWidthMm,
+      dieHeightMm,
+      scribeLineUm,
+      edgeExclusionMm,
+      defectDensity,
+      clusteringFactor,
+      yieldModel: values.yieldModel,
+    },
+    usableDiameterMm,
+    effectiveDieWidthMm,
+    effectiveDieHeightMm,
+    bareDieAreaMm2,
+    streetedDieAreaMm2,
+    waferAreaMm2,
+    idealAreaDies,
+    edgeLossDies,
+    grossDies,
+    grossUtilization,
+    poissonYield,
+    negativeBinomialYield,
+    yieldRate,
+    goodDies,
+    edgeExclusionAreaMm2,
+    streetOverheadMm2,
+  };
+}
+
+const bondingPackagePresets = {
+  qfn32: {
+    label: 'QFN 5×5mm / 32L / 0.50mm pitch',
+    packageWidthMm: 5,
+    packageHeightMm: 5,
+    packagePins: 32,
+    dieWidthUm: 2400,
+    dieHeightUm: 2400,
+  },
+  qfn48: {
+    label: 'QFN 7×7mm / 48L / 0.50mm pitch',
+    packageWidthMm: 7,
+    packageHeightMm: 7,
+    packagePins: 48,
+    dieWidthUm: 3200,
+    dieHeightUm: 3200,
+  },
+  qfn64: {
+    label: 'QFN 9×9mm / 64L / 0.50mm pitch',
+    packageWidthMm: 9,
+    packageHeightMm: 9,
+    packagePins: 64,
+    dieWidthUm: 4200,
+    dieHeightUm: 4200,
+  },
+};
+
+const bondingDefaultValues = bondingPackagePresets.qfn48;
+
+const bondingSampleNetlist = `pin,pad,net,side
+1,PAD_VDD1,VDD,top
+2,PAD_GPIO0,GPIO0,top
+3,PAD_GPIO1,GPIO1,top
+4,PAD_RSTN,RSTN,top
+12,PAD_CLK,CLK,right
+13,PAD_SDA,I2C_SDA,right
+14,PAD_SCL,I2C_SCL,right
+24,PAD_VSS1,VSS,bottom
+25,PAD_ADC0,ADC0,bottom
+26,PAD_ADC1,ADC1,bottom
+36,PAD_TXD,UART_TX,left
+37,PAD_RXD,UART_RX,left
+38,PAD_VDDIO,VDDIO,left`;
+
+function getPackagePinSide(pin, packagePins) {
+  const pinsPerSide = Math.ceil(packagePins / 4);
+  if (pin <= pinsPerSide) return 'top';
+  if (pin <= pinsPerSide * 2) return 'right';
+  if (pin <= pinsPerSide * 3) return 'bottom';
+  return 'left';
+}
+
+function parseBondingNetlist(rawNetlist, packagePins) {
+  const lines = rawNetlist
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line && !line.startsWith('#'));
+
+  if (lines.length === 0) {
+    return { rows: [], warnings: ['Netlist 为空：请粘贴 CSV 内容，或点击“载入示例”。'] };
+  }
+
+  const separator = lines[0].includes('\t') ? '\t' : lines[0].includes(';') ? ';' : ',';
+  const firstCells = lines[0].split(separator).map((cell) => cell.trim().toLowerCase());
+  const hasHeader = firstCells.some((cell) => ['pin', 'package_pin', 'pad', 'die_pad', 'net', 'side'].includes(cell));
+  const headers = hasHeader ? firstCells : ['pin', 'pad', 'net', 'side'];
+  const dataLines = hasHeader ? lines.slice(1) : lines;
+  const sideNames = new Set(['top', 'right', 'bottom', 'left']);
+  const warnings = [];
+
+  const rows = dataLines.map((line, index) => {
+    const cells = line.split(separator).map((cell) => cell.trim());
+    const getCell = (names, fallbackIndex) => {
+      const headerIndex = names.map((name) => headers.indexOf(name)).find((cellIndex) => cellIndex >= 0);
+      return cells[headerIndex ?? fallbackIndex] || '';
+    };
+    const pin = Number.parseInt(getCell(['pin', 'package_pin'], 0), 10);
+    const pad = getCell(['pad', 'die_pad'], 1) || `PAD_${index + 1}`;
+    const net = getCell(['net', 'signal'], 2) || 'NC';
+    const rawSide = getCell(['side', 'edge'], 3).toLowerCase();
+    const side = sideNames.has(rawSide) ? rawSide : getPackagePinSide(pin || index + 1, packagePins);
+
+    if (!Number.isFinite(pin) || pin < 1 || pin > packagePins) {
+      warnings.push(`第 ${index + 1} 行 pin 超出范围，已跳过：${line}`);
+      return null;
+    }
+
+    return { id: `${pin}-${pad}-${index}`, pin, pad, net, side };
+  }).filter(Boolean);
+
+  const duplicatePins = rows
+    .map((row) => row.pin)
+    .filter((pin, index, pins) => pins.indexOf(pin) !== index);
+
+  if (duplicatePins.length > 0) {
+    warnings.push(`发现重复 package pin：${Array.from(new Set(duplicatePins)).join(', ')}。`);
+  }
+
+  return { rows, warnings };
+}
+
+function pointForPackagePin(pin, packagePins, rect) {
+  const pinsPerSide = Math.ceil(packagePins / 4);
+  const side = getPackagePinSide(pin, packagePins);
+  const localIndex = side === 'top' ? pin - 1
+    : side === 'right' ? pin - pinsPerSide - 1
+      : side === 'bottom' ? pin - pinsPerSide * 2 - 1
+        : pin - pinsPerSide * 3 - 1;
+  const slots = side === 'top' || side === 'bottom' ? Math.min(pinsPerSide, packagePins) : pinsPerSide;
+  const ratio = slots <= 1 ? 0.5 : (localIndex + 0.5) / slots;
+
+  if (side === 'top') return { x: rect.x + rect.w * ratio, y: rect.y, side };
+  if (side === 'right') return { x: rect.x + rect.w, y: rect.y + rect.h * ratio, side };
+  if (side === 'bottom') return { x: rect.x + rect.w * (1 - ratio), y: rect.y + rect.h, side };
+  return { x: rect.x, y: rect.y + rect.h * (1 - ratio), side };
+}
+
+function pointForDiePad(row, sideRows, dieRect) {
+  const rowsOnSide = sideRows[row.side] || [];
+  const localIndex = Math.max(0, rowsOnSide.findIndex((item) => item.id === row.id));
+  const ratio = rowsOnSide.length <= 1 ? 0.5 : (localIndex + 0.5) / rowsOnSide.length;
+
+  if (row.side === 'top') return { x: dieRect.x + dieRect.w * ratio, y: dieRect.y };
+  if (row.side === 'right') return { x: dieRect.x + dieRect.w, y: dieRect.y + dieRect.h * ratio };
+  if (row.side === 'bottom') return { x: dieRect.x + dieRect.w * (1 - ratio), y: dieRect.y + dieRect.h };
+  return { x: dieRect.x, y: dieRect.y + dieRect.h * (1 - ratio) };
+}
+
+function makeBondingGeometry(values, rows) {
+  const packageWidthMm = Math.max(1, Number(values.packageWidthMm) || 1);
+  const packageHeightMm = Math.max(1, Number(values.packageHeightMm) || 1);
+  const packagePins = Math.max(4, Number(values.packagePins) || 4);
+  const dieWidthMm = Math.max(0.1, Number(values.dieWidthUm) / 1000 || 0.1);
+  const dieHeightMm = Math.max(0.1, Number(values.dieHeightUm) / 1000 || 0.1);
+  const packageRect = { x: 72, y: 72, w: 576, h: 576 };
+  const dieScale = Math.min(packageRect.w * 0.68 / packageWidthMm, packageRect.h * 0.68 / packageHeightMm);
+  const dieRect = {
+    w: Math.max(108, Math.min(390, dieWidthMm * dieScale)),
+    h: Math.max(108, Math.min(390, dieHeightMm * dieScale)),
+  };
+  dieRect.x = 360 - dieRect.w / 2;
+  dieRect.y = 360 - dieRect.h / 2;
+
+  const sideRows = rows.reduce((groups, row) => {
+    groups[row.side] = [...(groups[row.side] || []), row];
+    return groups;
+  }, {});
+
+  const pins = Array.from({ length: packagePins }, (_, index) => {
+    const pin = index + 1;
+    return { pin, ...pointForPackagePin(pin, packagePins, packageRect) };
+  });
+
+  const bonds = rows.map((row) => {
+    const packagePoint = pointForPackagePin(row.pin, packagePins, packageRect);
+    const diePoint = pointForDiePad(row, sideRows, dieRect);
+    const dx = packagePoint.x - diePoint.x;
+    const dy = packagePoint.y - diePoint.y;
+    const length = Math.sqrt(dx * dx + dy * dy);
+    const netName = row.net.toUpperCase();
+    const netType = netName.includes('VDD') || netName.includes('PWR') ? 'power'
+      : netName.includes('VSS') || netName.includes('GND') ? 'ground'
+        : 'signal';
+    return { ...row, packagePoint, diePoint, length, netType };
+  });
+
+  const averageWireLength = bonds.length > 0
+    ? bonds.reduce((sum, bond) => sum + bond.length, 0) / bonds.length
+    : 0;
+
+  return {
+    packagePins,
+    packageRect,
+    dieRect,
+    pins,
+    bonds,
+    activePins: new Set(rows.map((row) => row.pin)),
+    dieToPackageRatio: (dieWidthMm * dieHeightMm) / (packageWidthMm * packageHeightMm),
+    averageWireLength,
+  };
+}
+
 const assistantQuickQuestions = [
   'EDA、IP、PDK 分别是什么？',
   'Fabless 企业如何使用产业资源？',
@@ -2086,6 +2360,74 @@ function AssistantPage() {
   );
 }
 
+function OnlineToolPreview({ toolId }) {
+  if (toolId === 'chip-area-calculator') {
+    return (
+      <svg viewBox="0 0 96 72" role="img" aria-label="芯片面积估算器预览">
+        <rect className="preview-chip" x="20" y="12" width="56" height="46" rx="6" />
+        {Array.from({ length: 7 }, (_, index) => (
+          <g key={index}>
+            <line x1="12" y1={18 + index * 6} x2="20" y2={18 + index * 6} />
+            <line x1="76" y1={18 + index * 6} x2="84" y2={18 + index * 6} />
+          </g>
+        ))}
+        {[
+          ['逻辑', 28, 21, 23, 10],
+          ['SRAM', 28, 36, 17, 12],
+          ['IO', 50, 36, 16, 12],
+        ].map(([label, x, y, width, height]) => (
+          <g key={label}>
+            <rect className="preview-chip-block" x={x} y={y} width={width} height={height} rx="2" />
+            <text x={x + width / 2} y={y + height / 2 + 2} textAnchor="middle">{label}</text>
+          </g>
+        ))}
+      </svg>
+    );
+  }
+
+  if (toolId === 'die-per-wafer-calculator') {
+    return (
+      <svg viewBox="0 0 96 72" role="img" aria-label="晶圆芯片数量计算器预览">
+        <circle className="preview-wafer" cx="48" cy="36" r="27" />
+        {Array.from({ length: 7 }, (_, row) => (
+          <g key={row}>
+            {Array.from({ length: 9 }, (_, column) => {
+              const x = 21 + column * 6;
+              const y = 15 + row * 6;
+              const inside = (x + 2 - 48) ** 2 + (y + 2 - 36) ** 2 < 25 ** 2;
+              return inside ? <rect key={column} className="preview-die-cell" x={x} y={y} width="4" height="4" rx="0.8" /> : null;
+            })}
+          </g>
+        ))}
+        <path className="preview-scan" d="M22 46 C38 58 58 57 75 44" />
+      </svg>
+    );
+  }
+
+  if (toolId === 'bonding-diagram-tool') {
+    return (
+      <svg viewBox="0 0 96 72" role="img" aria-label="键合图生成器预览">
+        <rect className="preview-package" x="15" y="8" width="66" height="56" rx="6" />
+        <rect className="preview-die" x="35" y="24" width="26" height="24" rx="3" />
+        {[
+          [26, 8, 38, 24],
+          [42, 8, 45, 24],
+          [58, 8, 52, 24],
+          [81, 24, 61, 31],
+          [81, 44, 61, 42],
+          [23, 64, 39, 48],
+          [53, 64, 51, 48],
+          [15, 31, 35, 35],
+        ].map(([x1, y1, x2, y2], index) => (
+          <path key={index} className={index < 2 ? 'preview-bond power' : 'preview-bond'} d={`M ${x1} ${y1} Q ${(x1 + x2) / 2} ${(y1 + y2) / 2 - 5} ${x2} ${y2}`} />
+        ))}
+      </svg>
+    );
+  }
+
+  return <Calculator size={24} strokeWidth={1.7} />;
+}
+
 function OnlineToolsPage() {
   return (
     <main className="app-shell tools-shell" style={{ '--bg-image': `url(${backgroundUrl})` }}>
@@ -2109,8 +2451,8 @@ function OnlineToolsPage() {
           const isReady = tool.status === '已上线';
           const card = (
             <article className={`tool-directory-card ${isReady ? 'ready' : 'reserved'}`}>
-              <div className="tool-directory-icon" aria-hidden="true">
-                <Calculator size={24} strokeWidth={1.7} />
+              <div className={isReady ? 'tool-directory-preview' : 'tool-directory-icon'} aria-hidden="true">
+                <OnlineToolPreview toolId={tool.id} />
               </div>
               <div>
                 <span className="tool-source">{tool.source}</span>
@@ -2309,6 +2651,466 @@ function ChipAreaCalculator() {
             <code>
               {`Die Area = (Logic + SRAM + NVM + IO + Hard Macros) × (1 + Routing Overhead × ${formatNumber(result.profile.overheadBias, 2)}) + Edge Area\nLogic = ${result.inputs.gatesM}M / (${result.params.gateDensityM}M gates/mm² × ${formatNumber(result.inputs.utilization, 2)})\nSRAM = ${formatNumber(result.inputs.sramMbit, 2)} / ${result.params.sramDensity} | NVM = ${formatNumber(result.inputs.nvmMbit, 2)} / ${result.params.nvmDensity}\nIO = ${result.inputs.ioCount} × ${result.params.ioPitchUm}µm × ${result.params.padDepthUm}µm × ${formatNumber(result.profile.ioMultiplier, 2)}`}
             </code>
+          </div>
+        </section>
+      </section>
+    </main>
+  );
+}
+
+function DiePerWaferCalculator() {
+  const [preset, setPreset] = useState('advanced');
+  const [values, setValues] = useState(diePerWaferDefaultValues);
+  const result = useMemo(() => calculateDiePerWafer(values), [values]);
+
+  const updateValue = (key, nextValue) => {
+    setPreset('custom');
+    setValues((current) => ({ ...current, [key]: nextValue }));
+  };
+
+  const applyPreset = (nextPreset) => {
+    setPreset(nextPreset);
+    if (diePerWaferPresets[nextPreset]) {
+      setValues(diePerWaferPresets[nextPreset]);
+    }
+  };
+
+  const utilizationPct = result.grossUtilization * 100;
+  const yieldPct = result.yieldRate * 100;
+
+  return (
+    <main className="app-shell tools-shell" style={{ '--bg-image': `url(${backgroundUrl})` }}>
+      <header className="library-hero tools-hero" style={{ '--library-accent': '#8bffcf', '--library-accent-rgb': '139 255 207' }}>
+        <a className="back-button" href="#/tools">
+          <ArrowLeft size={18} aria-hidden="true" />
+          返回工具目录
+        </a>
+        <div className="library-hero-copy">
+          <p className="eyebrow">ONLINE TOOL</p>
+          <h1>晶圆芯片数量计算器</h1>
+          <p>用于 wafer start、MPW、成本测算和早期 die size 讨论。输入晶圆直径、芯片尺寸、切割道、边缘排除和缺陷密度，估算每片晶圆可切割的总芯片数量与可用良品数量。</p>
+        </div>
+        <div className="library-hero-mark" aria-hidden="true">
+          <Calculator size={58} strokeWidth={1.4} />
+        </div>
+      </header>
+
+      <section className="tool-layout" aria-label="晶圆芯片数量计算器">
+        <form className="tool-panel tool-inputs" onSubmit={(event) => event.preventDefault()}>
+          <div className="tool-panel-head">
+            <h2>输入参数</h2>
+            <p>公式参考公开 DPW 估算口径，并加入切割道、边缘排除与良率模型。结果适合早期估算，不替代 foundry 排版、mask data 或真实 wafer map 计算。</p>
+          </div>
+
+          <div className="tool-field-grid">
+            <label className="tool-field">
+              <span>预设场景</span>
+              <select value={preset} onChange={(event) => applyPreset(event.target.value)}>
+                <option value="custom">自定义</option>
+                <option value="advanced">300mm 先进制程中等 die</option>
+                <option value="mature">200mm 成熟制程小 die</option>
+                <option value="largeSoc">300mm 大型 SoC</option>
+              </select>
+            </label>
+            <label className="tool-field">
+              <span>良率模型</span>
+              <select value={values.yieldModel} onChange={(event) => updateValue('yieldModel', event.target.value)}>
+                <option value="negative-binomial">Negative Binomial</option>
+                <option value="poisson">Poisson</option>
+              </select>
+            </label>
+          </div>
+
+          <div className="tool-field-grid tool-field-grid-three">
+            {[
+              ['waferDiameterMm', '晶圆直径 (mm)', '1', '常见为 150 / 200 / 300mm。'],
+              ['dieWidthMm', '芯片宽度 (mm)', '0.01', '裸 die 的 X 方向尺寸，不含切割道。'],
+              ['dieHeightMm', '芯片高度 (mm)', '0.01', '裸 die 的 Y 方向尺寸，不含切割道。'],
+              ['scribeLineUm', 'Scribe line (µm)', '1', 'die 之间的切割道/划片道宽度，会计入有效 die pitch。'],
+              ['edgeExclusionMm', '边缘排除 (mm)', '0.1', '晶圆边缘不能有效放置 die 或良率较低的保留环。'],
+              ['defectDensity', '缺陷密度 D0 (/cm²)', '0.01', '用于 good die 估算；不知道时可先填 0 只看 gross DPW。'],
+              ['clusteringFactor', '聚集因子 α', '0.1', 'Negative Binomial 模型使用，数值越大越接近 Poisson。'],
+            ].map(([key, label, step, hint]) => (
+              <label className="tool-field" key={key}>
+                <span>{label}</span>
+                <input
+                  type="number"
+                  min="0"
+                  step={step}
+                  value={values[key]}
+                  onChange={(event) => updateValue(key, event.target.value)}
+                />
+                <em>{hint}</em>
+              </label>
+            ))}
+          </div>
+
+          <p className="tool-note">使用建议：估算晶圆可切割芯片总数时重点看芯片 pitch、边缘排除和切割道；估算良品数量时还要谨慎选择缺陷密度和良率模型。先进制程、大面积 SoC、模拟/RF 产品通常需要更保守的良率假设。</p>
+
+          <div className="tool-actions">
+            <button type="button" className="tool-primary" onClick={() => setPreset('custom')}>进入自定义</button>
+            <button type="button" className="tool-secondary" onClick={() => applyPreset('advanced')}>恢复默认</button>
+          </div>
+        </form>
+
+        <section className="tool-panel tool-results">
+          <figure className="tool-wafer-visual">
+            <img src={waferDieCalculatorUrl} alt="彩色晶圆与芯片矩阵示意图" />
+            <figcaption>
+              <strong>晶圆排布示意</strong>
+              <span>圆形晶圆上排布矩形芯片，边缘区域会产生无法完整放置芯片的几何损失。</span>
+            </figcaption>
+          </figure>
+
+          <div className="tool-score-card">
+            <span>每片晶圆可切割芯片总数</span>
+            <strong>{result.grossDies}</strong>
+            <p>按可用晶圆面积与边缘修正估算。若计入当前良率模型，预计可用良品数量约为 {result.goodDies} 颗。</p>
+          </div>
+
+          <div className="tool-metric-grid">
+            {[
+              ['每片晶圆良品数', result.goodDies, `当前模型良率 ${formatNumber(yieldPct, 1)}%。`],
+              ['裸芯片面积', `${formatNumber(result.bareDieAreaMm2, 2)} mm²`, '仅芯片宽度 × 芯片高度，不含切割道。'],
+              ['有效芯片 pitch 面积', `${formatNumber(result.streetedDieAreaMm2, 2)} mm²`, '计入切割道后用于 DPW 排布估算。'],
+              ['可用晶圆直径', `${formatNumber(result.usableDiameterMm, 2)} mm`, 'wafer diameter - 2 × edge exclusion。'],
+              ['面积法理论上限', formatNumber(result.idealAreaDies, 1), '只按面积相除，不考虑圆形边缘损失。'],
+              ['边缘损失估计', formatNumber(result.edgeLossDies, 1), '圆形晶圆边缘不能完整放置矩形 die 的修正量。'],
+              ['Gross 利用率', `${formatNumber(utilizationPct, 1)}%`, 'gross dies × effective die area / usable wafer area。'],
+              ['Edge exclusion 面积', `${formatNumber(result.edgeExclusionAreaMm2, 1)} mm²`, '从完整晶圆中排除的外圈面积。'],
+              ['Scribe 额外面积 / die', `${formatNumber(result.streetOverheadMm2, 3)} mm²`, '每颗 die 因切割道带来的 pitch 面积增加。'],
+            ].map(([label, value, meta]) => (
+              <div className="tool-metric" key={label}>
+                <span>{label}</span>
+                <strong>{value}</strong>
+                <p>{meta}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="tool-breakdown">
+            <h2>关键比例</h2>
+            {[
+              ['晶圆面积利用率', utilizationPct],
+              ['良率估算', yieldPct],
+              ['边缘损失 / 理论上限', result.idealAreaDies > 0 ? (result.edgeLossDies / result.idealAreaDies) * 100 : 0],
+              ['切割道开销 / 裸芯片面积', result.bareDieAreaMm2 > 0 ? (result.streetOverheadMm2 / result.bareDieAreaMm2) * 100 : 0],
+            ].map(([label, pct]) => (
+              <div className="tool-bar-row" key={label}>
+                <span>{label}</span>
+                <div className="tool-bar-track"><div style={{ width: `${Math.max(0, Math.min(100, pct))}%` }} /></div>
+                <em>{formatNumber(pct, 1)}%</em>
+              </div>
+            ))}
+          </div>
+
+          <div className="tool-formula">
+            <div>
+              <span className="status-pill">说明</span>
+              <p>晶圆芯片总数主要回答“一片晶圆几何上能放多少颗 die”；良品数量才接近“电性测试后大约有多少颗好 die”。实际量产还会受到 reticle size、scribe test structure、晶圆缺陷分布、edge yield、PCM、binning、测试策略和封装良率影响。</p>
+            </div>
+            <code>
+              {`Effective die width = Die width + Scribe line / 1000
+Effective die height = Die height + Scribe line / 1000
+Usable wafer diameter = Wafer diameter - 2 × Edge exclusion
+Gross DPW ≈ floor(Wafer area / Effective die area - π × Usable wafer diameter / sqrt(2 × Effective die area))
+Poisson yield = exp(-D0 × Bare die area cm²)
+Negative binomial yield = (1 + D0 × Bare die area cm² / α)^(-α)
+Good DPW = floor(Gross DPW × Yield)`}
+            </code>
+          </div>
+
+          <div className="tool-explainer">
+            <h2>参数解释、公式口径与使用边界</h2>
+            <ul>
+              <li><strong>计算目标：</strong>先估算每片晶圆几何上能切出的芯片总数，再根据缺陷密度估算可用良品数，适合早期成本、MPW 与 wafer start 讨论。</li>
+              <li><strong>芯片宽度 / 高度：</strong>芯片裸片尺寸，通常来自 floorplan、GDS 版图或 foundry 报价所用 die size，不含切割道。</li>
+              <li><strong>切割道 Scribe line：</strong>die 与 die 之间的划片道，可能包含对准标记、PCM、工艺监控结构和锯切余量；切割道越宽，有效 pitch 越大，可切芯片数量越少。</li>
+              <li><strong>边缘排除 Edge exclusion：</strong>晶圆边缘保留区，边缘区域因工艺均匀性、夹持、污染和切割限制通常不能完全利用；数值越大，可用晶圆直径越小。</li>
+              <li><strong>晶圆芯片总数：</strong>几何排布估算值，不等于最终可销售芯片数量；它没有考虑缺陷、测试 binning、封装损耗和客户筛选规则。</li>
+              <li><strong>D0 缺陷密度：</strong>单位为每平方厘米缺陷数。die 越大，同样缺陷密度下良率越低。</li>
+              <li><strong>Poisson 模型：</strong>假设缺陷随机独立分布，简单但可能偏保守或偏理想。</li>
+              <li><strong>Negative Binomial 模型：</strong>允许缺陷聚集，更常用于工程估算；α 越大越接近 Poisson。</li>
+              <li><strong>Reticle 与 stepper 限制：</strong>超大芯片或特殊拼接设计还要考虑光刻曝光场尺寸、step-and-repeat 排列、shot map 和 partial die 策略。</li>
+              <li><strong>边缘芯片策略：</strong>有些 foundry/产品会保留 partial die 或 edge die 用于监控，有些会完全排除；本工具按保守几何修正估算。</li>
+              <li><strong>量产复核：</strong>最终 DPW 需要用 foundry 的 die stepping、reticle 限制、scribe 规则、edge die 策略、真实 wafer map 和测试数据复核。</li>
+            </ul>
+          </div>
+        </section>
+      </section>
+    </main>
+  );
+}
+
+function BondingDiagramTool() {
+  const [preset, setPreset] = useState('qfn48');
+  const [values, setValues] = useState(bondingDefaultValues);
+  const [netlist, setNetlist] = useState(bondingSampleNetlist);
+  const parsedNetlist = useMemo(() => parseBondingNetlist(netlist, values.packagePins), [netlist, values.packagePins]);
+  const diagram = useMemo(() => makeBondingGeometry(values, parsedNetlist.rows), [values, parsedNetlist.rows]);
+
+  const updateValue = (key, nextValue) => {
+    setPreset('custom');
+    setValues((current) => ({ ...current, [key]: nextValue }));
+  };
+
+  const applyPreset = (nextPreset) => {
+    setPreset(nextPreset);
+    if (bondingPackagePresets[nextPreset]) {
+      setValues(bondingPackagePresets[nextPreset]);
+    }
+  };
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      setNetlist(String(reader.result || ''));
+    };
+    reader.readAsText(file);
+  };
+
+  const downloadTemplate = () => {
+    const blob = new Blob([bondingSampleNetlist], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'bonding-netlist-template.csv';
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <main className="app-shell tools-shell" style={{ '--bg-image': `url(${backgroundUrl})` }}>
+      <header className="library-hero tools-hero" style={{ '--library-accent': '#8bffcf', '--library-accent-rgb': '139 255 207' }}>
+        <a className="back-button" href="#/tools">
+          <ArrowLeft size={18} aria-hidden="true" />
+          返回工具目录
+        </a>
+        <div className="library-hero-copy">
+          <p className="eyebrow">ONLINE TOOL</p>
+          <h1>键合图生成器</h1>
+          <p>用于封装早期沟通的 QFN bonding diagram 草图工具。选择封装尺寸、输入 die 尺寸和 pin-to-pad netlist 后，生成芯片 pad 到封装 pin 的键合连线示意。</p>
+        </div>
+        <div className="library-hero-mark" aria-hidden="true">
+          <Workflow size={58} strokeWidth={1.4} />
+        </div>
+      </header>
+
+      <section className="tool-layout bonding-tool-layout" aria-label="键合图生成器">
+        <form className="tool-panel tool-inputs" onSubmit={(event) => event.preventDefault()}>
+          <div className="tool-panel-head">
+            <h2>封装与 netlist</h2>
+            <p>当前先支持 QFN 类四边封装示意图。实际工程交付前仍需用封装厂模板、bonding rule、pad opening、lead frame 与 DRC 规则复核。</p>
+          </div>
+
+          <div className="tool-field-grid">
+            <label className="tool-field">
+              <span>封装预设</span>
+              <select value={preset} onChange={(event) => applyPreset(event.target.value)}>
+                <option value="custom">自定义</option>
+                {Object.entries(bondingPackagePresets).map(([key, presetValue]) => (
+                  <option key={key} value={key}>{presetValue.label}</option>
+                ))}
+              </select>
+            </label>
+            <label className="tool-field">
+              <span>Package pins</span>
+              <input
+                type="number"
+                min="4"
+                step="4"
+                value={values.packagePins}
+                onChange={(event) => updateValue('packagePins', event.target.value)}
+              />
+              <em>建议输入 4 的倍数，便于四边均匀分配。</em>
+            </label>
+          </div>
+
+          <div className="tool-field-grid tool-field-grid-three">
+            {[
+              ['packageWidthMm', '封装宽度 (mm)', '0.1', 'QFN body 的 X 方向尺寸。'],
+              ['packageHeightMm', '封装高度 (mm)', '0.1', 'QFN body 的 Y 方向尺寸。'],
+              ['dieWidthUm', 'Die 宽度 (µm)', '10', '芯片裸片 X 方向尺寸。'],
+              ['dieHeightUm', 'Die 高度 (µm)', '10', '芯片裸片 Y 方向尺寸。'],
+            ].map(([key, label, step, hint]) => (
+              <label className="tool-field" key={key}>
+                <span>{label}</span>
+                <input
+                  type="number"
+                  min="0"
+                  step={step}
+                  value={values[key]}
+                  onChange={(event) => updateValue(key, event.target.value)}
+                />
+                <em>{hint}</em>
+              </label>
+            ))}
+          </div>
+
+          <label className="tool-field bonding-netlist-field">
+            <span>Netlist CSV</span>
+            <textarea
+              value={netlist}
+              onChange={(event) => setNetlist(event.target.value)}
+              spellCheck="false"
+              placeholder="pin,pad,net,side"
+            />
+            <em>支持列名 pin,pad,net,side。side 可填 top/right/bottom/left；不填时按 package pin 编号自动推断。</em>
+          </label>
+
+          <div className="bonding-file-row">
+            <label className="tool-secondary bonding-upload-button">
+              上传 CSV / TXT
+              <input type="file" accept=".csv,.txt" onChange={handleFileUpload} />
+            </label>
+            <button type="button" className="tool-secondary" onClick={() => setNetlist(bondingSampleNetlist)}>
+              载入示例
+            </button>
+            <button type="button" className="tool-secondary" onClick={downloadTemplate}>
+              下载模板
+            </button>
+          </div>
+
+          <p className="tool-note">Netlist 是封装图的核心输入：每一行代表一根 bond wire，从 package pin 连接到 die pad，并带上网络名称。VDD/VSS/GND 会自动用不同颜色区分。</p>
+        </form>
+
+        <section className="tool-panel tool-results bonding-diagram-panel">
+          <div className="tool-score-card">
+            <span>Bonding Connections</span>
+            <strong>{diagram.bonds.length}</strong>
+            <p>当前封装 {values.packagePins} pin，已连接 {diagram.bonds.length} 条键合线，die/package 面积比例约 {formatNumber(diagram.dieToPackageRatio * 100, 1)}%。</p>
+          </div>
+
+          <div className="bonding-svg-shell" aria-label="键合图 SVG 示意">
+            <svg className="bonding-diagram-svg" viewBox="0 0 720 720" role="img" aria-labelledby="bonding-diagram-title">
+              <title id="bonding-diagram-title">QFN bonding diagram preview</title>
+              <defs>
+                <linearGradient id="bondingPackageStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#62d6ff" />
+                  <stop offset="45%" stopColor="#ffffff" />
+                  <stop offset="100%" stopColor="#9b7cff" />
+                </linearGradient>
+                <radialGradient id="bondingDieFill" cx="50%" cy="45%" r="65%">
+                  <stop offset="0%" stopColor="rgba(139,255,207,0.22)" />
+                  <stop offset="100%" stopColor="rgba(5,20,38,0.9)" />
+                </radialGradient>
+                <filter id="bondingGlow">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+
+              <rect
+                className="bonding-package"
+                x={diagram.packageRect.x}
+                y={diagram.packageRect.y}
+                width={diagram.packageRect.w}
+                height={diagram.packageRect.h}
+                rx="16"
+              />
+              <rect
+                className="bonding-exposed-pad"
+                x="272"
+                y="272"
+                width="176"
+                height="176"
+                rx="12"
+              />
+              <rect
+                className="bonding-die"
+                x={diagram.dieRect.x}
+                y={diagram.dieRect.y}
+                width={diagram.dieRect.w}
+                height={diagram.dieRect.h}
+                rx="10"
+              />
+
+              {diagram.pins.map((pinPoint) => (
+                <g key={pinPoint.pin} className={diagram.activePins.has(pinPoint.pin) ? 'bonding-pin active' : 'bonding-pin'}>
+                  <circle cx={pinPoint.x} cy={pinPoint.y} r={diagram.activePins.has(pinPoint.pin) ? 5.5 : 3.2} />
+                  {(pinPoint.pin === 1 || pinPoint.pin % 8 === 0) && (
+                    <text x={pinPoint.x} y={pinPoint.y - 10} textAnchor="middle">{pinPoint.pin}</text>
+                  )}
+                </g>
+              ))}
+
+              {diagram.bonds.map((bond) => {
+                const midX = (bond.packagePoint.x + bond.diePoint.x) / 2;
+                const midY = (bond.packagePoint.y + bond.diePoint.y) / 2;
+                return (
+                  <g key={bond.id} className={`bonding-wire-group ${bond.netType}`}>
+                    <path
+                      className="bonding-wire"
+                      d={`M ${bond.packagePoint.x} ${bond.packagePoint.y} Q ${midX} ${midY - 18} ${bond.diePoint.x} ${bond.diePoint.y}`}
+                    />
+                    <circle className="bonding-pad" cx={bond.diePoint.x} cy={bond.diePoint.y} r="5" />
+                  </g>
+                );
+              })}
+
+              {diagram.bonds.slice(0, 18).map((bond) => (
+                <text
+                  key={`${bond.id}-label`}
+                  className="bonding-net-label"
+                  x={bond.diePoint.x}
+                  y={bond.diePoint.y - 9}
+                  textAnchor="middle"
+                >
+                  {bond.net}
+                </text>
+              ))}
+            </svg>
+          </div>
+
+          <div className="bonding-legend">
+            <span><i className="signal" />Signal</span>
+            <span><i className="power" />Power</span>
+            <span><i className="ground" />Ground</span>
+            <span>平均线长: {formatNumber(diagram.averageWireLength, 1)} px</span>
+          </div>
+
+          {parsedNetlist.warnings.length > 0 && (
+            <div className="bonding-warning-list" role="status">
+              {parsedNetlist.warnings.map((warning) => (
+                <p key={warning}>{warning}</p>
+              ))}
+            </div>
+          )}
+
+          <div className="tool-metric-grid">
+            {[
+              ['封装尺寸', `${values.packageWidthMm} × ${values.packageHeightMm} mm`, 'QFN body 的外形尺寸。'],
+              ['Die 尺寸', `${values.dieWidthUm} × ${values.dieHeightUm} µm`, '用于估算 die 在封装中心的相对大小。'],
+              ['未连接 pin', Math.max(0, diagram.packagePins - diagram.bonds.length), '没有出现在 netlist 中的 package pin。'],
+              ['电源/地线数量', diagram.bonds.filter((bond) => bond.netType !== 'signal').length, 'VDD/VSS/GND/PWR 会被识别为供电相关网络。'],
+              ['最大线长', `${formatNumber(Math.max(0, ...diagram.bonds.map((bond) => bond.length)), 1)} px`, '示意图中的相对长度，用于观察长线风险。'],
+              ['连接密度', `${formatNumber((diagram.bonds.length / Math.max(1, diagram.packagePins)) * 100, 1)}%`, '已连接 pin 数 / package pin 总数。'],
+            ].map(([label, value, meta]) => (
+              <div className="tool-metric" key={label}>
+                <span>{label}</span>
+                <strong>{value}</strong>
+                <p>{meta}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="tool-explainer">
+            <h2>说明、输入格式与工程边界</h2>
+            <ul>
+              <li><strong>工具用途：</strong>生成早期 bonding diagram 草图，帮助芯片设计、封装设计和测试团队对齐 package pin、die pad 与网络连接关系。</li>
+              <li><strong>封装类型：</strong>当前演示稿按 QFN 四边引脚封装处理，适合 QFN/DFN 类封装的概念图。BGA、WLCSP、QFP、SIP 等封装后续可扩展独立模板。</li>
+              <li><strong>Die 尺寸：</strong>输入裸片宽高后，图中 die 会按 package 尺寸比例缩放。真实封装还需要考虑 die attach pad、die offset、keepout 和 wire sweep。</li>
+              <li><strong>Netlist 格式：</strong>推荐 CSV 表头为 pin,pad,net,side。pin 是封装引脚号，pad 是芯片 pad 名称，net 是网络名，side 是 pad 所在边。</li>
+              <li><strong>自动边推断：</strong>side 留空时，工具会按 pin 编号顺序自动分配 top/right/bottom/left，便于快速生成草图，但正式设计应使用真实 pad ring 坐标。</li>
+              <li><strong>颜色规则：</strong>普通信号为青绿色，VDD/PWR 类电源为金色，VSS/GND 类地线为蓝色，便于快速检查供电网络是否分布均衡。</li>
+              <li><strong>检查重点：</strong>初版图应重点看 pin 是否重复、未连接 pin 是否合理、长线是否过多、电源/地是否分散、相邻敏感信号是否需要调整。</li>
+              <li><strong>不能替代：</strong>本工具不替代封装厂 CAD、bonding rule check、wire loop profile、capillary clearance、mold flow、SI/PI 分析和量产签核文件。</li>
+            </ul>
           </div>
         </section>
       </section>
@@ -2850,6 +3652,14 @@ function App() {
 
   if (routeHash === '#/tools/chip-area-calculator') {
     return <ChipAreaCalculator />;
+  }
+
+  if (routeHash === '#/tools/die-per-wafer-calculator') {
+    return <DiePerWaferCalculator />;
+  }
+
+  if (routeHash === '#/tools/bonding-diagram-tool') {
+    return <BondingDiagramTool />;
   }
 
   if (routeHash === '#/assistant') {
