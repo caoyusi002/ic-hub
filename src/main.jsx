@@ -2935,6 +2935,13 @@ function ResourceLibrary({ onBack, config }) {
   }, [currentSafePage, totalPages]);
   const selectedCategoryLabel =
     activeSecondary !== '全部' ? activeSecondary : activePrimary !== '全部' ? activePrimary : '全部分类';
+  const selectedCategorySummary =
+    activeSecondary !== '全部'
+      ? `${activePrimary} / ${activeSecondary}`
+      : activePrimary !== '全部'
+        ? activePrimary
+        : `全部${resourceName}分类`;
+  const selectedCompanySummary = companyFilter !== '全部' ? companyFilter : '全部公司';
   const getInternalDetailPath = (resource) =>
     detailBasePath ? `#/${detailBasePath}/product/${getResourceSlug(resource)}` : null;
 
@@ -3048,6 +3055,13 @@ function ResourceLibrary({ onBack, config }) {
                 </span>
               </button>
 
+              {!isCategorySectionOpen ? (
+                <div className="tree-collapsed-selection" aria-live="polite">
+                  <span>当前选择</span>
+                  <strong>{selectedCategorySummary}</strong>
+                </div>
+              ) : null}
+
               {isCategorySectionOpen && (
                 <div className="tree-section-body">
                   {taxonomy.map((category) => {
@@ -3106,6 +3120,13 @@ function ResourceLibrary({ onBack, config }) {
                   <em>{isCompanySectionOpen ? '收起' : '展开'}</em>
                 </span>
               </button>
+
+              {!isCompanySectionOpen ? (
+                <div className="tree-collapsed-selection" aria-live="polite">
+                  <span>当前选择</span>
+                  <strong>{selectedCompanySummary}</strong>
+                </div>
+              ) : null}
 
               {isCompanySectionOpen && (
                 <div className="tree-section-body">
