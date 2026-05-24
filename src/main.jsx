@@ -584,6 +584,7 @@ function ResourceLibrary({ onBack, config }) {
   const [toolTypeFilter, setToolTypeFilter] = useState('全部');
   const [supportFilter, setSupportFilter] = useState('全部');
   const [operationModeFilter, setOperationModeFilter] = useState('全部');
+  const [adoptionFilter, setAdoptionFilter] = useState('全部');
   const [isCategorySectionOpen, setIsCategorySectionOpen] = useState(true);
   const [isCompanySectionOpen, setIsCompanySectionOpen] = useState(true);
   const [expandedPrimaryCategories, setExpandedPrimaryCategories] = useState(
@@ -640,6 +641,8 @@ function ResourceLibrary({ onBack, config }) {
       const tags = resource.tags || [];
       const matchesSupport = supportFilter === '全部' || supportValues.includes(supportFilter) || tags.includes(supportFilter);
       const matchesOperationMode = operationModeFilter === '全部' || resource.operationMode === operationModeFilter;
+      const hasAdoptionCases = Boolean(resource.adoptionCases?.length);
+      const matchesAdoption = adoptionFilter === '全部' || hasAdoptionCases;
       const searchable = [
         resource.company,
         resource.tool,
@@ -658,6 +661,14 @@ function ResourceLibrary({ onBack, config }) {
         resource.note,
         resource.sourceUrl,
         companySourceUrls[resource.company],
+        ...(resource.adoptionCases || []).flatMap((caseItem) => [
+          caseItem.company,
+          caseItem.chipType,
+          caseItem.evidenceType,
+          caseItem.accuracy,
+          caseItem.sourceTitle,
+          caseItem.note,
+        ]),
         ...supportValues,
         ...(resource.supportAreas || []),
         ...tags,
@@ -672,10 +683,11 @@ function ResourceLibrary({ onBack, config }) {
         matchesToolType &&
         matchesSupport &&
         matchesOperationMode &&
+        matchesAdoption &&
         (!keyword || searchable.includes(keyword))
       );
     });
-  }, [activePrimary, activeSecondary, companyFilter, operationModeFilter, query, regionFilter, resources, stageFilter, supportFilter, supportFilterField, toolTypeFilter]);
+  }, [activePrimary, activeSecondary, adoptionFilter, companyFilter, operationModeFilter, query, regionFilter, resources, stageFilter, supportFilter, supportFilterField, toolTypeFilter]);
 
   const companyCount = new Set(resources.map((resource) => resource.company)).size;
   const secondaryCategoryCount = taxonomy.reduce((count, category) => count + category.items.length, 0);
@@ -800,6 +812,7 @@ function ResourceLibrary({ onBack, config }) {
     setToolTypeFilter('全部');
     setSupportFilter('全部');
     setOperationModeFilter('全部');
+    setAdoptionFilter('全部');
     setCurrentPage(1);
     setExpandedPrimaryCategories(new Set(taxonomy.map((category) => category.label)));
   };
@@ -1041,6 +1054,19 @@ function ResourceLibrary({ onBack, config }) {
                     </select>
                   </label>
                 ) : null}
+                <label className="filter-field">
+                  <span>公开案例</span>
+                  <select
+                    value={adoptionFilter}
+                    onChange={(event) => {
+                      setAdoptionFilter(event.target.value);
+                      setCurrentPage(1);
+                    }}
+                  >
+                    <option>全部</option>
+                    <option>有公开案例</option>
+                  </select>
+                </label>
                 <button className="reset-filter" onClick={resetFilters}>
                   <RotateCcw size={16} aria-hidden="true" />
                   重置
@@ -1115,6 +1141,7 @@ function ResourceLibrary({ onBack, config }) {
                 const sourceUrl = getResourceSourceUrl(resource);
                 const isIpResource = isIpDictionaryResource(resource);
                 const resourceDisplayName = getResourceDisplayName(resource);
+                const adoptionCaseCount = resource.adoptionCases?.length || 0;
                 const MainElement = detailPath ? 'a' : 'button';
                 const mainProps = detailPath
                   ? {
@@ -1130,7 +1157,7 @@ function ResourceLibrary({ onBack, config }) {
                 return (
                   <article
                     key={`${resource.company}-${resource.tool}-${resource.secondaryCategory}`}
-                    className="resource-card"
+                    className={adoptionCaseCount > 0 ? 'resource-card has-adoption-cases' : 'resource-card'}
                   >
                     <MainElement className="resource-card-main" {...mainProps}>
                       <div className="resource-card-head">
@@ -1152,6 +1179,9 @@ function ResourceLibrary({ onBack, config }) {
                         <div className="resource-title-block">
                           <p className="resource-company">{isIpResource ? resource.fullName : resource.company}</p>
                           <h2>{resource.tool}</h2>
+                          {adoptionCaseCount > 0 ? (
+                            <span className="public-case-badge">公开案例 {adoptionCaseCount}</span>
+                          ) : null}
                           <div className="resource-chip-row">
                             {getResourceChips(resource).map((chip) => (
                               <span key={chip}>{chip}</span>
@@ -1366,6 +1396,7 @@ function ResourceDetailPage({ config, resource }) {
   const ipMarketSections = resource && isIpDetail ? getIpMarketSections(resource) : [];
   const companyPath = resource && !isFoundryDetail ? `#/company/${getCompanySlug(resource.company)}` : null;
   const productFlow = resource ? getProductFlow(resource) : { steps: [], activeIndex: 0 };
+  const adoptionCases = resource?.adoptionCases || [];
 
   const renderContactPanel = () => (
     <section className="detail-panel product-contact-panel">
@@ -1429,38 +1460,37 @@ function ResourceDetailPage({ config, resource }) {
         ) : (
           <>
             <header className={isIpDetail ? 'product-detail-hero ip-product-hero' : 'product-detail-hero'}>
-              {companyPath ? (
-                <a
-                  className="product-logo-card company-entry-link"
-                  href={companyPath}
-                  aria-label={`查看${resource.company}厂商详情`}
-                >
-                  {visual ? (
-                    <img src={visual} alt={`${resource.company} 图标`} />
-                  ) : (
-                    <span className="resource-visual-fallback">{getCompanyInitials(resource.company)}</span>
-                  )}
-                </a>
-              ) : (
-                <div className="product-logo-card">
-                  {visual ? (
-                    <img src={visual} alt={`${resource.company} 图标`} />
-                  ) : (
-                    <span className="resource-visual-fallback">{getCompanyInitials(resource.company)}</span>
-                  )}
-                </div>
-              )}
+              <div className="product-logo-stack">
+                {companyPath ? (
+                  <a
+                    className="product-logo-card company-entry-link"
+                    href={companyPath}
+                    aria-label={`查看${resource.company}厂商详情`}
+                  >
+                    {visual ? (
+                      <img src={visual} alt={`${resource.company} 图标`} />
+                    ) : (
+                      <span className="resource-visual-fallback">{getCompanyInitials(resource.company)}</span>
+                    )}
+                  </a>
+                ) : (
+                  <div className="product-logo-card">
+                    {visual ? (
+                      <img src={visual} alt={`${resource.company} 图标`} />
+                    ) : (
+                      <span className="resource-visual-fallback">{getCompanyInitials(resource.company)}</span>
+                    )}
+                  </div>
+                )}
+                {companyPath ? (
+                  <span className="company-logo-hint">点击logo进入厂商详细页</span>
+                ) : null}
+              </div>
               <div className="product-detail-title">
                 <p className="eyebrow">
                   {isFoundryDetail ? 'FOUNDRY COMPANY DETAIL' : isIpDetail ? 'IP PRODUCT PROFILE' : `${resourceName} PRODUCT DETAIL`}
                 </p>
-                {companyPath ? (
-                  <a className="resource-company company-name-link" href={companyPath}>
-                    {resource.company}
-                  </a>
-                ) : (
-                  <p className="resource-company">{resource.company}</p>
-                )}
+                <p className="resource-company">{resource.company}</p>
                 <h1>{resource.tool}</h1>
                 <div className="resource-chip-row">
                   {getResourceChips(resource).map((chip) => (
@@ -1593,6 +1623,42 @@ function ResourceDetailPage({ config, resource }) {
                       </section>
                     ))}
                   </div>
+                  {!isFoundryDetail && adoptionCases.length > 0 ? (
+                    <section className="adoption-case-panel" aria-label={`${resource.tool}公开采用案例`}>
+                      <div className="adoption-case-heading">
+                        <p className="eyebrow">PUBLIC ADOPTION</p>
+                        <h2>公开采用案例</h2>
+                      </div>
+                      <div className="adoption-case-list">
+                        {adoptionCases.map((item) => (
+                          <article className="adoption-case-card" key={`${item.company}-${item.sourceTitle}`}>
+                            <div className="adoption-case-title">
+                              <strong>{item.company}</strong>
+                              <span>{item.accuracy}</span>
+                            </div>
+                            <dl className="adoption-case-meta">
+                              <div>
+                                <dt>芯片类型</dt>
+                                <dd>{item.chipType || '未公开披露'}</dd>
+                              </div>
+                              <div>
+                                <dt>证据类型</dt>
+                                <dd>{item.evidenceType}</dd>
+                              </div>
+                              <div>
+                                <dt>公开时间</dt>
+                                <dd>{item.publishedAt}</dd>
+                              </div>
+                            </dl>
+                            <p>{item.note}</p>
+                            <a className="source-link adoption-source-link" href={item.sourceUrl} target="_blank" rel="noreferrer">
+                              查看出处
+                            </a>
+                          </article>
+                        ))}
+                      </div>
+                    </section>
+                  ) : null}
                   {isFoundryDetail ? (
                     <>
                       <section className="foundry-node-panel" aria-label={`${resource.tool}制程节点`}>

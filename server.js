@@ -7,6 +7,14 @@ dotenv.config({ quiet: true });
 
 const app = express();
 const port = Number(process.env.PORT) || 5177;
+const hmrPort = Number(process.env.HMR_PORT) || 24678 + Math.max(0, port - 5177);
+const hmrConfig = process.env.HMR_PORT
+  ? {
+      host: '127.0.0.1',
+      port: hmrPort,
+      clientPort: hmrPort,
+    }
+  : false;
 const isProduction = process.env.NODE_ENV === 'production';
 
 const systemPrompt = '你是 IC 产业问答助手，服务于集成电路产业库 demo。当前阶段只提供通用问答和页面导航建议，不声称已接入产业库数据库。回答使用中文，简洁、专业、适合产业研究和产品调研场景。';
@@ -90,7 +98,7 @@ async function start() {
       server: {
         host: '127.0.0.1',
         middlewareMode: true,
-        hmr: false,
+        hmr: hmrConfig,
       },
       appType: 'spa',
     });
@@ -99,6 +107,9 @@ async function start() {
 
   app.listen(port, '127.0.0.1', () => {
     console.log(`IC Hub server running at http://127.0.0.1:${port}/`);
+    if (!isProduction && hmrConfig) {
+      console.log(`Vite HMR WebSocket running on ws://127.0.0.1:${hmrPort}/`);
+    }
   });
 }
 
