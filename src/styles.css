@@ -3160,6 +3160,10 @@ button {
   outline: none;
 }
 
+.resource-card.has-adoption-cases {
+  border-color: rgb(var(--library-accent-rgb) / 0.62);
+}
+
 .resource-card-head {
   display: grid;
   grid-template-columns: 104px minmax(0, 1fr);
@@ -3222,6 +3226,25 @@ button {
   color: #ffffff;
   font-size: 1.02rem;
   line-height: 1.2;
+}
+
+.public-case-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 7px;
+  border: 1px solid rgba(255, 214, 116, 0.52);
+  border-radius: 999px;
+  color: #ffe3a3;
+  background: rgba(121, 82, 18, 0.28);
+  padding: 3px 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.68rem;
+  font-weight: 900;
+  box-shadow: 0 0 16px rgba(255, 202, 83, 0.12);
 }
 
 .resource-company,
@@ -3599,6 +3622,19 @@ button {
   max-width: 100%;
   max-height: 60px;
   object-fit: contain;
+}
+
+.product-logo-stack {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+}
+
+.company-logo-hint {
+  color: rgba(234, 247, 255, 0.68);
+  font-size: 0.72rem;
+  line-height: 1.35;
+  text-align: center;
 }
 
 .company-entry-link {
@@ -4006,6 +4042,110 @@ button {
 .detail-section p {
   margin: 8px 0 0;
   font-size: 0.9rem;
+}
+
+.adoption-case-panel {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+  border: 1px solid rgb(var(--library-accent-rgb) / 0.18);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgb(var(--library-accent-rgb) / 0.1), rgba(4, 18, 38, 0.46)),
+    rgba(2, 20, 35, 0.5);
+  padding: 18px;
+}
+
+.adoption-case-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.adoption-case-heading h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.08rem;
+}
+
+.adoption-case-list {
+  display: grid;
+  gap: 12px;
+}
+
+.adoption-case-card {
+  border: 1px solid rgb(var(--library-accent-rgb) / 0.16);
+  border-radius: 7px;
+  background: rgba(2, 14, 30, 0.54);
+  padding: 15px;
+}
+
+.adoption-case-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.adoption-case-title strong {
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+.adoption-case-title span {
+  border: 1px solid rgb(var(--library-accent-rgb) / 0.32);
+  border-radius: 999px;
+  color: var(--library-accent);
+  background: rgb(var(--library-accent-rgb) / 0.1);
+  padding: 3px 9px;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.adoption-case-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+  margin: 13px 0 0;
+}
+
+.adoption-case-meta div {
+  min-width: 0;
+  border: 1px solid rgb(var(--library-accent-rgb) / 0.12);
+  border-radius: 6px;
+  background: rgba(3, 25, 42, 0.48);
+  padding: 9px 10px;
+}
+
+.adoption-case-meta dt,
+.adoption-case-meta dd {
+  margin: 0;
+}
+
+.adoption-case-meta dt {
+  color: rgb(var(--library-accent-rgb) / 0.72);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.adoption-case-meta dd {
+  margin-top: 4px;
+  color: rgba(234, 247, 255, 0.9);
+  overflow-wrap: anywhere;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.adoption-case-card p {
+  margin: 12px 0 0;
+  color: rgba(234, 247, 255, 0.74);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.adoption-source-link {
+  margin-top: 12px;
 }
 
 .foundry-node-panel {
@@ -4459,8 +4599,16 @@ button {
     justify-content: flex-start;
   }
 
+  .adoption-case-meta {
+    grid-template-columns: 1fr;
+  }
+
   .product-logo-card {
     width: min(180px, 100%);
+  }
+
+  .product-logo-stack {
+    justify-items: start;
   }
 }
 
