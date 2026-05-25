@@ -30,6 +30,13 @@ import waferDieCalculatorUrl from './assets/wafer-die-calculator.webp';
 import { companyDescriptions, companySourceUrls, companyVisuals } from './data/company.js';
 import { edaResources, edaTaxonomy } from './data/eda.js';
 import { foundryProcessNodeOptions, foundryResources } from './data/foundry.js';
+import {
+  getIndustryNewsById,
+  getIndustryNewsDirectory,
+  industryNews,
+  industryNewsCategories,
+  industryNewsSortOptions,
+} from './data/news.js';
 import { ipResources, ipTaxonomy } from './data/ip.js';
 import { chinaSemiconductorWebReport, getReportById, reportCategories, researchReports } from './data/reports.js';
 import { chipAreaDefaultValues, chipAreaPresets, chipProfiles, onlineTools, processLibrary } from './data/tools.js';
@@ -87,6 +94,13 @@ const lines = [
 ];
 
 const topNavItems = ['行业新闻', '研究报告', '技术文档', '产品试用', '厂商资源库', '在线工具'];
+
+const getHomeNavHref = (item) => {
+  if (item === '行业新闻') return '#/news';
+  if (item === '研究报告') return '#/reports';
+  if (item === '在线工具') return '#/tools';
+  return '#';
+};
 
 const RESULTS_PAGE_SIZE = 8;
 
@@ -2251,6 +2265,274 @@ const assistantQuickQuestions = [
   '芯片设计流程一般包括哪些阶段？',
 ];
 
+const formatNewsDate = (date) =>
+  new Intl.DateTimeFormat('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(new Date(`${date}T00:00:00`));
+
+function NewsVisual({ news }) {
+  if (news.imageUrl) {
+    return (
+      <img
+        src={news.imageUrl}
+        alt={news.imageAlt}
+        loading="lazy"
+        referrerPolicy="no-referrer"
+      />
+    );
+  }
+
+  return (
+    <div className={`news-visual-abstract ${news.visual || 'chip'}`} style={{ '--news-bg': `url(${backgroundUrl})` }}>
+      <span className="news-visual-grid" aria-hidden="true" />
+      {news.brandLabels ? (
+        <span className="news-brand-pair" aria-label={news.imageAlt}>
+          {news.brandLabels.map((label) => (
+            <strong key={label}>{label}</strong>
+          ))}
+        </span>
+      ) : (
+        <span className="news-chip-symbol" aria-label={news.imageAlt}>
+          <Microchip size={44} strokeWidth={1.35} />
+        </span>
+      )}
+    </div>
+  );
+}
+
+function IndustryNewsSection() {
+  return (
+    <section className="industry-news-section" id="industry-news" aria-labelledby="industry-news-title">
+      <div className="industry-news-head">
+        <div>
+          <p className="eyebrow">INDUSTRY NEWS</p>
+          <h2 id="industry-news-title">行业新闻</h2>
+        </div>
+        <div>
+          <p>2026 年 5 月 1 日至 5 月 24 日的集成电路产业动态，先以静态内容预览，后续可持续更新。</p>
+          <a className="industry-news-more" href="#/news">
+            进入新闻目录
+            <ChevronRight size={15} strokeWidth={1.9} aria-hidden="true" />
+          </a>
+        </div>
+      </div>
+
+      <div className="industry-news-grid">
+        {industryNews.map((news) => (
+          <a className="industry-news-card" href={news.route} key={news.id}>
+            <div className="industry-news-image">
+              <NewsVisual news={news} />
+              <span className="industry-news-source">{news.categoryLabel}</span>
+            </div>
+            <div className="industry-news-body">
+              <div className="industry-news-meta">
+                <time dateTime={news.date}>{formatNewsDate(news.date)}</time>
+                <span>{news.tags[0]}</span>
+              </div>
+              <h3>{news.title}</h3>
+              <p>{news.summary}</p>
+              <div className="industry-news-tags" aria-label="新闻标签">
+                {news.tags.map((tag) => (
+                  <span key={tag}>{tag}</span>
+                ))}
+              </div>
+              <div className="industry-news-footer">
+                <small>{news.imageCredit}</small>
+                <span>
+                  阅读详情
+                  <ChevronRight size={15} strokeWidth={1.9} aria-hidden="true" />
+                </span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function IndustryNewsDirectoryPage() {
+  const [category, setCategory] = useState('all');
+  const [sort, setSort] = useState('date-desc');
+  const [searchTerm, setSearchTerm] = useState('');
+  const filteredNews = useMemo(
+    () => getIndustryNewsDirectory({ category, sort, search: searchTerm }),
+    [category, sort, searchTerm],
+  );
+
+  return (
+    <main className="app-shell news-page" style={{ '--bg-image': `url(${backgroundUrl})` }}>
+      <section className="news-directory">
+        <button className="back-button" type="button" onClick={() => { window.location.hash = ''; }}>
+          <ArrowLeft size={18} aria-hidden="true" />
+          返回首页
+        </button>
+
+        <div className="news-directory-hero">
+          <div>
+            <p className="eyebrow">INDUSTRY NEWS DIRECTORY</p>
+            <h1>行业新闻目录</h1>
+            <p>按日期、浏览量和产业分类筛选近期集成电路新闻，点击条目进入详细解读页面。</p>
+          </div>
+          <div className="news-directory-count">
+            <strong>{filteredNews.length}</strong>
+            <span>条结果</span>
+          </div>
+        </div>
+
+        <div className="news-filter-panel" aria-label="行业新闻筛选">
+          <label className="news-search-field">
+            <Search size={16} strokeWidth={1.9} aria-hidden="true" />
+            <input
+              type="search"
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              placeholder="搜索标题、来源、标签"
+            />
+          </label>
+          <label className="news-sort-field">
+            <span>排序</span>
+            <select value={sort} onChange={(event) => setSort(event.target.value)}>
+              {industryNewsSortOptions.map((option) => (
+                <option key={option.id} value={option.id}>{option.label}</option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        <div className="news-category-tabs" aria-label="新闻分类">
+          {industryNewsCategories.map((item) => (
+            <button
+              className={category === item.id ? 'active' : ''}
+              key={item.id}
+              type="button"
+              onClick={() => setCategory(item.id)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="news-directory-list">
+          {filteredNews.map((news) => (
+            <a className="news-directory-item" href={news.route} key={news.id}>
+              <div className="news-directory-copy">
+                <div className="news-directory-meta">
+                  <time dateTime={news.date}>{formatNewsDate(news.date)}</time>
+                  <span>{news.categoryLabel}</span>
+                  <span>{news.views.toLocaleString('zh-CN')} 浏览</span>
+                </div>
+                <h2>{news.title}</h2>
+                <p>{news.summary}</p>
+                <div className="industry-news-tags" aria-label="新闻标签">
+                  {news.tags.map((tag) => (
+                    <span key={tag}>{tag}</span>
+                  ))}
+                </div>
+              </div>
+              <ChevronRight className="news-directory-arrow" size={20} strokeWidth={1.8} aria-hidden="true" />
+            </a>
+          ))}
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function NewsDetailPage({ news }) {
+  if (!news) {
+    return (
+      <main className="app-shell news-page" style={{ '--bg-image': `url(${backgroundUrl})` }}>
+        <section className="resource-placeholder">
+          <button className="back-button" type="button" onClick={() => { window.location.hash = '#/news'; }}>
+            <ArrowLeft size={18} aria-hidden="true" />
+            返回新闻目录
+          </button>
+          <p className="eyebrow">NEWS DETAIL</p>
+          <h1>未找到新闻</h1>
+          <p className="placeholder-copy">该新闻条目不存在或已被移除。</p>
+        </section>
+      </main>
+    );
+  }
+
+  const relatedNews = industryNews
+    .filter((item) => item.id !== news.id && (item.category === news.category || item.tags.some((tag) => news.tags.includes(tag))))
+    .slice(0, 3);
+  const relatedNewsIds = new Set(relatedNews.map((item) => item.id));
+  const fallbackNews = [
+    ...relatedNews,
+    ...industryNews.filter((item) => item.id !== news.id && !relatedNewsIds.has(item.id)),
+  ].slice(0, 3);
+
+  return (
+    <main className="app-shell news-page" style={{ '--bg-image': `url(${backgroundUrl})` }}>
+      <article className="news-detail">
+        <button className="back-button" type="button" onClick={() => { window.location.hash = '#/news'; }}>
+          <ArrowLeft size={18} aria-hidden="true" />
+          返回新闻目录
+        </button>
+
+        <header className="news-detail-hero">
+          <div className="news-detail-copy">
+            <p className="eyebrow">INDUSTRY NEWS DETAIL</p>
+            <div className="news-directory-meta">
+              <time dateTime={news.date}>{formatNewsDate(news.date)}</time>
+              <span>{news.categoryLabel}</span>
+              <span>{news.views.toLocaleString('zh-CN')} 浏览</span>
+            </div>
+            <h1>{news.title}</h1>
+            <div className="industry-news-tags" aria-label="新闻标签">
+              {news.tags.map((tag) => (
+                <span key={tag}>{tag}</span>
+              ))}
+            </div>
+          </div>
+          <div className="news-detail-visual">
+            <NewsVisual news={news} />
+          </div>
+        </header>
+
+        <div className="news-detail-layout">
+          <div className="news-detail-body">
+            {news.content.map((section) => (
+              <section className="news-detail-section" key={section.heading}>
+                <h2>{section.heading}</h2>
+                {section.paragraphs.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+              </section>
+            ))}
+          </div>
+          <aside className="news-detail-side">
+            <section className="news-side-module">
+              <h2>相关厂商</h2>
+              <div className="news-related-companies">
+                {(news.relatedCompanies || []).map((company) => (
+                  <span key={company}>{company}</span>
+                ))}
+              </div>
+            </section>
+            <section className="news-side-module">
+              <h2>其他新闻</h2>
+              <div className="news-related-list">
+                {fallbackNews.map((item) => (
+                  <a href={item.route} key={item.id}>
+                    <strong>{item.title}</strong>
+                    <span>{formatNewsDate(item.date)} · {item.categoryLabel}</span>
+                  </a>
+                ))}
+              </div>
+            </section>
+          </aside>
+        </div>
+      </article>
+    </main>
+  );
+}
+
 function HomeAssistantEntry() {
   return (
     <button
@@ -3716,6 +3998,16 @@ function App() {
     return <ResearchReportsPage />;
   }
 
+  if (routeHash === '#/news') {
+    return <IndustryNewsDirectoryPage />;
+  }
+
+  const newsRouteMatch = routeHash.match(/^#\/news\/([^/]+)$/);
+  if (newsRouteMatch) {
+    const [, newsId] = newsRouteMatch;
+    return <NewsDetailPage news={getIndustryNewsById(decodeURIComponent(newsId))} />;
+  }
+
   if (routeHash === '#/tools/chip-area-calculator') {
     return <ChipAreaCalculator />;
   }
@@ -3811,7 +4103,7 @@ function App() {
         </a>
         <nav className="home-nav-links" aria-label="产业库导航">
           {topNavItems.map((item) => (
-            <a key={item} href={item === '在线工具' ? '#/tools' : item === '研究报告' ? '#/reports' : '#'}>
+            <a key={item} href={getHomeNavHref(item)}>
               {item}
             </a>
           ))}
@@ -3947,6 +4239,7 @@ function App() {
           <HomeAssistantEntry />
         </div>
       </section>
+      <IndustryNewsSection />
     </main>
   );
 }
