@@ -1,0 +1,70 @@
+export const technicalDocTypes = [
+  '全部',
+  '用户手册',
+  '技术前沿',
+  'RISC-V',
+  '产品应用',
+  '快速入门',
+  '设计规范',
+  'Release Notes',
+  'FAQ / Troubleshooting',
+];
+
+export const technicalDocEntries = [
+  {
+    title: 'EDA 工具链快速入门指南',
+    category: 'EDA 工具文档',
+    type: '快速入门',
+    uploadedAt: '2026-05-26',
+    status: '即将上线',
+  },
+  {
+    title: 'IP 集成与接口核验技术前沿',
+    category: 'IP 技术资料',
+    type: '技术前沿',
+    uploadedAt: '2026-05-26',
+    status: '整理中',
+  },
+  {
+    title: 'PDK 工艺规则与验证流程说明',
+    category: 'PDK / 工艺文档',
+    type: '设计规范',
+    uploadedAt: '2026-05-26',
+    status: '整理中',
+  },
+  {
+    title: 'IC 设计方法学用户手册',
+    category: 'IC 设计方法学',
+    type: '用户手册',
+    uploadedAt: '2026-05-26',
+    status: '即将上线',
+  },
+  {
+    title: 'RISC-V SoC 设计资料索引',
+    category: 'IC 设计方法学',
+    type: 'RISC-V',
+    uploadedAt: '2026-05-26',
+    status: '即将上线',
+  },
+  {
+    title: 'EDA 产品版本更新记录模板',
+    category: 'EDA 工具文档',
+    type: 'Release Notes',
+    uploadedAt: '2026-05-26',
+    status: '即将上线',
+  },
+  {
+    title: '芯片产品应用问题排查清单',
+    category: 'IC 设计方法学',
+    type: '产品应用',
+    uploadedAt: '2026-05-26',
+    status: '整理中',
+  },
+  {
+    title: '常见设计导入问题排查清单',
+    category: 'IC 设计方法学',
+    type: 'FAQ / Troubleshooting',
+    uploadedAt: '2026-05-26',
+    status: '整理中',
+  },
+];
