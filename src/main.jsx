@@ -42,6 +42,7 @@ import {
 import { ipResources, ipTaxonomy } from './data/ip.js';
 import { chinaSemiconductorWebReport, getReportById, reportCategories, researchReports } from './data/reports.js';
 import { chipAreaDefaultValues, chipAreaPresets, chipProfiles, onlineTools, processLibrary } from './data/tools.js';
+import { TechnicalDocsPage } from './pages/TechnicalDocsPage.jsx';
 import './styles.css';
 
 const nodes = [
@@ -102,6 +103,7 @@ const getHomeNavHref = (item) => {
   if (item === '行业新闻') return '#/news';
   if (item === '研究报告') return '#/reports';
   if (item === '厂商资源库') return '#/vendors';
+  if (item === '技术文档') return '#/docs';
   if (item === '在线工具') return '#/tools';
   return '#';
 };
@@ -4724,6 +4726,10 @@ function App() {
 
   if (routeHash === '#/reports') {
     return <ResearchReportsPage />;
+  }
+
+  if (routeHash === '#/docs') {
+    return <TechnicalDocsPage />;
   }
 
   if (routeHash === '#/news') {

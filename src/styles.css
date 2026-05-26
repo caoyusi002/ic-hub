@@ -2593,6 +2593,237 @@ button {
   text-align: center;
 }
 
+.docs-shell {
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.docs-page {
+  position: relative;
+  z-index: 1;
+  width: min(1220px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 40px 0 60px;
+}
+
+.docs-hero {
+  display: grid;
+  gap: 20px;
+  padding: 18px 0 8px;
+}
+
+.docs-hero-grid {
+  display: grid;
+  gap: 12px;
+  align-items: start;
+}
+
+.docs-hero h1 {
+  margin: 0;
+  font-size: clamp(2.6rem, 6.5vw, 5.4rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+  background: linear-gradient(115deg, #8bffcf 0%, #ffffff 46%, #62d6ff 78%, #f7fbff 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.docs-hero p:not(.eyebrow),
+.doc-card p,
+.docs-side-panel p {
+  color: rgba(234, 247, 255, 0.72);
+  line-height: 1.7;
+}
+
+.docs-hero p:not(.eyebrow) {
+  max-width: 760px;
+  margin: 16px 0 0;
+}
+
+.doc-card-title-row span {
+  color: rgba(139, 255, 207, 0.82);
+  font-size: 0.74rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.docs-search {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) 150px;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(139, 255, 207, 0.24);
+  border-radius: 8px;
+  background: rgba(3, 12, 28, 0.78);
+  color: #8bffcf;
+  padding: 8px 8px 8px 16px;
+}
+
+.docs-search input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  color: #eefbff;
+  background: transparent;
+  padding: 12px 0;
+  font: inherit;
+}
+
+.docs-search input::placeholder {
+  color: rgba(234, 247, 255, 0.46);
+}
+
+.docs-search button {
+  min-height: 42px;
+  border: 1px solid rgba(139, 255, 207, 0.58);
+  border-radius: 6px;
+  color: #07140f;
+  background: #8bffcf;
+  padding: 0 14px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.docs-notice {
+  margin: -6px 0 0;
+  color: #ffbe60;
+  font-size: 0.86rem;
+}
+
+.doc-card,
+.docs-side-panel {
+  border: 1px solid rgba(98, 214, 255, 0.16);
+  border-radius: 8px;
+  background:
+    linear-gradient(145deg, rgba(8, 24, 46, 0.86), rgba(3, 12, 28, 0.76)),
+    rgba(3, 12, 28, 0.76);
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.22);
+}
+
+.doc-card-mark {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(139, 255, 207, 0.34);
+  border-radius: 8px;
+  color: #8bffcf;
+  background: rgba(2, 9, 21, 0.7);
+}
+
+.doc-card h2,
+.docs-side-panel h2 {
+  margin: 0;
+  color: #f7fcff;
+}
+
+.doc-card p,
+.docs-side-panel p {
+  margin: 0;
+}
+
+.docs-type-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 22px 0 16px;
+}
+
+.docs-type-nav button {
+  min-height: 40px;
+  border: 1px solid rgba(98, 214, 255, 0.24);
+  border-radius: 6px;
+  color: rgba(234, 247, 255, 0.78);
+  background: rgba(5, 20, 38, 0.7);
+  padding: 0 14px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.docs-type-nav button.active {
+  border-color: rgba(139, 255, 207, 0.72);
+  color: #07140f;
+  background: #8bffcf;
+}
+
+.docs-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 18px;
+  align-items: start;
+}
+
+.docs-list,
+.docs-side {
+  display: grid;
+  gap: 14px;
+}
+
+.doc-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 16px;
+  padding: 18px;
+}
+
+.doc-card-title-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: start;
+}
+
+.doc-card h2 {
+  font-size: 1.05rem;
+}
+
+.doc-card p {
+  margin-top: 9px;
+}
+
+.doc-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.doc-card-meta span {
+  border: 1px solid rgba(98, 214, 255, 0.16);
+  border-radius: 999px;
+  color: rgba(234, 247, 255, 0.7);
+  background: rgba(98, 214, 255, 0.08);
+  padding: 6px 10px;
+  font-size: 0.76rem;
+}
+
+.docs-side {
+  position: sticky;
+  top: 18px;
+}
+
+.docs-side-panel {
+  padding: 18px;
+}
+
+.docs-side-panel h2 {
+  font-size: 1rem;
+}
+
+.docs-side-panel p {
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+.docs-contribution {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  color: #8bffcf;
+}
+
 .reports-side {
   position: sticky;
   top: 18px;
@@ -5725,6 +5956,12 @@ button {
 :root[data-theme="day"] .bonding-legend span,
 :root[data-theme="day"] .bonding-warning-list p,
 :root[data-theme="day"] .reports-search,
+:root[data-theme="day"] .docs-search,
+:root[data-theme="day"] .docs-type-nav button,
+:root[data-theme="day"] .doc-card,
+:root[data-theme="day"] .doc-card-mark,
+:root[data-theme="day"] .doc-card-meta span,
+:root[data-theme="day"] .docs-side-panel,
 :root[data-theme="day"] .reports-section-nav button,
 :root[data-theme="day"] .reports-reset,
 :root[data-theme="day"] .reports-side section,
@@ -5815,6 +6052,7 @@ button {
 :root[data-theme="day"] .tool-field select,
 :root[data-theme="day"] .tool-field textarea,
 :root[data-theme="day"] .reports-search input,
+:root[data-theme="day"] .docs-search input,
 :root[data-theme="day"] .search-box input {
   border-color: var(--day-line);
   color: var(--day-ink);
@@ -5822,6 +6060,7 @@ button {
 }
 
 :root[data-theme="day"] .reports-search input::placeholder,
+:root[data-theme="day"] .docs-search input::placeholder,
 :root[data-theme="day"] .search-box input::placeholder {
   color: rgba(24, 48, 71, 0.42);
 }
@@ -5860,6 +6099,7 @@ button {
 
 :root[data-theme="day"] .tool-primary,
 :root[data-theme="day"] .reports-search button,
+:root[data-theme="day"] .docs-search button,
 :root[data-theme="day"] .report-meta button,
 :root[data-theme="day"] .report-unlock-button,
 :root[data-theme="day"] .report-summary-actions button,
@@ -5886,7 +6126,8 @@ button {
 :root[data-theme="day"] .resource-pagination button:focus-visible,
 :root[data-theme="day"] .resource-pagination button.active,
 :root[data-theme="day"] .web-report-toc button:hover,
-:root[data-theme="day"] .web-report-toc button:focus-visible {
+:root[data-theme="day"] .web-report-toc button:focus-visible,
+:root[data-theme="day"] .docs-type-nav button.active {
   border-color: rgb(var(--library-accent-rgb) / 0.48);
   color: #ffffff;
   background: linear-gradient(135deg, #168fbb, #18a9b8);
@@ -6019,7 +6260,9 @@ button {
 :root[data-theme="day"] .tool-bar-row em,
 :root[data-theme="day"] .bonding-legend,
 :root[data-theme="day"] .reports-hero p:not(.eyebrow),
+:root[data-theme="day"] .docs-hero p:not(.eyebrow),
 :root[data-theme="day"] .reports-section-nav button,
+:root[data-theme="day"] .docs-type-nav button,
 :root[data-theme="day"] .reports-reset,
 :root[data-theme="day"] .report-main p,
 :root[data-theme="day"] .report-tags span,
@@ -6029,6 +6272,9 @@ button {
 :root[data-theme="day"] .reports-price-note p,
 :root[data-theme="day"] .my-reports-head p:not(.eyebrow),
 :root[data-theme="day"] .my-report-card p,
+:root[data-theme="day"] .doc-card p,
+:root[data-theme="day"] .docs-side-panel p,
+:root[data-theme="day"] .doc-card-meta span,
 :root[data-theme="day"] .my-report-meta,
 :root[data-theme="day"] .report-modal-panel > p:not(.eyebrow),
 :root[data-theme="day"] .report-detail-hero p,
@@ -6083,6 +6329,8 @@ button {
 :root[data-theme="day"] .tool-wafer-visual figcaption strong,
 :root[data-theme="day"] .tool-score-card strong,
 :root[data-theme="day"] .report-title-row h2,
+:root[data-theme="day"] .doc-card h2,
+:root[data-theme="day"] .docs-side-panel h2,
 :root[data-theme="day"] .report-meta strong,
 :root[data-theme="day"] .reports-side h2,
 :root[data-theme="day"] .reports-rank-list strong,
@@ -6606,11 +6854,14 @@ button {
   .tools-hero,
   .tool-layout,
   .reports-hero-grid,
-  .reports-layout {
+  .reports-layout,
+  .docs-hero-grid,
+  .docs-layout {
     grid-template-columns: 1fr;
   }
 
-  .reports-side {
+  .reports-side,
+  .docs-side {
     position: static;
   }
 
@@ -6728,16 +6979,19 @@ button {
     width: min(100% - 24px, 1180px);
   }
 
-  .reports-page {
+  .reports-page,
+  .docs-page {
     width: min(100% - 24px, 1220px);
     padding: 24px 0 36px;
   }
 
-  .reports-search {
+  .reports-search,
+  .docs-search {
     grid-template-columns: auto minmax(0, 1fr);
   }
 
-  .reports-search button {
+  .reports-search button,
+  .docs-search button {
     grid-column: 1 / -1;
   }
 
@@ -6801,6 +7055,15 @@ button {
   }
 
   .report-title-row {
+    display: grid;
+  }
+
+  .doc-card {
+    grid-template-columns: 1fr;
+    padding: 14px;
+  }
+
+  .doc-card-title-row {
     display: grid;
   }
 

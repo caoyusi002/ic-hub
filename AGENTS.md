@@ -19,6 +19,8 @@
 - IP 企业、IP 产品、IP 分类：优先查看 `src/data/ip.js`。
 - PDK / Foundry / 制程相关资源：优先查看 `src/data/foundry.js`。
 - 研究报告、PDF 报告元数据：优先查看 `src/data/reports.js`。
+- 技术文档类型、文档占位列表、上传日期等数据：优先查看 `src/data/docs.js`。
+- 技术文档二级页面结构与交互：优先查看 `src/pages/TechnicalDocsPage.jsx`。
 - 行业新闻数据、分类、详情正文、相关厂商和新闻配图：优先查看 `src/data/news.js`。
 - 在线工具入口：优先查看 `src/data/tools.js`。
 - 首页三角图、首页文案、首页入口：优先查看首页相关组件或配置文件。
