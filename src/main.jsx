@@ -20,7 +20,9 @@ import {
   RotateCcw,
   Search,
   Send,
+  Moon,
   Sparkles,
+  Sun,
   Trash2,
   Workflow,
   X,
@@ -94,6 +96,7 @@ const lines = [
 ];
 
 const topNavItems = ['行业新闻', '研究报告', '技术文档', '产品试用', '厂商资源库', '在线工具'];
+const THEME_STORAGE_KEY = 'ic-hub-theme';
 
 const getHomeNavHref = (item) => {
   if (item === '行业新闻') return '#/news';
@@ -2620,9 +2623,6 @@ function AssistantPage() {
           返回首页
         </button>
         <div className="assistant-title">
-          <span className="assistant-title-mark" aria-hidden="true">
-            <Microchip size={32} strokeWidth={1.5} />
-          </span>
           <div>
             <p className="eyebrow">IC INDUSTRY ASSISTANT</p>
             <h1>IC问答助手</h1>
@@ -3972,12 +3972,30 @@ function App() {
   const [activeNode, setActiveNode] = useState(null);
   const [selectedNode, setSelectedNode] = useState(null);
   const [routeHash, setRouteHash] = useState(() => window.location.hash);
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem(THEME_STORAGE_KEY) === 'day' ? 'day' : 'night';
+    } catch (_error) {
+      return 'night';
+    }
+  });
+
+  const isDayTheme = theme === 'day';
 
   useEffect(() => {
     const handleHashChange = () => setRouteHash(window.location.hash);
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
+    } catch (_error) {
+      // Theme persistence is optional; the visual state still updates.
+    }
+  }, [theme]);
 
   const currentResource = useMemo(
     () => nodes.find((node) => node.id === selectedNode),
@@ -4109,6 +4127,15 @@ function App() {
           ))}
         </nav>
         <div className="home-nav-actions">
+          <button
+            className="home-theme-toggle"
+            type="button"
+            onClick={() => setTheme(isDayTheme ? 'night' : 'day')}
+            aria-label={isDayTheme ? '切换黑天模式' : '切换白天模式'}
+            title={isDayTheme ? '切换黑天模式' : '切换白天模式'}
+          >
+            {isDayTheme ? <Moon size={16} aria-hidden="true" /> : <Sun size={16} aria-hidden="true" />}
+          </button>
           <a className="home-nav-search" href="#" aria-label="搜索">
             <Search size={16} aria-hidden="true" />
           </a>

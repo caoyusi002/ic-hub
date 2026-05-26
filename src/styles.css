@@ -70,6 +70,7 @@ button {
 .home-nav-brand,
 .home-nav-links a,
 .home-nav-search,
+.home-theme-toggle,
 .home-nav-entry {
   color: rgba(234, 247, 255, 0.84);
   text-decoration: none;
@@ -134,6 +135,8 @@ button {
 .home-nav-links a:focus-visible,
 .home-nav-search:hover,
 .home-nav-search:focus-visible,
+.home-theme-toggle:hover,
+.home-theme-toggle:focus-visible,
 .home-nav-entry:hover,
 .home-nav-entry:focus-visible {
   color: #ffffff;
@@ -153,6 +156,7 @@ button {
 }
 
 .home-nav-search,
+.home-theme-toggle,
 .home-nav-entry {
   display: inline-flex;
   align-items: center;
@@ -163,8 +167,14 @@ button {
   background: rgba(93, 157, 255, 0.08);
 }
 
-.home-nav-search {
+.home-nav-search,
+.home-theme-toggle {
   width: 34px;
+}
+
+.home-theme-toggle {
+  padding: 0;
+  cursor: pointer;
 }
 
 .home-nav-entry {
@@ -967,10 +977,15 @@ button {
   z-index: 1;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 18px;
   width: min(1180px, 100%);
   margin: 0 auto;
+}
+
+.assistant-hero .back-button {
+  position: static;
+  flex: 0 0 auto;
 }
 
 .assistant-title {
@@ -5002,6 +5017,1052 @@ button {
   cursor: pointer;
 }
 
+:root[data-theme="day"] {
+  color: #183047;
+  background: #f5fbff;
+  --library-accent: #168fbb;
+  --library-accent-rgb: 22 143 187;
+  --library-contrast: #f7fcff;
+  --day-ink: #12324c;
+  --day-muted: rgba(24, 48, 71, 0.68);
+  --day-soft: rgba(24, 48, 71, 0.52);
+  --day-card: rgba(255, 255, 255, 0.82);
+  --day-card-strong: rgba(255, 255, 255, 0.92);
+  --day-line: rgba(31, 132, 175, 0.2);
+  --day-line-strong: rgba(31, 132, 175, 0.38);
+  --day-chip: rgba(222, 242, 249, 0.72);
+  --day-shadow: 0 18px 46px rgba(54, 111, 142, 0.12);
+}
+
+:root[data-theme="day"] .app-shell {
+  background-color: #f7fbff;
+  background-image:
+    radial-gradient(circle at 79% 39%, rgba(95, 191, 227, 0.32) 0 2px, transparent 3px),
+    radial-gradient(circle at 52% 68%, rgba(57, 126, 178, 0.2) 0 2px, transparent 3px),
+    radial-gradient(circle at 81% 48%, rgba(40, 186, 198, 0.22) 0 3px, transparent 4px),
+    linear-gradient(120deg, transparent 0 44%, rgba(102, 191, 230, 0.14) 45%, transparent 46% 58%, rgba(34, 152, 180, 0.12) 59%, transparent 60%),
+    linear-gradient(150deg, rgba(255, 255, 255, 0.94) 0%, rgba(242, 249, 253, 0.9) 42%, rgba(224, 239, 247, 0.92) 100%);
+}
+
+:root[data-theme="day"] .app-shell::before,
+:root[data-theme="day"] .app-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+:root[data-theme="day"] .app-shell::before {
+  background:
+    linear-gradient(90deg, transparent 0 60%, rgba(92, 175, 220, 0.18) 60.2%, transparent 60.6%),
+    linear-gradient(0deg, transparent 0 47%, rgba(92, 175, 220, 0.14) 47.2%, transparent 47.55%),
+    repeating-linear-gradient(135deg, transparent 0 72px, rgba(58, 144, 186, 0.09) 73px, transparent 75px);
+  opacity: 0.72;
+  mask-image: linear-gradient(90deg, transparent 0%, #000 34%, #000 100%);
+}
+
+:root[data-theme="day"] .app-shell::after {
+  background:
+    radial-gradient(ellipse at 80% 42%, rgba(89, 172, 211, 0.22), transparent 22%),
+    radial-gradient(ellipse at 8% 24%, rgba(255, 255, 255, 0.96), transparent 36%);
+}
+
+:root[data-theme="day"] .app-shell > :not(.home-top-nav) {
+  position: relative;
+  z-index: 1;
+}
+
+:root[data-theme="day"] .home-top-nav {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.88), rgba(232, 244, 250, 0.72)),
+    rgba(255, 255, 255, 0.68);
+  box-shadow: 0 18px 52px rgba(52, 108, 140, 0.14);
+}
+
+:root[data-theme="day"] .home-nav-brand,
+:root[data-theme="day"] .home-nav-links a,
+:root[data-theme="day"] .home-nav-search,
+:root[data-theme="day"] .home-theme-toggle,
+:root[data-theme="day"] .home-nav-entry {
+  color: rgba(28, 58, 82, 0.84);
+}
+
+:root[data-theme="day"] .home-nav-brand span,
+:root[data-theme="day"] .home-nav-entry {
+  color: #087b95;
+}
+
+:root[data-theme="day"] .home-nav-brand strong,
+:root[data-theme="day"] .home-nav-links a:hover,
+:root[data-theme="day"] .home-nav-links a:focus-visible,
+:root[data-theme="day"] .home-nav-search:hover,
+:root[data-theme="day"] .home-nav-search:focus-visible,
+:root[data-theme="day"] .home-theme-toggle:hover,
+:root[data-theme="day"] .home-theme-toggle:focus-visible,
+:root[data-theme="day"] .home-nav-entry:hover,
+:root[data-theme="day"] .home-nav-entry:focus-visible {
+  color: #09263d;
+}
+
+:root[data-theme="day"] .home-nav-links a + a {
+  border-left-color: rgba(24, 92, 126, 0.15);
+}
+
+:root[data-theme="day"] .home-nav-links a::after {
+  background: linear-gradient(90deg, rgba(31, 151, 190, 0), rgba(31, 151, 190, 0.72), rgba(102, 92, 202, 0));
+}
+
+:root[data-theme="day"] .home-nav-search,
+:root[data-theme="day"] .home-theme-toggle,
+:root[data-theme="day"] .home-nav-entry {
+  border-color: rgba(40, 132, 180, 0.24);
+  background: rgba(255, 255, 255, 0.54);
+}
+
+:root[data-theme="day"] .eyebrow,
+:root[data-theme="day"] .industry-news-source,
+:root[data-theme="day"] .resource-company {
+  color: #088d9b;
+}
+
+:root[data-theme="day"] .hero-copy h1 {
+  background: linear-gradient(115deg, #0f78a4 0%, #183d64 42%, #786ee8 76%, #0f82a1 100%);
+  background-size: 180% 180%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 14px 36px rgba(73, 132, 180, 0.16);
+}
+
+:root[data-theme="day"] .hero-copy p:last-child,
+:root[data-theme="day"] .industry-news-head p:last-child,
+:root[data-theme="day"] .industry-news-head div:last-child p,
+:root[data-theme="day"] .library-hero-copy p:last-child,
+:root[data-theme="day"] .detail-panel > p:not(.eyebrow),
+:root[data-theme="day"] .ip-market-panel > p:not(.eyebrow) {
+  color: rgba(24, 48, 71, 0.72);
+}
+
+:root[data-theme="day"] .assistant-entry-card {
+  border-color: rgba(24, 143, 187, 0.22);
+  color: #14324c;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(218, 240, 249, 0.64)),
+    rgba(255, 255, 255, 0.72);
+  box-shadow:
+    0 22px 54px rgba(53, 115, 148, 0.16),
+    inset 0 0 28px rgba(34, 157, 188, 0.08);
+}
+
+:root[data-theme="day"] .assistant-entry-card:hover,
+:root[data-theme="day"] .assistant-entry-card:focus-visible {
+  border-color: rgba(24, 143, 187, 0.48);
+  box-shadow:
+    0 28px 70px rgba(53, 115, 148, 0.2),
+    0 0 26px rgba(24, 143, 187, 0.12),
+    inset 0 0 30px rgba(92, 175, 220, 0.12);
+}
+
+:root[data-theme="day"] .assistant-entry-orbit {
+  border-color: rgba(24, 143, 187, 0.28);
+  background: radial-gradient(circle, rgba(219, 249, 247, 0.92), rgba(218, 239, 249, 0.66) 64%);
+  box-shadow: 0 0 26px rgba(32, 142, 178, 0.16);
+}
+
+:root[data-theme="day"] .assistant-entry-core,
+:root[data-theme="day"] .assistant-entry-spark {
+  color: #0e90a7;
+}
+
+:root[data-theme="day"] .assistant-entry-copy strong,
+:root[data-theme="day"] .industry-news-head h2,
+:root[data-theme="day"] .industry-news-card h3,
+:root[data-theme="day"] .library-hero-copy h1,
+:root[data-theme="day"] .resource-card h2,
+:root[data-theme="day"] .detail-panel h2,
+:root[data-theme="day"] .report-card h2,
+:root[data-theme="day"] .tool-panel-head h2,
+:root[data-theme="day"] .modal-panel h2,
+:root[data-theme="day"] .company-product-row strong {
+  color: #12324c;
+}
+
+:root[data-theme="day"] .assistant-entry-copy span,
+:root[data-theme="day"] .industry-news-card p,
+:root[data-theme="day"] .industry-news-meta,
+:root[data-theme="day"] .industry-news-footer small,
+:root[data-theme="day"] .resource-card p,
+:root[data-theme="day"] .modal-panel > p:not(.eyebrow),
+:root[data-theme="day"] .company-product-row,
+:root[data-theme="day"] .company-product-row em {
+  color: rgba(24, 48, 71, 0.66);
+}
+
+:root[data-theme="day"] .assistant-shell {
+  color: var(--day-ink);
+}
+
+:root[data-theme="day"] .assistant-hero .back-button {
+  position: static;
+  flex: 0 0 auto;
+  border-color: var(--day-line);
+  color: var(--day-ink);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: var(--day-shadow);
+}
+
+:root[data-theme="day"] .assistant-title {
+  margin-right: auto;
+}
+
+:root[data-theme="day"] .assistant-title h1 {
+  color: var(--day-ink);
+}
+
+:root[data-theme="day"] .assistant-title p:last-child {
+  color: var(--day-muted);
+}
+
+:root[data-theme="day"] .assistant-workspace {
+  border-color: var(--day-line);
+  color: var(--day-ink);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.88), rgba(226, 242, 249, 0.68)),
+    var(--day-card);
+  box-shadow: 0 24px 62px rgba(54, 111, 142, 0.15);
+}
+
+:root[data-theme="day"] .assistant-empty {
+  color: var(--day-muted);
+}
+
+:root[data-theme="day"] .assistant-empty svg {
+  color: #0f90a7;
+  filter: drop-shadow(0 0 14px rgba(31, 132, 175, 0.22));
+}
+
+:root[data-theme="day"] .assistant-empty h2 {
+  color: var(--day-ink);
+}
+
+:root[data-theme="day"] .assistant-quick-grid button {
+  border-color: var(--day-line);
+  color: var(--day-ink);
+  background: rgba(255, 255, 255, 0.68);
+}
+
+:root[data-theme="day"] .assistant-quick-grid button:hover,
+:root[data-theme="day"] .assistant-quick-grid button:focus-visible {
+  border-color: var(--day-line-strong);
+  color: #0f7292;
+  background: rgba(230, 246, 250, 0.88);
+  outline: none;
+}
+
+:root[data-theme="day"] .assistant-message span,
+:root[data-theme="day"] .assistant-input-bar > span,
+:root[data-theme="day"] .assistant-message.loading p {
+  color: var(--day-soft);
+}
+
+:root[data-theme="day"] .assistant-message p {
+  border-color: var(--day-line);
+  color: var(--day-ink);
+  background: rgba(255, 255, 255, 0.76);
+}
+
+:root[data-theme="day"] .assistant-message.user p {
+  border-color: rgba(31, 132, 175, 0.34);
+  color: #ffffff;
+  background: linear-gradient(135deg, #168fbb, #22b7bd);
+}
+
+:root[data-theme="day"] .assistant-message.error p {
+  border-color: rgba(194, 72, 72, 0.24);
+  color: #8b2626;
+  background: rgba(255, 238, 238, 0.74);
+}
+
+:root[data-theme="day"] .assistant-input-bar {
+  border-color: var(--day-line);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: inset 0 0 24px rgba(31, 132, 175, 0.05);
+}
+
+:root[data-theme="day"] .assistant-input-bar input {
+  border-color: var(--day-line);
+  color: var(--day-ink);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+:root[data-theme="day"] .assistant-input-bar input::placeholder {
+  color: rgba(24, 48, 71, 0.42);
+}
+
+:root[data-theme="day"] .assistant-input-bar input:focus {
+  border-color: var(--day-line-strong);
+  box-shadow: 0 0 0 3px rgba(31, 132, 175, 0.1);
+}
+
+:root[data-theme="day"] .assistant-input-bar button {
+  border-color: rgb(var(--library-accent-rgb) / 0.38);
+  color: #ffffff;
+  background: linear-gradient(135deg, #168fbb, #18a9b8);
+}
+
+:root[data-theme="day"] .assistant-input-bar .assistant-clear {
+  border-color: var(--day-line);
+  color: #0f7292;
+  background: rgba(255, 255, 255, 0.68);
+}
+
+:root[data-theme="day"] #triangleStroke stop:nth-child(1),
+:root[data-theme="day"] #triangleHighlight stop:nth-child(1) {
+  stop-color: #1ba8c7;
+}
+
+:root[data-theme="day"] #triangleStroke stop:nth-child(2),
+:root[data-theme="day"] #triangleHighlight stop:nth-child(2) {
+  stop-color: #244f7a;
+}
+
+:root[data-theme="day"] #triangleStroke stop:nth-child(3),
+:root[data-theme="day"] #triangleHighlight stop:nth-child(3) {
+  stop-color: #786ee8;
+}
+
+:root[data-theme="day"] #triangleStroke stop:nth-child(4),
+:root[data-theme="day"] #triangleHighlight stop:nth-child(4) {
+  stop-color: #0e90a7;
+}
+
+:root[data-theme="day"] .triangle-line.hub,
+:root[data-theme="day"] .active-line {
+  stroke: rgba(150, 113, 18, 0.64) !important;
+}
+
+:root[data-theme="day"] .triangle-flare {
+  fill: rgba(36, 118, 160, 0.72);
+}
+
+:root[data-theme="day"] .triangle-spark {
+  fill: rgba(44, 106, 146, 0.5);
+}
+
+:root[data-theme="day"] .industry-node {
+  color: #12324c;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 36%, rgba(255, 255, 255, 0.9)), rgba(255, 255, 255, 0.86) 42%, color-mix(in srgb, var(--accent) 24%, rgba(219, 241, 250, 0.82))) border-box;
+  box-shadow: 0 20px 44px rgba(67, 119, 148, 0.18);
+}
+
+:root[data-theme="day"] .industry-node::before {
+  background:
+    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 56%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.82), rgba(221, 239, 248, 0.58));
+  box-shadow:
+    inset 0 0 0 1px rgba(20, 93, 128, 0.12),
+    inset 0 0 24px color-mix(in srgb, var(--accent) 13%, transparent);
+}
+
+:root[data-theme="day"] .node-frame {
+  border-color: color-mix(in srgb, var(--accent) 72%, rgba(12, 74, 106, 0.16));
+  opacity: 0.86;
+}
+
+:root[data-theme="day"] .node-icon {
+  color: color-mix(in srgb, var(--accent) 74%, #0c5a7a);
+  border-color: color-mix(in srgb, var(--accent) 50%, rgba(13, 74, 104, 0.2));
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: inset 0 0 18px color-mix(in srgb, var(--accent) 13%, transparent);
+}
+
+:root[data-theme="day"] .node-label {
+  color: #16324b;
+}
+
+:root[data-theme="day"] .industry-news-card,
+:root[data-theme="day"] .news-filter-panel,
+:root[data-theme="day"] .library-metrics div,
+:root[data-theme="day"] .resource-card,
+:root[data-theme="day"] .category-tree,
+:root[data-theme="day"] .filter-field,
+:root[data-theme="day"] .support-filter-panel,
+:root[data-theme="day"] .tool-panel,
+:root[data-theme="day"] .tool-metric,
+:root[data-theme="day"] .report-card,
+:root[data-theme="day"] .my-reports-panel,
+:root[data-theme="day"] .my-report-card,
+:root[data-theme="day"] .report-modal-panel,
+:root[data-theme="day"] .report-summary-panel,
+:root[data-theme="day"] .report-download-panel,
+:root[data-theme="day"] .web-report-panel,
+:root[data-theme="day"] .web-report-metrics div,
+:root[data-theme="day"] .modal-panel,
+:root[data-theme="day"] .detail-panel,
+:root[data-theme="day"] .product-flow-panel,
+:root[data-theme="day"] .adoption-case-panel,
+:root[data-theme="day"] .foundry-node-panel,
+:root[data-theme="day"] .company-products-panel,
+:root[data-theme="day"] .company-metrics div,
+:root[data-theme="day"] .company-product-row {
+  border-color: rgba(31, 132, 175, 0.18);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.86), rgba(228, 242, 249, 0.72));
+  box-shadow: 0 18px 46px rgba(54, 111, 142, 0.12);
+}
+
+:root[data-theme="day"] .resource-card::before,
+:root[data-theme="day"] .industry-news-image::after {
+  opacity: 0.35;
+}
+
+:root[data-theme="day"] .filter-field select,
+:root[data-theme="day"] .reset-filter,
+:root[data-theme="day"] .support-filter-chip,
+:root[data-theme="day"] .resource-card-footer a,
+:root[data-theme="day"] .resource-card-footer button,
+:root[data-theme="day"] .modal-close {
+  border-color: rgba(31, 132, 175, 0.22);
+  color: #14324c;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+:root[data-theme="day"] .resource-placeholder,
+:root[data-theme="day"] .back-button,
+:root[data-theme="day"] .library-back,
+:root[data-theme="day"] .library-hero-mark,
+:root[data-theme="day"] .tool-directory-card,
+:root[data-theme="day"] .tool-directory-icon,
+:root[data-theme="day"] .tool-directory-preview,
+:root[data-theme="day"] .tool-wafer-visual,
+:root[data-theme="day"] .tool-score-card,
+:root[data-theme="day"] .tool-metric,
+:root[data-theme="day"] .tool-formula code,
+:root[data-theme="day"] .tool-explainer li,
+:root[data-theme="day"] .bonding-svg-shell,
+:root[data-theme="day"] .bonding-legend span,
+:root[data-theme="day"] .bonding-warning-list p,
+:root[data-theme="day"] .reports-search,
+:root[data-theme="day"] .reports-section-nav button,
+:root[data-theme="day"] .reports-reset,
+:root[data-theme="day"] .reports-side section,
+:root[data-theme="day"] .reports-rank-list button,
+:root[data-theme="day"] .report-cover,
+:root[data-theme="day"] .report-detail-card,
+:root[data-theme="day"] .web-report-cover,
+:root[data-theme="day"] .web-report-toc,
+:root[data-theme="day"] .web-report-toc button,
+:root[data-theme="day"] .web-report-signal,
+:root[data-theme="day"] .web-report-original iframe,
+:root[data-theme="day"] .search-box,
+:root[data-theme="day"] .category-tabs button,
+:root[data-theme="day"] .library-content,
+:root[data-theme="day"] .tree-actions button,
+:root[data-theme="day"] .tree-section-toggle,
+:root[data-theme="day"] .tree-collapsed-selection,
+:root[data-theme="day"] .tree-all,
+:root[data-theme="day"] .tree-primary,
+:root[data-theme="day"] .tree-child,
+:root[data-theme="day"] .view-toggle,
+:root[data-theme="day"] .result-tools select,
+:root[data-theme="day"] .resource-chip-row span,
+:root[data-theme="day"] .resource-tags span,
+:root[data-theme="day"] .resource-pagination button,
+:root[data-theme="day"] .modal-detail-section,
+:root[data-theme="day"] .source-link,
+:root[data-theme="day"] .product-detail-hero,
+:root[data-theme="day"] .ip-product-hero,
+:root[data-theme="day"] .ip-market-section,
+:root[data-theme="day"] .ip-specification-table,
+:root[data-theme="day"] .product-flow-panel,
+:root[data-theme="day"] .detail-section,
+:root[data-theme="day"] .adoption-case-panel,
+:root[data-theme="day"] .adoption-case-card,
+:root[data-theme="day"] .adoption-case-meta div,
+:root[data-theme="day"] .foundry-node-panel,
+:root[data-theme="day"] .foundry-node-list span,
+:root[data-theme="day"] .foundry-relation-card,
+:root[data-theme="day"] .company-product-row,
+:root[data-theme="day"] .report-modal-panel dl div {
+  border-color: var(--day-line);
+  color: var(--day-ink);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.86), rgba(226, 242, 249, 0.66)),
+    var(--day-card);
+  box-shadow: var(--day-shadow);
+}
+
+:root[data-theme="day"] .tool-directory-link:not(.tool-directory-disabled):hover .tool-directory-card,
+:root[data-theme="day"] .tool-directory-link:not(.tool-directory-disabled):focus-visible .tool-directory-card,
+:root[data-theme="day"] .report-card:hover,
+:root[data-theme="day"] .resource-card:hover,
+:root[data-theme="day"] .resource-card:focus-within,
+:root[data-theme="day"] .company-product-row:hover,
+:root[data-theme="day"] .company-product-row:focus-visible {
+  border-color: var(--day-line-strong);
+  box-shadow: 0 22px 54px rgba(54, 111, 142, 0.18), 0 0 24px rgba(31, 132, 175, 0.1);
+}
+
+:root[data-theme="day"] .tool-directory-icon,
+:root[data-theme="day"] .tool-directory-preview,
+:root[data-theme="day"] .library-hero-mark,
+:root[data-theme="day"] .placeholder-mark {
+  color: var(--library-accent);
+  background:
+    radial-gradient(circle at 48% 26%, rgb(var(--library-accent-rgb) / 0.18), transparent 58%),
+    rgba(255, 255, 255, 0.72);
+}
+
+:root[data-theme="day"] .tool-directory-preview text {
+  fill: var(--day-ink);
+}
+
+:root[data-theme="day"] .preview-chip,
+:root[data-theme="day"] .preview-package {
+  fill: rgba(255, 255, 255, 0.86);
+  stroke: rgb(var(--library-accent-rgb) / 0.74);
+}
+
+:root[data-theme="day"] .preview-chip-block,
+:root[data-theme="day"] .preview-die {
+  fill: rgba(40, 151, 190, 0.13);
+  stroke: rgba(15, 68, 98, 0.44);
+}
+
+:root[data-theme="day"] .tool-field input,
+:root[data-theme="day"] .tool-field select,
+:root[data-theme="day"] .tool-field textarea,
+:root[data-theme="day"] .reports-search input,
+:root[data-theme="day"] .search-box input {
+  border-color: var(--day-line);
+  color: var(--day-ink);
+  background: rgba(255, 255, 255, 0.76);
+}
+
+:root[data-theme="day"] .reports-search input::placeholder,
+:root[data-theme="day"] .search-box input::placeholder {
+  color: rgba(24, 48, 71, 0.42);
+}
+
+:root[data-theme="day"] .tool-field input:focus-visible,
+:root[data-theme="day"] .tool-field select:focus-visible,
+:root[data-theme="day"] .tool-field textarea:focus-visible,
+:root[data-theme="day"] .filter-field select:focus-visible {
+  border-color: var(--day-line-strong);
+  box-shadow: 0 0 0 3px rgba(31, 132, 175, 0.1);
+}
+
+:root[data-theme="day"] .tool-field input:disabled,
+:root[data-theme="day"] .tool-field select:disabled,
+:root[data-theme="day"] .report-download-button:disabled,
+:root[data-theme="day"] .resource-pagination button:disabled {
+  color: rgba(24, 48, 71, 0.36);
+  background: rgba(222, 233, 239, 0.54);
+}
+
+:root[data-theme="day"] .tool-secondary,
+:root[data-theme="day"] .reports-load-more,
+:root[data-theme="day"] .my-reports-head button,
+:root[data-theme="day"] .my-report-card button,
+:root[data-theme="day"] .report-summary-actions a,
+:root[data-theme="day"] .report-download-button,
+:root[data-theme="day"] .report-view-switch button,
+:root[data-theme="day"] .report-modal-close,
+:root[data-theme="day"] .tree-actions button,
+:root[data-theme="day"] .source-link,
+:root[data-theme="day"] .modal-close {
+  border-color: var(--day-line);
+  color: #0f7292;
+  background: rgba(255, 255, 255, 0.68);
+}
+
+:root[data-theme="day"] .tool-primary,
+:root[data-theme="day"] .reports-search button,
+:root[data-theme="day"] .report-meta button,
+:root[data-theme="day"] .report-unlock-button,
+:root[data-theme="day"] .report-summary-actions button,
+:root[data-theme="day"] .category-tabs button.active,
+:root[data-theme="day"] .category-tabs button:hover,
+:root[data-theme="day"] .category-tabs button:focus-visible,
+:root[data-theme="day"] .support-filter-chip:hover,
+:root[data-theme="day"] .support-filter-chip:focus-visible,
+:root[data-theme="day"] .support-filter-chip.active,
+:root[data-theme="day"] .tree-section-toggle strong,
+:root[data-theme="day"] .tree-all.active,
+:root[data-theme="day"] .tree-primary.active,
+:root[data-theme="day"] .tree-child.active,
+:root[data-theme="day"] .tree-all:hover,
+:root[data-theme="day"] .tree-primary:hover,
+:root[data-theme="day"] .tree-child:hover,
+:root[data-theme="day"] .tree-all:focus-visible,
+:root[data-theme="day"] .tree-primary:focus-visible,
+:root[data-theme="day"] .tree-child:focus-visible,
+:root[data-theme="day"] .view-toggle.active,
+:root[data-theme="day"] .view-toggle:hover,
+:root[data-theme="day"] .view-toggle:focus-visible,
+:root[data-theme="day"] .resource-pagination button:hover,
+:root[data-theme="day"] .resource-pagination button:focus-visible,
+:root[data-theme="day"] .resource-pagination button.active,
+:root[data-theme="day"] .web-report-toc button:hover,
+:root[data-theme="day"] .web-report-toc button:focus-visible {
+  border-color: rgb(var(--library-accent-rgb) / 0.48);
+  color: #ffffff;
+  background: linear-gradient(135deg, #168fbb, #18a9b8);
+}
+
+:root[data-theme="day"] .reports-section-nav button.active,
+:root[data-theme="day"] .report-view-switch button.active,
+:root[data-theme="day"] .format-badge.format-web,
+:root[data-theme="day"] .reports-rank-list span,
+:root[data-theme="day"] .web-report-panel-head span,
+:root[data-theme="day"] .result-tools > span {
+  color: #ffffff;
+  background: #168fbb;
+}
+
+:root[data-theme="day"] .report-card-web .report-cover,
+:root[data-theme="day"] .report-cover,
+:root[data-theme="day"] .web-report-cover,
+:root[data-theme="day"] .tool-score-card {
+  color: var(--day-ink);
+  background:
+    linear-gradient(135deg, rgba(72, 170, 210, 0.15), rgba(133, 120, 227, 0.12)),
+    radial-gradient(circle at 18% 12%, rgba(30, 172, 186, 0.18), transparent 52%),
+    rgba(255, 255, 255, 0.82);
+}
+
+:root[data-theme="day"] .resource-card,
+:root[data-theme="day"] .report-card,
+:root[data-theme="day"] .my-report-card,
+:root[data-theme="day"] .report-modal-panel,
+:root[data-theme="day"] .report-summary-panel,
+:root[data-theme="day"] .report-download-panel,
+:root[data-theme="day"] .web-report-panel,
+:root[data-theme="day"] .web-report-metrics div,
+:root[data-theme="day"] .modal-panel,
+:root[data-theme="day"] .detail-panel,
+:root[data-theme="day"] .company-products-panel,
+:root[data-theme="day"] .company-metrics div,
+:root[data-theme="day"] .library-metrics div,
+:root[data-theme="day"] .category-tree,
+:root[data-theme="day"] .empty-state,
+:root[data-theme="day"] .news-filter-panel,
+:root[data-theme="day"] .filter-field,
+:root[data-theme="day"] .support-filter-panel,
+:root[data-theme="day"] .tool-panel,
+:root[data-theme="day"] .my-reports-panel,
+:root[data-theme="day"] .reports-side section {
+  border-color: var(--day-line);
+  color: var(--day-ink);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.88), rgba(224, 241, 249, 0.7)),
+    var(--day-card);
+  box-shadow: var(--day-shadow);
+}
+
+:root[data-theme="day"] .resource-card {
+  border-color: rgb(var(--library-accent-rgb) / 0.26);
+}
+
+:root[data-theme="day"] .resource-card::before {
+  background:
+    linear-gradient(90deg, transparent 0 48%, rgba(31, 132, 175, 0.09) 48% 49%, transparent 49%),
+    repeating-linear-gradient(135deg, rgba(31, 132, 175, 0.05) 0 1px, transparent 1px 16px);
+  opacity: 0.42;
+}
+
+:root[data-theme="day"] .resource-chip-row span,
+:root[data-theme="day"] .resource-tags span,
+:root[data-theme="day"] .report-tags span,
+:root[data-theme="day"] .report-detail-tags span:not(.format-badge),
+:root[data-theme="day"] .format-badge,
+:root[data-theme="day"] .public-case-badge,
+:root[data-theme="day"] .bottleneck-tags span,
+:root[data-theme="day"] .follow-channel,
+:root[data-theme="day"] .foundry-node-list span,
+:root[data-theme="day"] .tree-all strong,
+:root[data-theme="day"] .tree-primary strong,
+:root[data-theme="day"] .tree-child em {
+  border-color: rgb(var(--library-accent-rgb) / 0.22);
+  color: #0f7292;
+  background: rgb(var(--library-accent-rgb) / 0.08);
+}
+
+:root[data-theme="day"] .public-case-badge,
+:root[data-theme="day"] .bottleneck-tags span,
+:root[data-theme="day"] .bonding-warning-list p {
+  border-color: rgba(194, 136, 22, 0.22);
+  color: #8a5a0b;
+  background: rgba(255, 223, 143, 0.22);
+}
+
+:root[data-theme="day"] .tool-source,
+:root[data-theme="day"] .tool-field span,
+:root[data-theme="day"] .report-meta span,
+:root[data-theme="day"] .reports-price-note span,
+:root[data-theme="day"] .report-modal-panel dt,
+:root[data-theme="day"] .report-detail-card dt,
+:root[data-theme="day"] .web-report-toc span,
+:root[data-theme="day"] .web-report-metrics span,
+:root[data-theme="day"] .tree-header h2,
+:root[data-theme="day"] .filter-field span,
+:root[data-theme="day"] .support-filter-head,
+:root[data-theme="day"] .resource-company,
+:root[data-theme="day"] .modal-company,
+:root[data-theme="day"] .resource-card dt,
+:root[data-theme="day"] .modal-panel dt,
+:root[data-theme="day"] .company-name-link,
+:root[data-theme="day"] .product-contact-row svg,
+:root[data-theme="day"] .product-contact-row span,
+:root[data-theme="day"] .follow-channel,
+:root[data-theme="day"] .adoption-case-title span,
+:root[data-theme="day"] .adoption-case-meta dt,
+:root[data-theme="day"] .detail-meta dt,
+:root[data-theme="day"] .tool-metric strong,
+:root[data-theme="day"] .reports-price-note strong {
+  color: #0f7292;
+}
+
+:root[data-theme="day"] .placeholder-copy,
+:root[data-theme="day"] .library-hero > p:last-child,
+:root[data-theme="day"] .library-hero-copy p:last-child,
+:root[data-theme="day"] .tool-directory-card p,
+:root[data-theme="day"] .tool-panel-head p,
+:root[data-theme="day"] .tool-note,
+:root[data-theme="day"] .tool-formula p,
+:root[data-theme="day"] .tool-metric p,
+:root[data-theme="day"] .tool-score-card p,
+:root[data-theme="day"] .tool-explainer li,
+:root[data-theme="day"] .tool-bar-row,
+:root[data-theme="day"] .tool-bar-row em,
+:root[data-theme="day"] .bonding-legend,
+:root[data-theme="day"] .reports-hero p:not(.eyebrow),
+:root[data-theme="day"] .reports-section-nav button,
+:root[data-theme="day"] .reports-reset,
+:root[data-theme="day"] .report-main p,
+:root[data-theme="day"] .report-tags span,
+:root[data-theme="day"] .report-meta div,
+:root[data-theme="day"] .reports-no-more,
+:root[data-theme="day"] .reports-rank-list em,
+:root[data-theme="day"] .reports-price-note p,
+:root[data-theme="day"] .my-reports-head p:not(.eyebrow),
+:root[data-theme="day"] .my-report-card p,
+:root[data-theme="day"] .my-report-meta,
+:root[data-theme="day"] .report-modal-panel > p:not(.eyebrow),
+:root[data-theme="day"] .report-detail-hero p,
+:root[data-theme="day"] .report-summary-panel p,
+:root[data-theme="day"] .report-download-panel p,
+:root[data-theme="day"] .web-report-cover p,
+:root[data-theme="day"] .web-report-panel p,
+:root[data-theme="day"] .web-report-panel ul,
+:root[data-theme="day"] .web-report-metrics p,
+:root[data-theme="day"] .web-report-signal span,
+:root[data-theme="day"] .library-metrics p,
+:root[data-theme="day"] .tree-toggle-meta em,
+:root[data-theme="day"] .tree-collapsed-selection span,
+:root[data-theme="day"] .tree-all,
+:root[data-theme="day"] .tree-primary,
+:root[data-theme="day"] .tree-child,
+:root[data-theme="day"] .result-summary p,
+:root[data-theme="day"] .resource-card p,
+:root[data-theme="day"] .resource-browse-profile p,
+:root[data-theme="day"] .resource-card-footer span,
+:root[data-theme="day"] .resource-card dd,
+:root[data-theme="day"] .modal-panel dd,
+:root[data-theme="day"] .modal-detail-section p,
+:root[data-theme="day"] .modal-panel > p:not(.eyebrow),
+:root[data-theme="day"] .company-logo-hint,
+:root[data-theme="day"] .disabled-link,
+:root[data-theme="day"] .detail-panel > p:not(.eyebrow),
+:root[data-theme="day"] .detail-section p,
+:root[data-theme="day"] .ip-market-panel > p:not(.eyebrow),
+:root[data-theme="day"] .ip-market-section p,
+:root[data-theme="day"] .ip-specification-table dt,
+:root[data-theme="day"] .material-note,
+:root[data-theme="day"] .product-contact-row,
+:root[data-theme="day"] .follow-us-block p,
+:root[data-theme="day"] .product-flow-step,
+:root[data-theme="day"] .adoption-case-card p,
+:root[data-theme="day"] .foundry-relation-item,
+:root[data-theme="day"] .foundry-relation-item span,
+:root[data-theme="day"] .detail-meta dd,
+:root[data-theme="day"] .company-profile-copy,
+:root[data-theme="day"] .company-product-row,
+:root[data-theme="day"] .company-product-row em,
+:root[data-theme="day"] .page-number-list span,
+:root[data-theme="day"] .page-size-note {
+  color: var(--day-muted);
+}
+
+:root[data-theme="day"] .tool-directory-card h2,
+:root[data-theme="day"] .tool-panel-head h2,
+:root[data-theme="day"] .tool-breakdown h2,
+:root[data-theme="day"] .tool-explainer h2,
+:root[data-theme="day"] .tool-wafer-visual figcaption strong,
+:root[data-theme="day"] .tool-score-card strong,
+:root[data-theme="day"] .report-title-row h2,
+:root[data-theme="day"] .report-meta strong,
+:root[data-theme="day"] .reports-side h2,
+:root[data-theme="day"] .reports-rank-list strong,
+:root[data-theme="day"] .my-reports-head h2,
+:root[data-theme="day"] .my-report-card h3,
+:root[data-theme="day"] .report-modal-panel h2,
+:root[data-theme="day"] .report-modal-panel dd,
+:root[data-theme="day"] .report-detail-card dd,
+:root[data-theme="day"] .report-summary-panel h2,
+:root[data-theme="day"] .report-download-panel h2,
+:root[data-theme="day"] .web-report-cover h2,
+:root[data-theme="day"] .web-report-metrics strong,
+:root[data-theme="day"] .web-report-panel h3,
+:root[data-theme="day"] .web-report-signal div,
+:root[data-theme="day"] .tree-collapsed-selection strong,
+:root[data-theme="day"] .result-summary strong,
+:root[data-theme="day"] .resource-card h2,
+:root[data-theme="day"] .resource-browse-profile strong,
+:root[data-theme="day"] .modal-detail-section h3,
+:root[data-theme="day"] .empty-state h2,
+:root[data-theme="day"] .modal-panel h2,
+:root[data-theme="day"] .product-detail-title h1,
+:root[data-theme="day"] .detail-panel h2,
+:root[data-theme="day"] .detail-section h3,
+:root[data-theme="day"] .ip-market-section h3,
+:root[data-theme="day"] .ip-specification-table h4,
+:root[data-theme="day"] .ip-specification-table dd,
+:root[data-theme="day"] .product-contact-row strong,
+:root[data-theme="day"] .product-flow-heading h2,
+:root[data-theme="day"] .product-flow-step.active,
+:root[data-theme="day"] .adoption-case-heading h2,
+:root[data-theme="day"] .adoption-case-title strong,
+:root[data-theme="day"] .adoption-case-meta dd,
+:root[data-theme="day"] .foundry-node-panel h2,
+:root[data-theme="day"] .foundry-relation-card h3,
+:root[data-theme="day"] .foundry-relation-item strong,
+:root[data-theme="day"] .detail-empty h1,
+:root[data-theme="day"] .company-products-panel h2,
+:root[data-theme="day"] .company-product-row strong {
+  color: var(--day-ink);
+}
+
+:root[data-theme="day"] .tool-field em,
+:root[data-theme="day"] .report-cover span,
+:root[data-theme="day"] .report-cover em,
+:root[data-theme="day"] .tool-metric span {
+  color: var(--day-soft);
+}
+
+:root[data-theme="day"] .product-flow-track::before,
+:root[data-theme="day"] .web-report-signal i,
+:root[data-theme="day"] .tool-bar-track div {
+  background: linear-gradient(90deg, #2ba8c7, #168fbb, #786ee8);
+}
+
+:root[data-theme="day"] .tool-bar-track,
+:root[data-theme="day"] .web-report-signal span,
+:root[data-theme="day"] .ip-specification-table {
+  background: rgba(220, 239, 248, 0.52);
+}
+
+:root[data-theme="day"] .flow-dot {
+  border-color: rgb(var(--library-accent-rgb) / 0.28);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+:root[data-theme="day"] .product-flow-step.past,
+:root[data-theme="day"] .product-flow-step.active {
+  color: var(--day-ink);
+}
+
+:root[data-theme="day"] .product-flow-step.past .flow-dot {
+  background: rgb(var(--library-accent-rgb) / 0.18);
+}
+
+:root[data-theme="day"] .product-flow-step.active .flow-dot {
+  border-color: #ffffff;
+  background: var(--library-accent);
+}
+
+:root[data-theme="day"] .bonding-package {
+  fill: rgba(255, 255, 255, 0.44);
+}
+
+:root[data-theme="day"] .bonding-exposed-pad {
+  fill: rgba(31, 132, 175, 0.04);
+  stroke: rgba(31, 132, 175, 0.18);
+}
+
+:root[data-theme="day"] .bonding-die {
+  fill: rgba(255, 255, 255, 0.78);
+}
+
+:root[data-theme="day"] .bonding-pin circle,
+:root[data-theme="day"] .bonding-pad {
+  fill: rgba(255, 255, 255, 0.82);
+  stroke: rgba(21, 76, 108, 0.48);
+}
+
+:root[data-theme="day"] .bonding-pin text,
+:root[data-theme="day"] .bonding-net-label {
+  fill: rgba(24, 48, 71, 0.68);
+}
+
+:root[data-theme="day"] .resource-modal,
+:root[data-theme="day"] .report-modal {
+  background: rgba(218, 235, 244, 0.72);
+}
+
+:root[data-theme="day"] .follow-channel::after {
+  color: #ffffff;
+  background: #0e405e;
+}
+
+:root[data-theme="day"] .industry-news-more,
+:root[data-theme="day"] .news-directory-count,
+:root[data-theme="day"] .news-search-field,
+:root[data-theme="day"] .news-sort-field,
+:root[data-theme="day"] .news-category-tabs button,
+:root[data-theme="day"] .news-directory-item,
+:root[data-theme="day"] .news-detail-visual,
+:root[data-theme="day"] .news-detail-body,
+:root[data-theme="day"] .news-detail-side,
+:root[data-theme="day"] .news-related-companies span,
+:root[data-theme="day"] .news-related-list a,
+:root[data-theme="day"] .industry-news-tags span,
+:root[data-theme="day"] .industry-news-footer span,
+:root[data-theme="day"] .industry-news-source,
+:root[data-theme="day"] .news-brand-pair strong,
+:root[data-theme="day"] .news-chip-symbol {
+  border-color: var(--day-line);
+  color: var(--day-ink);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.86), rgba(226, 242, 249, 0.66)),
+    var(--day-card);
+  box-shadow: var(--day-shadow);
+}
+
+:root[data-theme="day"] .industry-news-card {
+  color: var(--day-ink);
+  border-color: var(--day-line);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.88), rgba(224, 241, 249, 0.7)),
+    var(--day-card);
+  box-shadow: var(--day-shadow);
+}
+
+:root[data-theme="day"] .industry-news-card:hover,
+:root[data-theme="day"] .industry-news-card:focus-visible,
+:root[data-theme="day"] .news-directory-item:hover,
+:root[data-theme="day"] .news-directory-item:focus-visible,
+:root[data-theme="day"] .news-related-list a:hover,
+:root[data-theme="day"] .news-related-list a:focus-visible {
+  border-color: var(--day-line-strong);
+  box-shadow: 0 22px 54px rgba(54, 111, 142, 0.18), 0 0 24px rgba(31, 132, 175, 0.1);
+}
+
+:root[data-theme="day"] .industry-news-image,
+:root[data-theme="day"] .news-detail-visual {
+  background: rgba(232, 245, 250, 0.74);
+}
+
+:root[data-theme="day"] .industry-news-image::after {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(222, 242, 249, 0.42)),
+    linear-gradient(90deg, rgba(31, 132, 175, 0.08), rgba(120, 110, 232, 0.08));
+  opacity: 1;
+}
+
+:root[data-theme="day"] .news-visual-abstract {
+  background-image:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.74), rgba(223, 242, 248, 0.36)),
+    var(--news-bg);
+}
+
+:root[data-theme="day"] .news-visual-grid {
+  background:
+    linear-gradient(90deg, rgba(31, 132, 175, 0.12) 1px, transparent 1px) 0 0 / 28px 28px,
+    linear-gradient(rgba(120, 110, 232, 0.1) 1px, transparent 1px) 0 0 / 28px 28px;
+  opacity: 0.32;
+}
+
+:root[data-theme="day"] .news-brand-pair,
+:root[data-theme="day"] .news-chip-symbol {
+  color: var(--day-ink);
+}
+
+:root[data-theme="day"] .news-brand-pair strong {
+  color: var(--day-ink);
+  text-shadow: none;
+}
+
+:root[data-theme="day"] .news-chip-symbol {
+  background:
+    radial-gradient(circle, rgba(31, 132, 175, 0.12), rgba(255, 255, 255, 0.74) 68%);
+}
+
+:root[data-theme="day"] .news-directory-hero h1,
+:root[data-theme="day"] .news-detail-hero h1,
+:root[data-theme="day"] .news-directory-count strong,
+:root[data-theme="day"] .news-directory-item h2,
+:root[data-theme="day"] .news-detail-section h2,
+:root[data-theme="day"] .news-detail-side h2,
+:root[data-theme="day"] .news-related-list strong,
+:root[data-theme="day"] .industry-news-card h3 {
+  color: var(--day-ink);
+  text-shadow: none;
+}
+
+:root[data-theme="day"] .news-directory-hero p,
+:root[data-theme="day"] .news-detail-copy > p,
+:root[data-theme="day"] .news-directory-count span,
+:root[data-theme="day"] .news-directory-meta,
+:root[data-theme="day"] .news-directory-item p,
+:root[data-theme="day"] .news-detail-section p,
+:root[data-theme="day"] .news-related-list span,
+:root[data-theme="day"] .industry-news-meta,
+:root[data-theme="day"] .industry-news-card p,
+:root[data-theme="day"] .industry-news-footer small {
+  color: var(--day-muted);
+}
+
+:root[data-theme="day"] .news-directory-meta span,
+:root[data-theme="day"] .industry-news-meta span,
+:root[data-theme="day"] .news-directory-arrow,
+:root[data-theme="day"] .news-related-companies span,
+:root[data-theme="day"] .industry-news-source,
+:root[data-theme="day"] .industry-news-footer span {
+  color: #0f7292;
+}
+
+:root[data-theme="day"] .news-search-field input,
+:root[data-theme="day"] .news-sort-field select {
+  color: var(--day-ink);
+  background: transparent;
+}
+
+:root[data-theme="day"] .news-search-field input::placeholder {
+  color: rgba(24, 48, 71, 0.42);
+}
+
+:root[data-theme="day"] .news-search-field svg,
+:root[data-theme="day"] .news-sort-field span {
+  color: #0f7292;
+}
+
+:root[data-theme="day"] .news-sort-field select option {
+  color: var(--day-ink);
+  background: #ffffff;
+}
+
+:root[data-theme="day"] .news-category-tabs button:hover,
+:root[data-theme="day"] .news-category-tabs button:focus-visible,
+:root[data-theme="day"] .news-category-tabs button.active {
+  border-color: rgb(var(--library-accent-rgb) / 0.48);
+  color: #ffffff;
+  background: linear-gradient(135deg, #168fbb, #18a9b8);
+  outline: none;
+}
+
 @media (max-width: 860px) {
   .home-top-nav {
     grid-template-columns: 1fr auto;
@@ -5035,7 +6096,8 @@ button {
     font-size: 0.78rem;
   }
 
-  .home-nav-search {
+  .home-nav-search,
+  .home-theme-toggle {
     width: 31px;
     min-height: 30px;
   }
