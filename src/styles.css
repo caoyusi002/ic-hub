@@ -78,23 +78,57 @@ button {
 
 .home-nav-brand {
   display: inline-flex;
-  align-items: baseline;
-  gap: 9px;
+  align-items: center;
+  gap: 10px;
   min-width: 0;
   white-space: nowrap;
 }
 
-.home-nav-brand span {
-  color: #8bffcf;
-  font-size: 0.76rem;
-  font-weight: 900;
-  letter-spacing: 0.18em;
+.brand-logo-mark {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  overflow: visible;
+  filter: drop-shadow(0 0 12px rgba(84, 217, 255, 0.24));
 }
 
-.home-nav-brand strong {
+.brand-chip-shell,
+.brand-chip-pin,
+.brand-c-shape,
+.brand-corner {
+  fill: none;
+  stroke: url(#brandMarkStroke);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.brand-chip-shell {
+  fill: rgba(5, 18, 40, 0.52);
+}
+
+.brand-core-dot {
+  fill: #8bffcf;
+  opacity: 0.95;
+}
+
+.brand-wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
   color: #f6fbff;
-  font-size: 0.92rem;
-  font-weight: 800;
+  font-size: 1.02rem;
+  font-weight: 850;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.brand-wordmark-primary {
+  color: #f6fbff;
+}
+
+.brand-wordmark-secondary {
+  color: #8bffcf;
 }
 
 .home-nav-links {
@@ -5599,12 +5633,26 @@ button {
   color: rgba(28, 58, 82, 0.84);
 }
 
-:root[data-theme="day"] .home-nav-brand span,
 :root[data-theme="day"] .home-nav-entry {
   color: #087b95;
 }
 
-:root[data-theme="day"] .home-nav-brand strong,
+:root[data-theme="day"] .brand-wordmark-primary {
+  color: #09263d;
+}
+
+:root[data-theme="day"] .brand-wordmark-secondary {
+  color: #087b95;
+}
+
+:root[data-theme="day"] .brand-chip-shell {
+  fill: rgba(255, 255, 255, 0.62);
+}
+
+:root[data-theme="day"] .brand-logo-mark {
+  filter: drop-shadow(0 8px 18px rgba(36, 112, 148, 0.16));
+}
+
 :root[data-theme="day"] .home-nav-links a:hover,
 :root[data-theme="day"] .home-nav-links a:focus-visible,
 :root[data-theme="day"] .home-nav-search:hover,
@@ -6665,8 +6713,13 @@ button {
     gap: 7px;
   }
 
-  .home-nav-brand strong {
-    font-size: 0.82rem;
+  .brand-wordmark {
+    font-size: 0.88rem;
+  }
+
+  .brand-logo-mark {
+    width: 28px;
+    height: 28px;
   }
 
   .home-nav-links {

@@ -108,6 +108,31 @@ const getHomeNavHref = (item) => {
   return '#';
 };
 
+function BrandLogo() {
+  return (
+    <>
+      <svg className="brand-logo-mark" viewBox="0 0 44 44" aria-hidden="true">
+        <defs>
+          <linearGradient id="brandMarkStroke" x1="7" y1="7" x2="37" y2="37" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#8bffcf" />
+            <stop offset="0.58" stopColor="#54d9ff" />
+            <stop offset="1" stopColor="#a995ff" />
+          </linearGradient>
+        </defs>
+        <rect className="brand-chip-shell" x="10" y="10" width="24" height="24" rx="6" />
+        <path className="brand-chip-pin" d="M17 5v5M23 5v5M29 5v5M17 34v5M23 34v5M29 34v5M5 17h5M5 23h5M5 29h5M34 17h5M34 23h5M34 29h5" />
+        <path className="brand-c-shape" d="M27.5 16.5a7.2 7.2 0 1 0 0 11" />
+        <path className="brand-corner" d="M27.5 16.5h5v5M27.5 27.5h5v-5" />
+        <rect className="brand-core-dot" x="17.4" y="18.1" width="4.8" height="7.8" rx="1.4" />
+      </svg>
+      <span className="brand-wordmark">
+        <span className="brand-wordmark-primary">IC</span>
+        <span className="brand-wordmark-secondary">Commons</span>
+      </span>
+    </>
+  );
+}
+
 const RESULTS_PAGE_SIZE = 8;
 
 const getResourceSlug = (resource) => encodeURIComponent(`${resource.company}-${resource.tool}`);
@@ -4835,9 +4860,8 @@ function App() {
   return (
     <main className="app-shell" style={{ '--bg-image': `url(${backgroundUrl})` }}>
       <header className="home-top-nav" aria-label="首页导航">
-        <a className="home-nav-brand" href="#" aria-label="返回 IC HUB 首页">
-          <span>IC HUB</span>
-          <strong>集成电路产业库</strong>
+        <a className="home-nav-brand" href="#" aria-label="返回 IC Commons 首页">
+          <BrandLogo />
         </a>
         <nav className="home-nav-links" aria-label="产业库导航">
           {topNavItems.map((item) => (
