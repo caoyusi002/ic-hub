@@ -101,6 +101,7 @@ const THEME_STORAGE_KEY = 'ic-hub-theme';
 const getHomeNavHref = (item) => {
   if (item === '行业新闻') return '#/news';
   if (item === '研究报告') return '#/reports';
+  if (item === '厂商资源库') return '#/vendors';
   if (item === '在线工具') return '#/tools';
   return '#';
 };
@@ -128,6 +129,11 @@ const getResourceSourceUrl = (resource) => resource.officialUrl || resource.sour
 
 const getResourceDisplayName = (resource) =>
   resource.tool.startsWith(resource.company) ? resource.tool : `${resource.company} ${resource.tool}`;
+
+const getResourceDetailPath = (resource) => {
+  if (foundryResources.includes(resource)) return `#/foundry/product/${getResourceSlug(resource)}`;
+  return `#/${getResourceLibraryKey(resource)}/product/${getResourceSlug(resource)}`;
+};
 
 const isIpDictionaryResource = (resource) =>
   Boolean(resource.fullName || resource.specs || resource.exampleApplications || resource.applicationDomains || resource.vendors);
@@ -368,6 +374,45 @@ function BrandIcon({ name }) {
   );
 }
 
+function ProductContactPanel() {
+  return (
+    <section className="detail-panel product-contact-panel">
+      <p className="eyebrow">CONTACT</p>
+      <h2>联系方式</h2>
+      <div className="product-contact-list">
+        {productContactItems.map((item) => {
+          const Icon = item.icon;
+
+          return (
+            <div className="product-contact-row" key={item.label}>
+              <Icon size={16} aria-hidden="true" />
+              <span>{item.label}</span>
+              <strong>{item.value}</strong>
+            </div>
+          );
+        })}
+      </div>
+      <div className="follow-us-block">
+        <p>Follow Us</p>
+        <div className="follow-channel-list">
+          {productFollowChannels.map((channel) => (
+            <button
+              type="button"
+              className="follow-channel"
+              key={channel.label}
+              title={channel.label}
+              data-label={channel.label}
+              aria-label={`${channel.label}入口待补充`}
+            >
+              <BrandIcon name={channel.icon} />
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 const productFlowTemplates = {
   analog: ['规格定义', '原理图设计', '电路仿真', '版图设计', '物理验证', '寄生提取/后仿', '模拟签核'],
   digitalFront: ['需求/架构', 'RTL 设计', '仿真/形式验证', '逻辑综合', 'DFT/等价检查', '前端收敛', '交付后端'],
@@ -502,6 +547,182 @@ const getProductFlow = (resource) => {
   };
 };
 
+const vendorTypeOptions = ['全部', 'EDA', 'IP', '代工厂', '芯片设计', '组织与平台', '封装', '测试', '其他'];
+const reservedVendorTypes = ['芯片设计', '组织与平台', '封装', '测试', '其他'];
+const hotVendorNames = ['Cadence', 'Synopsys', 'Siemens EDA', 'Arm', '芯原股份', '台积电', '中芯国际', '三星'];
+const vendorTypePriority = {
+  IP: 0,
+  EDA: 1,
+  代工厂: 2,
+  芯片设计: 3,
+  组织与平台: 4,
+  封装: 5,
+  测试: 6,
+  其他: 7,
+};
+
+const ensureVendorEntry = (vendorMap, company) => {
+  if (!vendorMap.has(company)) {
+    vendorMap.set(company, {
+      company,
+      types: new Set(),
+      regions: new Set(),
+      resources: [],
+      keywords: new Set([company]),
+      description: companyDescriptions[company] || '',
+      visual: companyVisuals[company],
+      sourceUrl: companySourceUrls[company],
+      route: `#/company/${getCompanySlug(company)}`,
+      routeType: 'company',
+    });
+  }
+
+  return vendorMap.get(company);
+};
+
+const getVendorRoutePriority = (routeType) => {
+  if (routeType === 'ip') return 0;
+  if (routeType === 'eda') return 1;
+  if (routeType === 'foundry') return 2;
+  return 3;
+};
+
+const addVendorResource = (vendorMap, resource, type) => {
+  const entry = ensureVendorEntry(vendorMap, resource.company);
+  const routeType = type === '代工厂' ? 'foundry' : getResourceLibraryKey(resource);
+  const route = type === '代工厂'
+    ? `#/foundry/product/${getResourceSlug(resource)}`
+    : `#/company/${getCompanySlug(resource.company)}`;
+
+  entry.types.add(type);
+  entry.resources.push(resource);
+
+  if (resource.region) entry.regions.add(resource.region);
+  if (!entry.description) entry.description = resource.summary || resource.detail || '';
+  if (!entry.visual) entry.visual = getResourceVisual(resource);
+  if (!entry.sourceUrl) entry.sourceUrl = getResourceSourceUrl(resource);
+  if (getVendorRoutePriority(routeType) < getVendorRoutePriority(entry.routeType)) {
+    entry.route = route;
+    entry.routeType = routeType;
+  }
+
+  [
+    resource.company,
+    resource.tool,
+    resource.primaryCategory,
+    resource.secondaryCategory,
+    resource.region,
+    resource.stage,
+    resource.operationMode,
+    ...(resource.tags || []),
+    ...(resource.supportAreas || []),
+    ...(resource.processNodes || []),
+  ]
+    .filter(Boolean)
+    .forEach((keyword) => entry.keywords.add(keyword));
+};
+
+const getVendorDirectoryRoute = (entry, types) => {
+  const isPureFoundryVendor = types.length === 1 && types[0] === '代工厂';
+  if (!isPureFoundryVendor) return `#/vendor/${getCompanySlug(entry.company)}`;
+
+  const foundryResource = entry.resources.find((resource) => foundryResources.includes(resource));
+  return foundryResource ? `#/foundry/product/${getResourceSlug(foundryResource)}` : entry.route;
+};
+
+const buildVendorDirectoryEntries = () => {
+  const vendorMap = new Map();
+
+  edaResources.forEach((resource) => addVendorResource(vendorMap, resource, 'EDA'));
+  ipResources.forEach((resource) => addVendorResource(vendorMap, resource, 'IP'));
+  foundryResources.forEach((resource) => addVendorResource(vendorMap, resource, '代工厂'));
+
+  return Array.from(vendorMap.values())
+    .map((entry) => {
+      const types = Array.from(entry.types).sort(
+        (left, right) => (vendorTypePriority[left] ?? 99) - (vendorTypePriority[right] ?? 99),
+      );
+      const regions = Array.from(entry.regions);
+      return {
+        ...entry,
+        types,
+        regions,
+        route: getVendorDirectoryRoute(entry, types),
+        regionLabel: regions.length > 0 ? regions.join(' / ') : '待补充',
+        productCount: entry.resources.length,
+        description: entry.description || '该厂商信息已纳入资源库，后续将补充更完整的企业画像与产品矩阵。',
+        keywordText: Array.from(entry.keywords).join(' ').toLowerCase(),
+      };
+    })
+    .sort((left, right) => {
+      const priorityDiff = (vendorTypePriority[left.types[0]] ?? 99) - (vendorTypePriority[right.types[0]] ?? 99);
+      if (priorityDiff !== 0) return priorityDiff;
+      return left.company.localeCompare(right.company, 'zh-Hans-CN');
+    });
+};
+
+const vendorDirectoryEntries = buildVendorDirectoryEntries();
+
+const vendorTypeCounts = vendorTypeOptions.reduce((counts, type) => {
+  if (type === '全部') {
+    counts[type] = vendorDirectoryEntries.length;
+  } else if (reservedVendorTypes.includes(type)) {
+    counts[type] = 0;
+  } else {
+    counts[type] = vendorDirectoryEntries.filter((entry) => entry.types.includes(type)).length;
+  }
+  return counts;
+}, {});
+
+const otherVendorTypeCount = reservedVendorTypes.reduce((sum, type) => sum + vendorTypeCounts[type], 0);
+
+const getHotVendor = (name) => vendorDirectoryEntries.find((entry) => entry.company === name);
+
+const getVendorBySlug = (slug) =>
+  vendorDirectoryEntries.find((entry) => getCompanySlug(entry.company) === slug);
+
+const getVendorRelatedNews = (vendor) => {
+  if (!vendor) return [];
+
+  const vendorKeywords = new Set([
+    vendor.company,
+    ...vendor.resources.map((resource) => resource.tool),
+  ].filter(Boolean));
+
+  return industryNews
+    .filter((news) => {
+      const relatedCompanies = news.relatedCompanies || [];
+      const searchableText = [news.title, news.summary, news.categoryLabel, ...news.tags, ...relatedCompanies].join(' ');
+
+      return Array.from(vendorKeywords).some((keyword) =>
+        relatedCompanies.includes(keyword) || searchableText.includes(keyword),
+      );
+    })
+    .slice(0, 4);
+};
+
+const getCompanyRelatedNews = (company) => {
+  if (!company) return [];
+  const vendor = vendorDirectoryEntries.find((entry) => entry.company === company);
+  if (vendor) return getVendorRelatedNews(vendor);
+
+  return industryNews
+    .filter((news) => {
+      const relatedCompanies = news.relatedCompanies || [];
+      const searchableText = [news.title, news.summary, news.categoryLabel, ...news.tags, ...relatedCompanies].join(' ');
+      return relatedCompanies.includes(company) || searchableText.includes(company);
+    })
+    .slice(0, 4);
+};
+
+const getVendorPrimaryLibraryConfig = (vendor) => {
+  if (!vendor) return libraryConfigs.eda;
+  if (vendor.types.includes('IP')) return libraryConfigs.ip;
+  if (vendor.types.includes('EDA')) return libraryConfigs.eda;
+  if (vendor.types.includes('代工厂')) return libraryConfigs.foundry;
+  return libraryConfigs.eda;
+};
+
 const libraryConfigs = {
   eda: {
     resourceName: 'EDA',
@@ -562,6 +783,272 @@ const libraryConfigs = {
     detailBasePath: 'foundry',
   },
 };
+
+function VendorDirectoryPage() {
+  const [query, setQuery] = useState('');
+  const [typeFilter, setTypeFilter] = useState('全部');
+  const [regionFilter, setRegionFilter] = useState('全部');
+
+  const regionOptions = useMemo(
+    () => ['全部', ...Array.from(new Set(vendorDirectoryEntries.flatMap((entry) => entry.regions))).filter(Boolean)],
+    [],
+  );
+
+  const filteredVendors = useMemo(() => {
+    const keyword = query.trim().toLowerCase();
+
+    return vendorDirectoryEntries.filter((entry) => {
+      const matchesType = typeFilter === '全部' || entry.types.includes(typeFilter);
+      const matchesRegion = regionFilter === '全部' || entry.regions.includes(regionFilter);
+      const matchesKeyword =
+        !keyword
+        || entry.company.toLowerCase().includes(keyword)
+        || entry.description.toLowerCase().includes(keyword)
+        || entry.regionLabel.toLowerCase().includes(keyword)
+        || entry.types.join(' ').toLowerCase().includes(keyword)
+        || entry.keywordText.includes(keyword);
+
+      return matchesType && matchesRegion && matchesKeyword;
+    });
+  }, [query, regionFilter, typeFilter]);
+
+  const resetFilters = () => {
+    setQuery('');
+    setTypeFilter('全部');
+    setRegionFilter('全部');
+  };
+
+  const selectedTypeCount = vendorTypeCounts[typeFilter] ?? 0;
+  const isReservedEmptyType = reservedVendorTypes.includes(typeFilter) && selectedTypeCount === 0;
+
+  return (
+    <main
+      className="app-shell library-shell vendor-shell"
+      style={{
+        '--bg-image': `url(${backgroundUrl})`,
+        '--library-accent': '#8bffcf',
+        '--library-accent-rgb': '139 255 207',
+        '--library-contrast': '#07140f',
+      }}
+    >
+      <section className="library-page vendor-page">
+        <header className="library-hero vendor-hero">
+          <button className="library-back" onClick={() => { window.location.hash = ''; }}>
+            <ArrowLeft size={18} aria-hidden="true" />
+            返回首页
+          </button>
+          <p className="eyebrow">VENDOR RESOURCE LIBRARY</p>
+          <h1>厂商资源库</h1>
+          <p>聚合集成电路产业链相关厂商信息，当前优先整合 EDA、IP 与代工厂数据，后续逐步补充芯片设计、封装、测试及组织平台资源。</p>
+        </header>
+
+        <section className="library-metrics vendor-metrics" aria-label="厂商资源库概览">
+          <div>
+            <span>{vendorDirectoryEntries.length}</span>
+            <p>总厂商数量</p>
+          </div>
+          <div>
+            <span>{vendorTypeCounts.EDA}</span>
+            <p>EDA 企业</p>
+          </div>
+          <div>
+            <span>{vendorTypeCounts.IP}</span>
+            <p>IP 企业</p>
+          </div>
+          <div>
+            <span>{vendorTypeCounts.代工厂}</span>
+            <p>代工厂</p>
+          </div>
+          <div>
+            <span>{otherVendorTypeCount}</span>
+            <p>其他类型</p>
+          </div>
+        </section>
+
+        <section className="vendor-layout">
+          <aside className="vendor-sidebar" aria-label="热门企业与类型导航">
+            <section className="vendor-side-panel">
+              <div className="vendor-side-head">
+                <Sparkles size={16} aria-hidden="true" />
+                <h2>热门企业</h2>
+              </div>
+              <div className="vendor-hot-list">
+                {hotVendorNames.map((name) => {
+                  const vendor = getHotVendor(name);
+                  return vendor ? (
+                    <a key={name} className="vendor-hot-link" href={vendor.route}>
+                      <span>{name}</span>
+                      <ChevronRight size={15} aria-hidden="true" />
+                    </a>
+                  ) : (
+                    <span key={name} className="vendor-hot-link disabled-link">
+                      <span>{name}</span>
+                      <em>待补充</em>
+                    </span>
+                  );
+                })}
+              </div>
+            </section>
+
+            <section className="vendor-side-panel">
+              <div className="vendor-side-head">
+                <Factory size={16} aria-hidden="true" />
+                <h2>类型导航</h2>
+              </div>
+              <div className="vendor-type-nav">
+                {vendorTypeOptions.map((type) => (
+                  <button
+                    key={type}
+                    type="button"
+                    className={typeFilter === type ? 'vendor-type-button active' : 'vendor-type-button'}
+                    onClick={() => setTypeFilter(type)}
+                  >
+                    <span>{type === '全部' ? '全部厂商' : type}</span>
+                    <strong>{vendorTypeCounts[type]}</strong>
+                  </button>
+                ))}
+              </div>
+            </section>
+          </aside>
+
+          <div className="vendor-content">
+            <section className="library-toolbar vendor-toolbar" aria-label="厂商筛选">
+              <label className="search-box">
+                <Search size={18} aria-hidden="true" />
+                <input
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="搜索厂商名、类型、地区、简介或关键词"
+                />
+              </label>
+              <div className="filter-row vendor-filter-row">
+                <label className="filter-field">
+                  <span>厂商类型</span>
+                  <select value={typeFilter} onChange={(event) => setTypeFilter(event.target.value)}>
+                    {vendorTypeOptions.map((option) => (
+                      <option key={option}>{option}</option>
+                    ))}
+                  </select>
+                </label>
+                <label className="filter-field">
+                  <span>地区</span>
+                  <select value={regionFilter} onChange={(event) => setRegionFilter(event.target.value)}>
+                    {regionOptions.map((option) => (
+                      <option key={option}>{option}</option>
+                    ))}
+                  </select>
+                </label>
+                <button className="reset-filter" onClick={resetFilters}>
+                  <RotateCcw size={16} aria-hidden="true" />
+                  重置
+                </button>
+              </div>
+            </section>
+
+            <div className="result-summary vendor-result-summary">
+              <p>
+                当前筛选：<strong>{typeFilter === '全部' ? '全部厂商' : typeFilter}</strong>
+              </p>
+              <div className="result-tools">
+                <span>{filteredVendors.length} 家厂商</span>
+              </div>
+            </div>
+
+            {filteredVendors.length > 0 ? (
+              <section className="vendor-grid" aria-label="厂商列表">
+                {filteredVendors.map((vendor) => (
+                  <article
+                    className="vendor-card"
+                    key={vendor.company}
+                    role="link"
+                    tabIndex={0}
+                    onClick={() => { window.location.hash = vendor.route; }}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter') {
+                        window.location.hash = vendor.route;
+                      }
+                    }}
+                    aria-label={`进入${vendor.company}厂商详情页`}
+                  >
+                    <div className="vendor-card-head">
+                      <div className="vendor-logo">
+                        {vendor.visual ? (
+                          <img
+                            src={vendor.visual}
+                            alt={`${vendor.company} 标识`}
+                            onError={(event) => {
+                              event.currentTarget.style.display = 'none';
+                              event.currentTarget.nextElementSibling.hidden = false;
+                            }}
+                          />
+                        ) : null}
+                        <span className="resource-visual-fallback" hidden={Boolean(vendor.visual)}>
+                          {getCompanyInitials(vendor.company)}
+                        </span>
+                      </div>
+                      <div className="vendor-card-title">
+                        <h2>{vendor.company}</h2>
+                        <div className="vendor-type-tags">
+                          {vendor.types.map((type) => (
+                            <span key={type}>{type}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="vendor-card-meta">
+                      <span>
+                        <MapPin size={14} aria-hidden="true" />
+                        {vendor.regionLabel}
+                      </span>
+                      <span>
+                        <BookOpen size={14} aria-hidden="true" />
+                        收录 {vendor.productCount} 条
+                      </span>
+                    </div>
+
+                    <p>{vendor.description}</p>
+
+                    <div className="vendor-card-actions" onClick={(event) => event.stopPropagation()}>
+                      {vendor.route ? (
+                        <a href={vendor.route}>
+                          <BookOpen size={14} aria-hidden="true" />
+                          详情入口
+                        </a>
+                      ) : (
+                        <span className="vendor-disabled-action">待补充</span>
+                      )}
+                      {vendor.sourceUrl ? (
+                        <a href={vendor.sourceUrl} target="_blank" rel="noreferrer">
+                          <Download size={14} aria-hidden="true" />
+                          官网入口
+                        </a>
+                      ) : (
+                        <span className="vendor-disabled-action">
+                          <Download size={14} aria-hidden="true" />
+                          官网待补充
+                        </span>
+                      )}
+                    </div>
+                  </article>
+                ))}
+              </section>
+            ) : (
+              <section className="empty-state vendor-empty-state">
+                <h2>{isReservedEmptyType ? '该类型厂商数据待补充' : '暂无匹配厂商'}</h2>
+                <p>
+                  {isReservedEmptyType
+                    ? '当前版本先聚合已有 EDA、IP 与代工厂数据，该类型将在后续资料补充后展示。'
+                    : '可以更换关键词、地区或厂商类型，也可以点击重置恢复全部厂商列表。'}
+                </p>
+              </section>
+            )}
+          </div>
+        </section>
+      </section>
+    </main>
+  );
+}
 
 function ResourceLibrary({ onBack, config }) {
   const {
@@ -1833,6 +2320,7 @@ function CompanyDetailPage({ company }) {
   const sourceUrl = company ? companySourceUrls[company] : null;
   const categoryCount = new Set(resources.map((resource) => resource.primaryCategory)).size;
   const stageCount = new Set(resources.map((resource) => resource.stage)).size;
+  const relatedNews = getCompanyRelatedNews(company);
 
   return (
     <main
@@ -1904,6 +2392,35 @@ function CompanyDetailPage({ company }) {
               </div>
             </section>
 
+            <section className="detail-layout">
+              <article className="detail-panel detail-main-panel vendor-news-panel">
+                <p className="eyebrow">RELATED NEWS</p>
+                <h2>相关商家新闻</h2>
+                {relatedNews.length > 0 ? (
+                  <div className="company-product-list">
+                    {relatedNews.map((news) => (
+                      <a key={news.id} className="company-product-row" href={news.route}>
+                        <span>
+                          <strong>{news.title}</strong>
+                          <em>{news.summary}</em>
+                        </span>
+                        <span>{news.categoryLabel}</span>
+                        <span>{news.date}</span>
+                      </a>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="company-profile-copy">
+                    暂无已关联新闻。后续新增新闻时，在新闻数据的 relatedCompanies 中填写该厂商名称，即可在这里自动显示。
+                  </p>
+                )}
+              </article>
+
+              <aside className="detail-side">
+                <ProductContactPanel />
+              </aside>
+            </section>
+
             <section className="detail-panel company-products-panel">
               <p className="eyebrow">COLLECTED PRODUCTS</p>
               <h2>已收录产品</h2>
@@ -1926,6 +2443,197 @@ function CompanyDetailPage({ company }) {
                 </div>
               ) : (
                 <p className="company-profile-copy">暂无已收录产品。</p>
+              )}
+            </section>
+          </>
+        )}
+      </section>
+    </main>
+  );
+}
+
+function VendorCompanyDetailPage({ vendor }) {
+  const preferredLibraryConfig = getVendorPrimaryLibraryConfig(vendor);
+  const resources = vendor?.resources || [];
+  const categoryCount = new Set(resources.map((resource) => resource.primaryCategory).filter(Boolean)).size;
+  const regionCount = vendor?.regions.length || 0;
+  const relatedNews = getVendorRelatedNews(vendor);
+
+  return (
+    <main
+      className="app-shell library-shell"
+      style={{
+        '--bg-image': `url(${backgroundUrl})`,
+        '--library-accent': preferredLibraryConfig.accentColor,
+        '--library-accent-rgb': preferredLibraryConfig.accentRgb,
+        '--library-contrast': preferredLibraryConfig.contrastColor,
+      }}
+    >
+      <section className="resource-detail-page company-detail-page vendor-detail-page">
+        <a className="library-back detail-back" href="#/vendors">
+          <ArrowLeft size={18} aria-hidden="true" />
+          返回厂商资源库
+        </a>
+
+        {!vendor ? (
+          <section className="empty-state detail-empty">
+            <p className="eyebrow">VENDOR PROFILE</p>
+            <h1>未找到厂商</h1>
+            <p>这个厂商条目可能还没有被收录，可以返回厂商资源库后重新选择。</p>
+          </section>
+        ) : (
+          <>
+            <header className="product-detail-hero company-detail-hero">
+              <div className="product-logo-card company-logo-card">
+                {vendor.visual ? (
+                  <img src={vendor.visual} alt={`${vendor.company} 图标`} />
+                ) : (
+                  <span className="resource-visual-fallback">{getCompanyInitials(vendor.company)}</span>
+                )}
+              </div>
+              <div className="product-detail-title">
+                <p className="eyebrow">VENDOR PROFILE</p>
+                <p className="resource-company">{vendor.types.join(' / ')} 厂商信息</p>
+                <h1>{vendor.company}</h1>
+                <p className="company-profile-copy">{vendor.description}</p>
+              </div>
+              <div className="detail-actions">
+                {vendor.sourceUrl ? (
+                  <a className="source-link" href={vendor.sourceUrl} target="_blank" rel="noreferrer">
+                    厂商官网
+                  </a>
+                ) : (
+                  <span className="source-link disabled-link">官网待补充</span>
+                )}
+              </div>
+            </header>
+
+            <section className="library-metrics company-metrics" aria-label={`${vendor.company}厂商概览`}>
+              <div>
+                <span>{resources.length}</span>
+                <p>已收录条目</p>
+              </div>
+              <div>
+                <span>{vendor.types.length}</span>
+                <p>覆盖类型</p>
+              </div>
+              <div>
+                <span>{categoryCount}</span>
+                <p>覆盖分类</p>
+              </div>
+              <div>
+                <span>{regionCount}</span>
+                <p>地区信息</p>
+              </div>
+            </section>
+
+            <section className="detail-layout">
+              <article className="detail-panel detail-main-panel">
+                <p className="eyebrow">VENDOR OVERVIEW</p>
+                <h2>厂商简介</h2>
+                <p>{vendor.description}</p>
+                <div className="detail-section-grid">
+                  <section className="detail-section">
+                    <h3>业务类型</h3>
+                    <p>{vendor.types.join('、')}</p>
+                  </section>
+                  <section className="detail-section">
+                    <h3>地区信息</h3>
+                    <p>{vendor.regionLabel}</p>
+                  </section>
+                  <section className="detail-section">
+                    <h3>收录范围</h3>
+                    <p>当前聚合该厂商在 EDA、IP 或代工厂资源库中的已整理条目，后续可继续扩展企业画像、产品矩阵和合作案例。</p>
+                  </section>
+                  <section className="detail-section">
+                    <h3>资料入口</h3>
+                    <p>{vendor.sourceUrl ? '已关联官网入口，可继续补充报告、新闻和产品资料。' : '官网与资料入口待补充。'}</p>
+                  </section>
+                </div>
+              </article>
+
+              <aside className="detail-side">
+                <section className="detail-panel">
+                  <p className="eyebrow">CLASSIFICATION</p>
+                  <h2>厂商画像</h2>
+                  <dl className="detail-meta">
+                    <div>
+                      <dt>厂商类型</dt>
+                      <dd>{vendor.types.join(' / ')}</dd>
+                    </div>
+                    <div>
+                      <dt>地区</dt>
+                      <dd>{vendor.regionLabel}</dd>
+                    </div>
+                    <div>
+                      <dt>收录条目</dt>
+                      <dd>{resources.length}</dd>
+                    </div>
+                  </dl>
+                </section>
+
+                <section className="detail-panel">
+                  <p className="eyebrow">TAGS</p>
+                  <h2>资源标签</h2>
+                  <div className="resource-tags">
+                    {vendor.types.map((type) => (
+                      <span key={type}>{type}</span>
+                    ))}
+                    {vendor.regions.map((region) => (
+                      <span key={region}>{region}</span>
+                    ))}
+                  </div>
+                </section>
+
+                <ProductContactPanel />
+              </aside>
+            </section>
+
+            <section className="detail-panel company-products-panel vendor-news-panel">
+              <p className="eyebrow">RELATED NEWS</p>
+              <h2>相关商家新闻</h2>
+              {relatedNews.length > 0 ? (
+                <div className="company-product-list">
+                  {relatedNews.map((news) => (
+                    <a key={news.id} className="company-product-row" href={news.route}>
+                      <span>
+                        <strong>{news.title}</strong>
+                        <em>{news.summary}</em>
+                      </span>
+                      <span>{news.categoryLabel}</span>
+                      <span>{news.date}</span>
+                    </a>
+                  ))}
+                </div>
+              ) : (
+                <p className="company-profile-copy">
+                  暂无已关联新闻。后续新增新闻时，在新闻数据的 relatedCompanies 中填写该厂商名称，即可在这里自动显示。
+                </p>
+              )}
+            </section>
+
+            <section className="detail-panel company-products-panel">
+              <p className="eyebrow">COLLECTED RESOURCES</p>
+              <h2>已收录资源</h2>
+              {resources.length > 0 ? (
+                <div className="company-product-list">
+                  {resources.map((resource) => (
+                    <a
+                      key={`${resource.company}-${resource.tool}-${resource.secondaryCategory}`}
+                      className="company-product-row"
+                      href={getResourceDetailPath(resource)}
+                    >
+                      <span>
+                        <strong>{resource.tool}</strong>
+                        <em>{resource.summary}</em>
+                      </span>
+                      <span>{resource.primaryCategory}</span>
+                      <span>{resource.stage}</span>
+                    </a>
+                  ))}
+                </div>
+              ) : (
+                <p className="company-profile-copy">暂无已收录资源。</p>
               )}
             </section>
           </>
@@ -2376,12 +3084,8 @@ function IndustryNewsDirectoryPage() {
         <div className="news-directory-hero">
           <div>
             <p className="eyebrow">INDUSTRY NEWS DIRECTORY</p>
-            <h1>行业新闻目录</h1>
-            <p>按日期、浏览量和产业分类筛选近期集成电路新闻，点击条目进入详细解读页面。</p>
-          </div>
-          <div className="news-directory-count">
-            <strong>{filteredNews.length}</strong>
-            <span>条结果</span>
+            <h1>集成电路行业新闻</h1>
+            <p>汇集集成电路相关产业信息，覆盖 EDA、IP、晶圆代工、AI 芯片与供应链等关键动态。</p>
           </div>
         </div>
 
@@ -4002,6 +4706,12 @@ function App() {
     [selectedNode],
   );
 
+  const vendorRouteMatch = routeHash.match(/^#\/vendor\/(.+)$/);
+  if (vendorRouteMatch) {
+    const [, vendorSlug] = vendorRouteMatch;
+    return <VendorCompanyDetailPage vendor={getVendorBySlug(vendorSlug)} />;
+  }
+
   const companyRouteMatch = routeHash.match(/^#\/company\/(.+)$/);
   if (companyRouteMatch) {
     const [, companySlug] = companyRouteMatch;
@@ -4018,6 +4728,10 @@ function App() {
 
   if (routeHash === '#/news') {
     return <IndustryNewsDirectoryPage />;
+  }
+
+  if (routeHash === '#/vendors') {
+    return <VendorDirectoryPage />;
   }
 
   const newsRouteMatch = routeHash.match(/^#\/news\/([^/]+)$/);
